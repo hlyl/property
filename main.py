@@ -1,3 +1,5 @@
+# source /home/hlynge/dev/property/venv/bin/activate
+
 from ast import keyword
 from pickle import TRUE
 import string
@@ -29,11 +31,10 @@ def deserialise_property(item, region) -> Property:
     caption = item["realEstate"]["properties"][0]["caption"]
     category = item["realEstate"]["properties"][0]["category"]["name"]
     discription = item["realEstate"]["properties"][0]["description"]
+    discription_dk = ""
     floor = item["realEstate"]["properties"][0]["floor"]["value"]
-    print(floor)
     if floor is None:
         floor = "not assigned"
-
     rooms = item["realEstate"]["properties"][0]["rooms"]
     surface = item["realEstate"]["properties"][0]["surface"]
     lon = item["realEstate"]["properties"][0]["location"]["longitude"]
@@ -55,6 +56,7 @@ def deserialise_property(item, region) -> Property:
         "caption": caption,
         "category": category,
         "discription": discription,
+        "discription_dk": discription_dk,
         "floor": floor,
         "rooms": rooms,
         "surface": surface,
@@ -90,6 +92,15 @@ def updateTest():
 def select_db_region(region):
     with Session(dao.engine) as session:
         statement = select(Property).where(Property.region == region)
+        out = session.execute(statement)
+        return list(out)
+
+
+def select_db_no_translation() -> list:
+    with Session(dao.engine) as session:
+        statement = select(
+            Property.id, Property.discription, Property.discription_dk
+        ).where(Property.discription_dk is None)
         out = session.execute(statement)
         return list(out)
 
@@ -214,3 +225,4 @@ for name, region, province in data:
             session.merge(item)
         session.commit()
         update_sold(session, name, id_list)
+        # to_translate = select_db_no_translation()

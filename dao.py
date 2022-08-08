@@ -14,6 +14,7 @@ class Property(SQLModel, table=True):  #
     caption: Optional[str]
     category: str
     discription: str
+    discription_dk: str
     floor: Optional[str]
     rooms: Optional[str]
     surface: Optional[str]
