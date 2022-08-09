@@ -1,5 +1,3 @@
 apiKey.txt
 .vscode
-__pycache__/calcdist.cpython-38.pyc
-__pycache__/dao.cpython-38.pyc
-main
+__pycache__
