@@ -1,7 +1,9 @@
 # source /home/hlynge/dev/property/venv/bin/activate
 
-from ast import keyword
-from pickle import TRUE
+# from ast import keyword
+import datetime
+
+# from pickle import TRUE
 import string
 from tokenize import String
 from bs4 import BeautifulSoup
@@ -32,9 +34,11 @@ def deserialise_property(item, region) -> Property:
     category = item["realEstate"]["properties"][0]["category"]["name"]
     discription = item["realEstate"]["properties"][0]["description"]
     discription_dk = ""
-    floor = item["realEstate"]["properties"][0]["floor"]["value"]
+    floor = item["realEstate"]["properties"][0]["floor"]
     if floor is None:
         floor = "not assigned"
+    else:
+        floor = item["realEstate"]["properties"][0]["floor"]["value"]
     rooms = item["realEstate"]["properties"][0]["rooms"]
     surface = item["realEstate"]["properties"][0]["surface"]
     lon = item["realEstate"]["properties"][0]["location"]["longitude"]
@@ -193,11 +197,11 @@ data = [
     ("MILAN", "lom", "MI"),
 ]
 
-# "https://www.immobiliare.it/api-next/search-list/real-estates/?fkRegione={region}&idProvincia={province}&idNazione=IT&idContratto=1&idCategoria=1&prezzoMinimo=10000&prezzoMassimo=50000&idTipologia[0]=7&idTipologia[1]=31&idTipologia[2]=11&idTipologia[3]=12&idTipologia[4]=13&idTipologia[5]=4&localiMinimo=3&localiMassimo=5&bagni=1&boxAuto[0]=4&cantina=1&noAste=1&pag=1&paramsCount=17&path=%2Fen%2Fsearch-list%2F"
+# "https://www.immobiliare.it/api-next/search-list/real-estates/?fkRegione=lom&idProvincia=MI&idNazione=IT&idContratto=1&idCategoria=1&prezzoMinimo=10000&prezzoMassimo=30000&idTipologia[0]=7&idTipologia[1]=31&idTipologia[2]=11&idTipologia[3]=12&idTipologia[4]=13&idTipologia[5]=4&localiMinimo=3&localiMassimo=5&bagni=1&boxAuto[0]=4&cantina=1&noAste=1&pag=1&paramsCount=17&path=%2Fen%2Fsearch-list%2F"
 
 
 for name, region, province in data:
-    url = f"https://www.immobiliare.it/api-next/search-list/real-estates/?fkRegione=lom&idProvincia=MI&idNazione=IT&idContratto=1&idCategoria=1&prezzoMinimo=10000&prezzoMassimo=50000&idTipologia[0]=7&idTipologia[1]=31&idTipologia[2]=11&idTipologia[3]=12&idTipologia[4]=13&idTipologia[5]=4&localiMinimo=3&localiMassimo=5&bagni=1&boxAuto[0]=4&cantina=1&noAste=1&pag=1&paramsCount=17&path=%2Fen%2Fsearch-list%2F"
+    url = f"https://www.immobiliare.it/api-next/search-list/real-estates/?fkRegione={region}&idProvincia={province}&idNazione=IT&idContratto=1&idCategoria=1&prezzoMinimo=10000&prezzoMassimo=50000&idTipologia[0]=7&idTipologia[1]=31&idTipologia[2]=11&idTipologia[3]=12&idTipologia[4]=13&idTipologia[5]=4&localiMinimo=3&localiMassimo=5&bagni=1&boxAuto[0]=4&cantina=1&noAste=1&pag=1&paramsCount=17&path=%2Fen%2Fsearch-list%2F"
     response = requests.get(url)
     web_result = propertyparser(response.json(), name)
     id_list = []
@@ -220,9 +224,12 @@ for name, region, province in data:
                 item.shopping_count = -1
                 item.baker_count = -1
                 item.food_count = -1
-
             id_list.append(item.id)
+            if item.observed is None:
+                item.observed = datetime.datetime.now()
             session.merge(item)
         session.commit()
         update_sold(session, name, id_list)
-        # to_translate = select_db_no_translation()
+        to_translate = select_db_no_translation()
+        for element in to_translate:
+            print(element)

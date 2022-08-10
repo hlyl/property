@@ -29,7 +29,7 @@ class Property(SQLModel, table=True):  #
     baker_count: Optional[int]
     food_count: Optional[int]
     sold: int = 0
-    observed: str
+    observed: Optional[str]
 
 
 sqlite_file_name = "database.db"  #
