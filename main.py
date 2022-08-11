@@ -15,11 +15,7 @@ from dao import Property
 from sqlmodel import Field, SQLModel, create_engine, Session, select, update  #
 from typing import List
 import calcdist
-import logging
 
-sqla_logger = logging.getLogger("sqlalchemy.engine.base.Engine")
-for hdlr in sqla_logger.handlers:
-    sqla_logger.removeHandler(hdlr)
 
 API_KEY = open("apiKey.txt", "r").read()
 
