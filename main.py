@@ -17,9 +17,11 @@ from typing import List
 import calcdist
 import logging
 
+sqla_logger = logging.getLogger("sqlalchemy.engine.base.Engine")
+for hdlr in sqla_logger.handlers:
+    sqla_logger.removeHandler(hdlr)
+
 API_KEY = open("apiKey.txt", "r").read()
-logging.basicConfig()
-logging.getLogger("sqlalchemy").setLevel(logging.ERROR)
 
 
 def deserialise_property(item, region) -> Property:
