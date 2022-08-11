@@ -1,10 +1,8 @@
 # source /home/hlynge/dev/property/venv/bin/activate
 
-# from ast import keyword
 import datetime
 
-# from pickle import TRUE
-import string
+# import string
 from tokenize import String
 from bs4 import BeautifulSoup
 import asyncio
