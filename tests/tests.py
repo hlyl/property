@@ -1,11 +1,17 @@
-from import Dao
+import dao
+from main import propertyparser
+from sqlmodel import Field, SQLModel, create_engine, Session, select  #
+from pydantic import condecimal
+
 
 sqlite_file_name = "test.db"  #
 sqlite_url = f"sqlite:///{sqlite_file_name}"  #
 engine = create_engine(sqlite_url, echo=True)  #
 
+
 def create_db_and_tables():  #
     SQLModel.metadata.create_all(engine)  #
+
 
 test_data = [
     ("MILAN", "lom", "MI"),
