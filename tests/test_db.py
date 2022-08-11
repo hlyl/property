@@ -21,6 +21,6 @@ test_data = [
 ]
 
 for name, region, province in test_data:
-    test_file = open("testitem.json")
+    test_file = open("json_mock_file.json")
     web_result = propertyparser(test_file, name)
     id_list = []
