@@ -13,6 +13,9 @@ def create_db_and_tables():  #
     SQLModel.metadata.create_all(engine)  #
 
 
+if __name__ == "__main__":  #
+    dao.create_db_and_tables()
+
 test_data = [
     ("MILAN", "lom", "MI"),
 ]
