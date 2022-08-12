@@ -15,6 +15,7 @@ from dao import Property
 from sqlmodel import Field, SQLModel, create_engine, Session, select, update  #
 from typing import List
 import calcdist
+from datetime import date
 
 
 API_KEY = open("apiKey.txt", "r").read()
@@ -84,20 +85,20 @@ def updateTest():
         category="Apartment",
         discription="The discription of the test House",
     )
-    with Session(dao.engine) as session:
+    with Session(db_engine) as session:
         session.add(prop_1)
         session.commit()
 
 
 def select_db_region(region):
-    with Session(dao.engine) as session:
+    with Session(db_engine) as session:
         statement = select(Property).where(Property.region == region)
         out = session.execute(statement)
         return list(out)
 
 
 def select_db_no_translation() -> list:
-    with Session(dao.engine) as session:
+    with Session(db_engine) as session:
         statement = select(
             Property.id, Property.discription, Property.discription_dk
         ).where(Property.discription_dk is None)
@@ -105,8 +106,18 @@ def select_db_no_translation() -> list:
         return list(out)
 
 
+def update_observed(session):
+    statement = (
+        update(Property)
+        .values(observed=str(date.today()))
+        .where(Property.observed is None)
+    )
+    session.execute(statement)
+    session.commit()
+
+
 if __name__ == "__main__":  #
-    dao.create_db_and_tables()
+    db_engine = dao.create_db("database2.db")
 
 
 def update_sold(session, region, id_list):
@@ -193,15 +204,21 @@ data = [
     ("MILAN", "lom", "MI"),
 ]
 
+data_test = [
+    ("LUCCA", "tos", "LU"),
+]
+
 # "https://www.immobiliare.it/api-next/search-list/real-estates/?fkRegione=lom&idProvincia=MI&idNazione=IT&idContratto=1&idCategoria=1&prezzoMinimo=10000&prezzoMassimo=30000&idTipologia[0]=7&idTipologia[1]=31&idTipologia[2]=11&idTipologia[3]=12&idTipologia[4]=13&idTipologia[5]=4&localiMinimo=3&localiMassimo=5&bagni=1&boxAuto[0]=4&cantina=1&noAste=1&pag=1&paramsCount=17&path=%2Fen%2Fsearch-list%2F"
 
 
-for name, region, province in data:
+for name, region, province in data_test:
+    print(name)
     url = f"https://www.immobiliare.it/api-next/search-list/real-estates/?fkRegione={region}&idProvincia={province}&idNazione=IT&idContratto=1&idCategoria=1&prezzoMinimo=10000&prezzoMassimo=50000&idTipologia[0]=7&idTipologia[1]=31&idTipologia[2]=11&idTipologia[3]=12&idTipologia[4]=13&idTipologia[5]=4&localiMinimo=3&localiMassimo=5&bagni=1&boxAuto[0]=4&cantina=1&noAste=1&pag=1&paramsCount=17&path=%2Fen%2Fsearch-list%2F"
     response = requests.get(url)
     web_result = propertyparser(response.json(), name)
     id_list = []
-    with Session(dao.engine) as session:
+    with Session(db_engine) as session:
+        #    with Session(dao.engine) as session:
         for item in web_result:
             if item.latitude != None and item.longitude != None:
                 if item.dist_coast == None:
@@ -221,11 +238,10 @@ for name, region, province in data:
                 item.baker_count = -1
                 item.food_count = -1
             id_list.append(item.id)
-            if item.observed is None:
-                item.observed = datetime.datetime.now()
             session.merge(item)
         session.commit()
         update_sold(session, name, id_list)
+        update_observed(session)
         to_translate = select_db_no_translation()
         for element in to_translate:
             print(element)

@@ -1,11 +1,11 @@
 import time  # to simulate a real time data, time loop
-import sqlite3  
+import sqlite3
 import numpy as np  # np mean, np random
 import pandas as pd  # read csv, df manipulation
 import plotly.express as px  # interactive charts
 import streamlit as st  # 🎈 data web app development
 
-database ="database.db"
+database = "database.db"
 conn = sqlite3.connect(database)
 
 st.set_page_config(
@@ -15,7 +15,7 @@ st.set_page_config(
 )
 
 # read df from a sql
-df = pd.read_sql("select * from property", con=conn)
+df = pd.read_sql("select * from property where sold is 0", con=conn)
 
 # dashboard title
 st.title("Property overview / Data that have been entered in the DB")
