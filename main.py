@@ -110,7 +110,7 @@ def update_observed(session):
     statement = (
         update(Property)
         .values(observed=str(date.today()))
-        .where(Property.observed is None)
+        .where(Property.observed == None)
     )
     session.execute(statement)
     session.commit()
