@@ -3,3 +3,4 @@ apiKey.txt
 __pycache__
 .env
 dev.env
+backup
