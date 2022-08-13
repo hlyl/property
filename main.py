@@ -97,6 +97,18 @@ def select_db_region(region):
         return list(out)
 
 
+def exist_db_property(id) -> bool:
+    with Session(db_engine) as session:
+        statement = select(Property).where(Property.id == id)
+        data = session.execute(statement)
+        if not data:
+            print("Debug: ID was not found")
+            return False
+        else:
+            print("DEBUG: ID was found")
+            return True
+
+
 def select_db_no_translation() -> list:
     with Session(db_engine) as session:
         statement = select(
@@ -110,7 +122,7 @@ def update_observed(session):
     statement = (
         update(Property)
         .values(observed=str(date.today()))
-        .where(Property.observed is None)
+        .where(Property.observed == None)
     )
     session.execute(statement)
     session.commit()
@@ -147,6 +159,7 @@ def count_bars(item: Property) -> Property:
         types=[types.TYPE_BAR] or [types.TYPE_CAFE],
     )
     bar_count = len(bar_query.places)
+    print("We are in the Bar_count")
     item.pub_count = bar_count
     return item
 
@@ -188,7 +201,7 @@ def count_food(item: Property) -> Property:
 
 
 if __name__ == "__main__":  #
-    db_engine = dao.create_db("database2.db")
+    db_engine = dao.create_db("database.db")
     data = [
         ("LUCCA", "tos", "LU"),
         ("PISA", "tos", "PI"),
@@ -208,32 +221,22 @@ if __name__ == "__main__":  #
 
     # "https://www.immobiliare.it/api-next/search-list/real-estates/?fkRegione=lom&idProvincia=MI&idNazione=IT&idContratto=1&idCategoria=1&prezzoMinimo=10000&prezzoMassimo=30000&idTipologia[0]=7&idTipologia[1]=31&idTipologia[2]=11&idTipologia[3]=12&idTipologia[4]=13&idTipologia[5]=4&localiMinimo=3&localiMassimo=5&bagni=1&boxAuto[0]=4&cantina=1&noAste=1&pag=1&paramsCount=17&path=%2Fen%2Fsearch-list%2F"
 
-    for name, region, province in data:
+    for name, region, province in data_test:
         print(name)
         url = f"https://www.immobiliare.it/api-next/search-list/real-estates/?fkRegione={region}&idProvincia={province}&idNazione=IT&idContratto=1&idCategoria=1&prezzoMinimo=10000&prezzoMassimo=50000&idTipologia[0]=7&idTipologia[1]=31&idTipologia[2]=11&idTipologia[3]=12&idTipologia[4]=13&idTipologia[5]=4&localiMinimo=3&localiMassimo=5&bagni=1&boxAuto[0]=4&cantina=1&noAste=1&pag=1&paramsCount=17&path=%2Fen%2Fsearch-list%2F"
         response = requests.get(url)
         web_result = propertyparser(response.json(), name)
         id_list = []
         with Session(db_engine) as session:
-            #    with Session(dao.engine) as session:
             for item in web_result:
-                if item.latitude != None and item.longitude != None:
-                    if item.dist_coast == None:
+                if exist_db_property(item.id) == False:
+                    print("DEBUG: This is a new one !!!")
+                    count_bars(item)
+                    count_shop(item)
+                    count_bakery(item)
+                    count_food(item)
+                    if item.latitude != None and item.longitude != None:
                         calc_dist_cost(item)
-                    if item.pub_count == None:
-                        count_bars(item)
-                    if item.shopping_count == None:
-                        count_shop(item)
-                    if item.baker_count == None:
-                        count_bakery(item)
-                    if item.food_count == None:
-                        count_food(item)
-                else:
-                    item.dist_coast = -1
-                    item.pub_count = -1
-                    item.shopping_count = -1
-                    item.baker_count = -1
-                    item.food_count = -1
                 id_list.append(item.id)
                 session.merge(item)
             session.commit()

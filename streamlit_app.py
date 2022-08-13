@@ -20,11 +20,23 @@ df = pd.read_sql("select * from property where sold is 0", con=conn)
 # dashboard title
 st.title("Property overview / Data that have been entered in the DB")
 
-# top-level filters
-region_filter = st.selectbox("Select Region", pd.unique(df["region"]))
 
 # creating a single-element container
 placeholder = st.empty()
+
+placeholder2 = st.empty()
+
+overview = df[["region", "price", "shopping_count", "pub_count"]].sort_values(
+    by="price"
+)
+overview = overview[(overview["shopping_count"] > 0) & (overview["pub_count"] > 0)]
+# near real-time / live feed simulation
+st.markdown("### All Properties:")
+st.dataframe(overview)
+
+# top-level filters
+region_filter = st.selectbox("Select Region", pd.unique(df["region"]))
+
 
 # dataframe filter
 df = df[df["region"] == region_filter]
