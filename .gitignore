@@ -1,3 +1,5 @@
 apiKey.txt
 .vscode
 __pycache__
+.env
+dev.env
