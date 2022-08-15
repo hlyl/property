@@ -1,0 +1,53 @@
+from shapely.geometry import Point, LineString, Point
+from shapely.geometry import *
+from shapely.strtree import STRtree
+from shapely.ops import transform, nearest_points
+from shapely import affinity
+from shapely import wkb, wkt
+import shapely
+import json
+import time
+import pyproj
+
+
+wgs_proj = pyproj.CRS("EPSG:4326")
+utm_proj = pyproj.CRS("EPSG:32633")
+project = pyproj.Transformer.from_crs(wgs_proj, utm_proj, always_xy=True).transform
+
+sweep_res = 10  # sweep resolution (degrees)
+focal_pt = Point((10.3499, 44.0197))  # radial sweep centre point
+sweep_radius = 10.0  # sweep radius
+
+
+def format_p(item):
+    return f"{item[0]} {item[1]}"
+
+
+def format_LineString(items):
+    items = ", ".join(list(map(format_p, items)))
+    return f"LineString (({items}))"
+
+
+lst_lines = []
+
+with open("Italy_waterLines.geojson") as f:
+    features = json.load(f)["features"]
+    flat_features = []
+    for feature in features:
+        chords = feature["geometry"]["coordinates"]
+        line_geom = LineString(chords)
+        lst_lines.append(transform(project, line_geom))
+
+t1 = time.time()
+tree = STRtree(lst_lines)
+t2 = time.time()
+print("Seconds since epoch =", t2 - t1)
+utm_focalpoint = transform(project, focal_pt)
+# print(tree.nearest_geom(utm_focalpoint))
+
+p1, p2 = nearest_points(utm_focalpoint, tree.nearest_geom(utm_focalpoint))
+print(utm_focalpoint)
+print(p1)
+print(p2)
+distance = (p1.distance(p2)) / 1000
+print(distance)

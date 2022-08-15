@@ -102,7 +102,6 @@ def exist_db_property(id) -> bool:
         statement = select(Property).where(Property.id == id)
         data = session.execute(statement)
         if not data:
-            print("Debug: ID was not found")
             return False
         else:
             print("DEBUG: ID was found")
@@ -200,28 +199,32 @@ def count_food(item: Property) -> Property:
     return item
 
 
-if __name__ == "__main__":  #
-    db_engine = dao.create_db("database.db")
-    data = [
-        ("LUCCA", "tos", "LU"),
-        ("PISA", "tos", "PI"),
-        ("LEGHORN", "tos", "LI"),
-        ("VENICE", "ven", "VE"),
-        ("TREVISO", "ven", "TV"),
-        ("PORDENONE", "fri", "PN"),
-        ("PADUA", "ven", "PD"),
-        ("ROViGO", "ven", "RO"),
-        ("BOLOGNA", "emi", "BO"),
-        ("MILAN", "lom", "MI"),
-    ]
+production = False
 
-    data_test = [
-        ("LUCCA", "tos", "LU"),
-    ]
+if __name__ == "__main__":  #
+    if production:
+        db_engine = dao.create_db("database.db")
+        data = [
+            ("LUCCA", "tos", "LU"),
+            ("PISA", "tos", "PI"),
+            ("LEGHORN", "tos", "LI"),
+            ("VENICE", "ven", "VE"),
+            ("TREVISO", "ven", "TV"),
+            ("PORDENONE", "fri", "PN"),
+            ("PADUA", "ven", "PD"),
+            ("ROViGO", "ven", "RO"),
+            ("BOLOGNA", "emi", "BO"),
+            ("MILAN", "lom", "MI"),
+        ]
+    else:
+        db_engine = dao.create_db("test.db")
+        data = [
+            ("LUCCA", "tos", "LU"),
+        ]
 
     # "https://www.immobiliare.it/api-next/search-list/real-estates/?fkRegione=lom&idProvincia=MI&idNazione=IT&idContratto=1&idCategoria=1&prezzoMinimo=10000&prezzoMassimo=30000&idTipologia[0]=7&idTipologia[1]=31&idTipologia[2]=11&idTipologia[3]=12&idTipologia[4]=13&idTipologia[5]=4&localiMinimo=3&localiMassimo=5&bagni=1&boxAuto[0]=4&cantina=1&noAste=1&pag=1&paramsCount=17&path=%2Fen%2Fsearch-list%2F"
 
-    for name, region, province in data_test:
+    for name, region, province in data:
         print(name)
         url = f"https://www.immobiliare.it/api-next/search-list/real-estates/?fkRegione={region}&idProvincia={province}&idNazione=IT&idContratto=1&idCategoria=1&prezzoMinimo=10000&prezzoMassimo=50000&idTipologia[0]=7&idTipologia[1]=31&idTipologia[2]=11&idTipologia[3]=12&idTipologia[4]=13&idTipologia[5]=4&localiMinimo=3&localiMassimo=5&bagni=1&boxAuto[0]=4&cantina=1&noAste=1&pag=1&paramsCount=17&path=%2Fen%2Fsearch-list%2F"
         response = requests.get(url)

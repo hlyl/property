@@ -24,8 +24,6 @@ def format_point(point):
     return f"POINT ({point[1]} {point[0]})"
 
 
-# poi = [41.89042580273156, 12.492230907067375]
-
 your_json_file = json.loads(open("PolyShoreItaly.geojson").read())
 jsonString = your_json_file["features"][0]["geometry"]["coordinates"][0]
 shore_italy = shapely.wkt.loads(format_t(jsonString))
