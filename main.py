@@ -1,8 +1,6 @@
 # source /home/hlynge/dev/property/venv/bin/activate
 
 import datetime
-
-# import string
 from tokenize import String
 from bs4 import BeautifulSoup
 import asyncio
@@ -14,11 +12,13 @@ import dao
 from dao import Property
 from sqlmodel import Field, SQLModel, create_engine, Session, select, update  #
 from typing import List
-import calcdist
+from calcdist import create_rivertree, calc_dist_short, calc_dist_water
 from datetime import date
 
 
 API_KEY = open("apiKey.txt", "r").read()
+
+tree = calcdist.create_rivertree()
 
 
 def deserialise_property(item, region) -> Property:
@@ -150,6 +150,18 @@ def calc_dist_cost(item: Property) -> Property:
     return item
 
 
+def calc_dist_water(item: Property) -> Property:
+    lat_input = float(item.latitude)
+    long_input = float(item.longitude)
+    poi = [lat_input, long_input]
+    try:
+        dist_water = calcdist.calc_dist_water(tree, poi)
+    except:
+        dist_water = -1
+    item.dist_water = round(dist_water, 2)
+    return item
+
+
 def count_bars(item: Property) -> Property:
     google_places = GooglePlaces(API_KEY)
     bar_query = google_places.nearby_search(
@@ -240,6 +252,7 @@ if __name__ == "__main__":  #
                     count_food(item)
                     if item.latitude != None and item.longitude != None:
                         calc_dist_cost(item)
+                        calc_dist_water(item)
                 id_list.append(item.id)
                 session.merge(item)
             session.commit()
