@@ -6,7 +6,6 @@ from shapely.geometry import Point, LineString
 from shapely.ops import nearest_points, transform
 import pyproj
 from pyproj import Transformer
-from main import tree
 
 wgs_proj = pyproj.CRS("EPSG:4326")
 utm_proj = pyproj.CRS("EPSG:32633")
@@ -57,8 +56,5 @@ def calc_dist_water(tree, poi):
     pt = wkt.loads(format_point(poi))
     pt = transform(project, pt)
     p1, p2 = nearest_points(pt, tree.nearest_geom(pt))
-    p2utm_point = transform(project, p2)
-    # Determine the distance
-    distance = p1.distance(p2utm_point)
-    # Print the distance
+    distance = pt.distance(p2)
     return distance / 1000

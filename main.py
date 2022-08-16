@@ -12,12 +12,14 @@ import dao
 from dao import Property
 from sqlmodel import Field, SQLModel, create_engine, Session, select, update  #
 from typing import List
+import calcdist
 from calcdist import create_rivertree, calc_dist_short, calc_dist_water
 from datetime import date
 
-
+production = True
+google_api = False
 API_KEY = open("apiKey.txt", "r").read()
-
+API_KEY = ""
 tree = calcdist.create_rivertree()
 
 
@@ -99,13 +101,12 @@ def select_db_region(region):
 
 def exist_db_property(id) -> bool:
     with Session(db_engine) as session:
-        statement = select(Property).where(Property.id == id)
+        statement = select(Property.id).where(Property.id == id)
         data = session.execute(statement)
-        if not data:
-            return False
-        else:
-            print("DEBUG: ID was found")
+        if data == None:
             return True
+        else:
+            return False
 
 
 def select_db_no_translation() -> list:
@@ -150,7 +151,7 @@ def calc_dist_cost(item: Property) -> Property:
     return item
 
 
-def calc_dist_water(item: Property) -> Property:
+def calc_dist_water_main(item: Property) -> Property:
     lat_input = float(item.latitude)
     long_input = float(item.longitude)
     poi = [lat_input, long_input]
@@ -170,7 +171,6 @@ def count_bars(item: Property) -> Property:
         types=[types.TYPE_BAR] or [types.TYPE_CAFE],
     )
     bar_count = len(bar_query.places)
-    print("We are in the Bar_count")
     item.pub_count = bar_count
     return item
 
@@ -211,8 +211,6 @@ def count_food(item: Property) -> Property:
     return item
 
 
-production = False
-
 if __name__ == "__main__":  #
     if production:
         db_engine = dao.create_db("database.db")
@@ -231,13 +229,12 @@ if __name__ == "__main__":  #
     else:
         db_engine = dao.create_db("test.db")
         data = [
-            ("LUCCA", "tos", "LU"),
+            ("MILAN", "lom", "MI"),
         ]
 
     # "https://www.immobiliare.it/api-next/search-list/real-estates/?fkRegione=lom&idProvincia=MI&idNazione=IT&idContratto=1&idCategoria=1&prezzoMinimo=10000&prezzoMassimo=30000&idTipologia[0]=7&idTipologia[1]=31&idTipologia[2]=11&idTipologia[3]=12&idTipologia[4]=13&idTipologia[5]=4&localiMinimo=3&localiMassimo=5&bagni=1&boxAuto[0]=4&cantina=1&noAste=1&pag=1&paramsCount=17&path=%2Fen%2Fsearch-list%2F"
 
     for name, region, province in data:
-        print(name)
         url = f"https://www.immobiliare.it/api-next/search-list/real-estates/?fkRegione={region}&idProvincia={province}&idNazione=IT&idContratto=1&idCategoria=1&prezzoMinimo=10000&prezzoMassimo=50000&idTipologia[0]=7&idTipologia[1]=31&idTipologia[2]=11&idTipologia[3]=12&idTipologia[4]=13&idTipologia[5]=4&localiMinimo=3&localiMassimo=5&bagni=1&boxAuto[0]=4&cantina=1&noAste=1&pag=1&paramsCount=17&path=%2Fen%2Fsearch-list%2F"
         response = requests.get(url)
         web_result = propertyparser(response.json(), name)
@@ -245,21 +242,18 @@ if __name__ == "__main__":  #
         with Session(db_engine) as session:
             for item in web_result:
                 if exist_db_property(item.id) == False:
-                    print("DEBUG: This is a new one !!!")
-                    count_bars(item)
-                    count_shop(item)
-                    count_bakery(item)
-                    count_food(item)
+                    if google_api:
+                        count_bars(item)
+                        count_shop(item)
+                        count_bakery(item)
+                        count_food(item)
                     if item.latitude != None and item.longitude != None:
                         calc_dist_cost(item)
-                        calc_dist_water(item)
+                        calc_dist_water_main(item)
                 id_list.append(item.id)
                 session.merge(item)
             session.commit()
             update_sold(session, name, id_list)
-            update_observed(session)
-            to_translate = select_db_no_translation()
-            for element in to_translate:
-                print(element)
-else:
-    db_engine = dao.create_db("test.db")
+            # update_observed(session)
+            # to_translate = select_db_no_translation()
+            # for element in to_translate:
