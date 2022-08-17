@@ -109,13 +109,23 @@ def exist_db_property(id) -> bool:
             return False
 
 
-def select_db_no_translation() -> list:
-    with Session(db_engine) as session:
-        statement = select(
-            Property.id, Property.discription, Property.discription_dk
-        ).where(Property.discription_dk is None)
-        out = session.execute(statement)
-        return list(out)
+def select_db_no_translation(session) -> dict:
+    statement = select(
+        Property.id, Property.discription, Property.discription_dk
+    ).where(Property.discription_dk == "")
+    out = session.execute(statement)
+    result_list_of_dict = [
+        {"id": col1, "discription": col2, "discription_dk": col3}
+        for (col1, col2, col3) in out.fetchall()
+    ]
+    return result_list_of_dict
+
+
+def get_list_id(sesson) -> list:
+    statement = select(Property.id)
+    data = session.execute(statement)
+    resultlst = [i[0] for i in data]
+    return resultlst
 
 
 def update_observed(session):
@@ -211,7 +221,15 @@ def count_food(item: Property) -> Property:
     return item
 
 
+def get_list_id(session) -> list:
+    statement = select(Property.id)
+    data = session.execute(statement)
+    resultlst = [i[0] for i in data]
+    return resultlst
+
+
 if __name__ == "__main__":  #
+
     if production:
         db_engine = dao.create_db("database.db")
         data = [
@@ -235,13 +253,16 @@ if __name__ == "__main__":  #
     # "https://www.immobiliare.it/api-next/search-list/real-estates/?fkRegione=lom&idProvincia=MI&idNazione=IT&idContratto=1&idCategoria=1&prezzoMinimo=10000&prezzoMassimo=30000&idTipologia[0]=7&idTipologia[1]=31&idTipologia[2]=11&idTipologia[3]=12&idTipologia[4]=13&idTipologia[5]=4&localiMinimo=3&localiMassimo=5&bagni=1&boxAuto[0]=4&cantina=1&noAste=1&pag=1&paramsCount=17&path=%2Fen%2Fsearch-list%2F"
 
     for name, region, province in data:
+        print(name)
         url = f"https://www.immobiliare.it/api-next/search-list/real-estates/?fkRegione={region}&idProvincia={province}&idNazione=IT&idContratto=1&idCategoria=1&prezzoMinimo=10000&prezzoMassimo=50000&idTipologia[0]=7&idTipologia[1]=31&idTipologia[2]=11&idTipologia[3]=12&idTipologia[4]=13&idTipologia[5]=4&localiMinimo=3&localiMassimo=5&bagni=1&boxAuto[0]=4&cantina=1&noAste=1&pag=1&paramsCount=17&path=%2Fen%2Fsearch-list%2F"
         response = requests.get(url)
         web_result = propertyparser(response.json(), name)
         id_list = []
         with Session(db_engine) as session:
+            exist_id = get_list_id(session)
+            print(exist_id)
             for item in web_result:
-                if exist_db_property(item.id) == False:
+                if item.id not in exist_id:
                     if google_api:
                         count_bars(item)
                         count_shop(item)
@@ -250,10 +271,10 @@ if __name__ == "__main__":  #
                     if item.latitude != None and item.longitude != None:
                         calc_dist_cost(item)
                         calc_dist_water_main(item)
+                    item.observed = str(date.today())
                 id_list.append(item.id)
                 session.merge(item)
             session.commit()
             update_sold(session, name, id_list)
-            # update_observed(session)
-            # to_translate = select_db_no_translation()
-            # for element in to_translate:
+            to_translate = select_db_no_translation(session)
+            print(to_translate)
