@@ -31,7 +31,7 @@ def deserialise_property(item, region) -> Property:
     bathrooms = item["realEstate"]["properties"][0]["bathrooms"]
     caption = item["realEstate"]["properties"][0]["caption"]
     category = item["realEstate"]["properties"][0]["category"]["name"]
-    discription = item["realEstate"]["properties"][0]["description"]
+    discription = (item["realEstate"]["properties"][0]["description"]).strip()
     discription_dk = ""
     floor = item["realEstate"]["properties"][0]["floor"]
     if floor is None:
