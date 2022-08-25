@@ -5,7 +5,7 @@ import pandas as pd  # read csv, df manipulation
 import plotly.express as px  # interactive charts
 import streamlit as st  # 🎈 data web app development
 
-database = "database2.db"
+database = "database.db"
 conn = sqlite3.connect(database)
 
 st.set_page_config(

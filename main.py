@@ -1,6 +1,7 @@
 # source /home/hlynge/dev/property/venv/bin/activate
 
 import datetime
+from fnmatch import translate
 from tokenize import String
 from bs4 import BeautifulSoup
 import asyncio
@@ -15,6 +16,9 @@ from typing import List
 import calcdist
 from calcdist import create_rivertree, calc_dist_short, calc_dist_water
 from datetime import date
+from googletrans import Translator
+
+translator = Translator()   
 
 production = True
 google_api = False
@@ -31,7 +35,7 @@ def deserialise_property(item, region) -> Property:
     bathrooms = item["realEstate"]["properties"][0]["bathrooms"]
     caption = item["realEstate"]["properties"][0]["caption"]
     category = item["realEstate"]["properties"][0]["category"]["name"]
-    discription = (item["realEstate"]["properties"][0]["description"]).strip()
+    discription = (item["realEstate"]["properties"][0]["description"])
     discription_dk = ""
     floor = item["realEstate"]["properties"][0]["floor"]
     if floor is None:
@@ -118,6 +122,11 @@ def select_db_no_translation(session) -> dict:
         {"id": col1, "discription": col2, "discription_dk": col3}
         for (col1, col2, col3) in out.fetchall()
     ]
+    for dic in result_list_of_dict:
+        dic["discription"] = str(dic["discription"]).replace('\n', '')
+        print(str(dic["discription"]))
+        dic["discription_dk"] = translator.translate(str(dic["discription"]),dest="da")
+        print(str(dic["discription_dk"]))
     return result_list_of_dict
 
 
@@ -260,7 +269,7 @@ if __name__ == "__main__":  #
         id_list = []
         with Session(db_engine) as session:
             exist_id = get_list_id(session)
-            print(exist_id)
+            #print(exist_id)
             for item in web_result:
                 if item.id not in exist_id:
                     if google_api:
@@ -277,4 +286,3 @@ if __name__ == "__main__":  #
             session.commit()
             update_sold(session, name, id_list)
             to_translate = select_db_no_translation(session)
-            print(to_translate)
