@@ -127,8 +127,12 @@ def select_db_no_translation(session) -> dict:
         dic["discription"] = str(dic["discription"]).replace('  ', ' ')
 
         totranslatestr = dic["discription"]
-        #print(str(dic["id"])+" : "+ totranslatestr)
-        print(translator.translate(totranslatestr,'da'))
+        dic["discription_dk"] = (translator.translate(totranslatestr,'da')).text
+
+    for dic in result_list_of_dict:
+        statement = update (Property).values(discription_dk=dic["discription_dk"]).where(Property.id == dic["id"])
+        session.execute(statement)
+    session.commit()
     return result_list_of_dict
 
 
@@ -271,7 +275,6 @@ if __name__ == "__main__":  #
         id_list = []
         with Session(db_engine) as session:
             exist_id = get_list_id(session)
-            #print(exist_id)
             for item in web_result:
                 if item.id not in exist_id:
                     if google_api:

@@ -5,10 +5,8 @@ translator = Translator()
 
 print(translator.translate('안녕하세요.', dest='en'))
 
-text = 'CASCIANA TERME - APPARTAMENTO rurale centrale completamente da ristrutturare \
-    in campagna appena fuori il centro abitatato  bene servito dai mezzi pubblici \
-        composto al piano terra da locale stalla con la vecchia mangiatoia  al piano \
-            primo dalla cucina ed al piano superiore da due vani con wc. Accessoriato da mq.'
+text = 'Casa rustica terratetto da ristrutturare sempre soleggiata , con possibilità di \
+    ampliamento del 30%, libera su n.3 lati con ampio terreno e area boscata.'
 
-print(translator.translate(text,dest='en'))
+print(translator.translate(text,dest='da'))
 
