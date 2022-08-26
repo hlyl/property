@@ -123,10 +123,12 @@ def select_db_no_translation(session) -> dict:
         for (col1, col2, col3) in out.fetchall()
     ]
     for dic in result_list_of_dict:
-        dic["discription"] = str(dic["discription"]).replace('\n', '')
-        print(str(dic["discription"]))
-        dic["discription_dk"] = translator.translate(str(dic["discription"]),dest="da")
-        print(str(dic["discription_dk"]))
+        dic["discription"] = str(dic["discription"]).replace('\n', ' ')
+        dic["discription"] = str(dic["discription"]).replace('  ', ' ')
+
+        totranslatestr = dic["discription"]
+        #print(str(dic["id"])+" : "+ totranslatestr)
+        print(translator.translate(totranslatestr,'da'))
     return result_list_of_dict
 
 
