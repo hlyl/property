@@ -8,7 +8,7 @@ class Property(SQLModel, table=True):  #
     region: str
     is_new: Optional[int] = None
     price: Optional[int] = None
-    price_drop: Optional[int] = None
+    price_drop: Optional[str] = None
     bathrooms: Optional[str]
     caption: Optional[str]
     category: str

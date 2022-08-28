@@ -18,7 +18,7 @@ from calcdist import create_rivertree, calc_dist_short, calc_dist_water
 from datetime import date
 from googletrans import Translator
 
-translator = Translator()   
+translator = Translator()
 
 production = True
 google_api = False
@@ -32,10 +32,16 @@ def deserialise_property(item, region) -> Property:
     is_new = item["realEstate"]["isNew"]
     price = item["realEstate"]["price"]["value"]
     price_drop = item["realEstate"]["price"]["loweredPrice"]
+    if price_drop is None:
+        price_drop = "No"
+    else:
+        print("WE have a PriceDrop")
+        price_drop = item["realEstate"]["price"]["loweredPrice"]["originalPrice"]
+        print("The orginal price was: " + str(price_drop))
     bathrooms = item["realEstate"]["properties"][0]["bathrooms"]
     caption = item["realEstate"]["properties"][0]["caption"]
     category = item["realEstate"]["properties"][0]["category"]["name"]
-    discription = (item["realEstate"]["properties"][0]["description"])
+    discription = item["realEstate"]["properties"][0]["description"]
     discription_dk = ""
     floor = item["realEstate"]["properties"][0]["floor"]
     if floor is None:
@@ -123,14 +129,18 @@ def select_db_no_translation(session) -> dict:
         for (col1, col2, col3) in out.fetchall()
     ]
     for dic in result_list_of_dict:
-        dic["discription"] = str(dic["discription"]).replace('\n', ' ')
-        dic["discription"] = str(dic["discription"]).replace('  ', ' ')
+        dic["discription"] = str(dic["discription"]).replace("\n", " ")
+        dic["discription"] = str(dic["discription"]).replace("  ", " ")
 
         totranslatestr = dic["discription"]
-        dic["discription_dk"] = (translator.translate(totranslatestr,'da')).text
+        dic["discription_dk"] = (translator.translate(totranslatestr, "da")).text
 
     for dic in result_list_of_dict:
-        statement = update (Property).values(discription_dk=dic["discription_dk"]).where(Property.id == dic["id"])
+        statement = (
+            update(Property)
+            .values(discription_dk=dic["discription_dk"])
+            .where(Property.id == dic["id"])
+        )
         session.execute(statement)
     session.commit()
     return result_list_of_dict
@@ -244,7 +254,6 @@ def get_list_id(session) -> list:
 
 
 if __name__ == "__main__":  #
-
     if production:
         db_engine = dao.create_db("database.db")
         data = [
@@ -265,29 +274,39 @@ if __name__ == "__main__":  #
             ("MILAN", "lom", "MI"),
         ]
 
-    # "https://www.immobiliare.it/api-next/search-list/real-estates/?fkRegione=lom&idProvincia=MI&idNazione=IT&idContratto=1&idCategoria=1&prezzoMinimo=10000&prezzoMassimo=30000&idTipologia[0]=7&idTipologia[1]=31&idTipologia[2]=11&idTipologia[3]=12&idTipologia[4]=13&idTipologia[5]=4&localiMinimo=3&localiMassimo=5&bagni=1&boxAuto[0]=4&cantina=1&noAste=1&pag=1&paramsCount=17&path=%2Fen%2Fsearch-list%2F"
-
+    # "https://www.immobiliare.it/api-next/search-list/real-estates/?fkRegione=lom&idProvincia=MI&idNazione=IT&idContratto=1&idCategoria=1&prezzoMinimo=10000&prezzoMassimo=50000&idTipologia[0]=7&idTipologia[1]=31&idTipologia[2]=11&idTipologia[3]=12&idTipologia[4]=13&idTipologia[5]=4&localiMinimo=3&localiMassimo=5&bagni=1&boxAuto[0]=4&cantina=1&noAste=1&pag=1&paramsCount=17&path=%2Fen%2Fsearch-list%2F"
+    total_count = 0
     for name, region, province in data:
         print(name)
-        url = f"https://www.immobiliare.it/api-next/search-list/real-estates/?fkRegione={region}&idProvincia={province}&idNazione=IT&idContratto=1&idCategoria=1&prezzoMinimo=10000&prezzoMassimo=50000&idTipologia[0]=7&idTipologia[1]=31&idTipologia[2]=11&idTipologia[3]=12&idTipologia[4]=13&idTipologia[5]=4&localiMinimo=3&localiMassimo=5&bagni=1&boxAuto[0]=4&cantina=1&noAste=1&pag=1&paramsCount=17&path=%2Fen%2Fsearch-list%2F"
-        response = requests.get(url)
-        web_result = propertyparser(response.json(), name)
-        id_list = []
-        with Session(db_engine) as session:
-            exist_id = get_list_id(session)
-            for item in web_result:
-                if item.id not in exist_id:
-                    if google_api:
-                        count_bars(item)
-                        count_shop(item)
-                        count_bakery(item)
-                        count_food(item)
-                    if item.latitude != None and item.longitude != None:
-                        calc_dist_cost(item)
-                        calc_dist_water_main(item)
-                    item.observed = str(date.today())
-                    session.merge(item)
-                id_list.append(item.id)
-            session.commit()
+        page = 0
+        while True:
+            page = page + 1
+            url = f"https://www.immobiliare.it/api-next/search-list/real-estates/?fkRegione={region}&idProvincia={province}&idNazione=IT&idContratto=1&idCategoria=1&prezzoMinimo=10000&prezzoMassimo=50000&idTipologia[0]=7&idTipologia[1]=31&idTipologia[2]=11&idTipologia[3]=12&idTipologia[4]=13&idTipologia[5]=4&localiMinimo=3&localiMassimo=5&bagni=1&boxAuto[0]=4&cantina=1&noAste=1&pag={page}&paramsCount=17&path=%2Fen%2Fsearch-list%2F"
+            response = requests.get(url)
+            input_json = response.json()
+            pages = input_json["maxPages"]
+            count = input_json["count"]
+            total_count = total_count + count
+            print("Property count :" + str(total_count))
+            if page == pages or count == 0 or response.status_code != 200:
+                break
+            web_result = propertyparser(response.json(), name)
+            id_list = []
+            with Session(db_engine) as session:
+                exist_id = get_list_id(session)
+                for item in web_result:
+                    if item.id not in exist_id:
+                        if google_api:
+                            count_bars(item)
+                            count_shop(item)
+                            count_bakery(item)
+                            count_food(item)
+                        if item.latitude != None and item.longitude != None:
+                            calc_dist_cost(item)
+                            calc_dist_water_main(item)
+                        item.observed = str(date.today())
+                        session.merge(item)
+                    id_list.append(item.id)
+                session.commit()
             update_sold(session, name, id_list)
             to_translate = select_db_no_translation(session)
