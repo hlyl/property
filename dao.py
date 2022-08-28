@@ -17,6 +17,7 @@ class Property(SQLModel, table=True):  #
     floor: Optional[str]
     rooms: Optional[str]
     surface: Optional[str]
+    price_m: Optional[int]
     longitude: Optional[str]
     latitude: Optional[str]
     marker: Optional[str]

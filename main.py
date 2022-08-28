@@ -1,4 +1,5 @@
 # source /home/hlynge/dev/property/venv/bin/activate
+# http://20.105.249.39:4444/
 
 import datetime
 from fnmatch import translate
@@ -50,12 +51,14 @@ def deserialise_property(item, region) -> Property:
         floor = item["realEstate"]["properties"][0]["floor"]["value"]
     rooms = item["realEstate"]["properties"][0]["rooms"]
     surface = item["realEstate"]["properties"][0]["surface"]
+    price_m = round(price / int(surface.split()[0]))
     lon = item["realEstate"]["properties"][0]["location"]["longitude"]
     lat = item["realEstate"]["properties"][0]["location"]["latitude"]
     marker = item["realEstate"]["properties"][0]["location"]["marker"]
     aphoto = []
     for photo in item["realEstate"]["properties"][0]["multimedia"]["photos"]:
         url = photo["urls"]["small"]
+        url = url.replace("xxs-c.jpg", "xxl.jpg")
         aphoto.append(url)
     photo_list = json.dumps(aphoto)
 
@@ -73,6 +76,7 @@ def deserialise_property(item, region) -> Property:
         "floor": floor,
         "rooms": rooms,
         "surface": surface,
+        "price_m": price_m,
         "longitude": lon,
         "latitude": lat,
         "marker": marker,
@@ -268,14 +272,17 @@ if __name__ == "__main__":  #
             ("BOLOGNA", "emi", "BO"),
             ("MILAN", "lom", "MI"),
         ]
+        first_observed = {}
+        first_observed = json.loads(open("first_observed.json").read())
     else:
         db_engine = dao.create_db("test.db")
         data = [
             ("MILAN", "lom", "MI"),
         ]
 
-    # "https://www.immobiliare.it/api-next/search-list/real-estates/?fkRegione=lom&idProvincia=MI&idNazione=IT&idContratto=1&idCategoria=1&prezzoMinimo=10000&prezzoMassimo=50000&idTipologia[0]=7&idTipologia[1]=31&idTipologia[2]=11&idTipologia[3]=12&idTipologia[4]=13&idTipologia[5]=4&localiMinimo=3&localiMassimo=5&bagni=1&boxAuto[0]=4&cantina=1&noAste=1&pag=1&paramsCount=17&path=%2Fen%2Fsearch-list%2F"
+    # "https://www.immobiliare.it/api-next/search-list/real-estates/?fkRegione=emi&idProvincia=BO&idNazione=IT&idContratto=1&idCategoria=1&prezzoMinimo=10000&prezzoMassimo=50000&idTipologia[0]=7&idTipologia[1]=31&idTipologia[2]=11&idTipologia[3]=12&idTipologia[4]=13&idTipologia[5]=4&localiMinimo=3&localiMassimo=5&bagni=1&boxAuto[0]=4&cantina=1&noAste=1&pag=1&paramsCount=17&path=%2Fen%2Fsearch-list%2F"
     total_count = 0
+    print(first_observed)
     for name, region, province in data:
         print(name)
         page = 0
@@ -286,15 +293,12 @@ if __name__ == "__main__":  #
             input_json = response.json()
             pages = input_json["maxPages"]
             count = input_json["count"]
-            total_count = total_count + count
-            print("Property count :" + str(total_count))
-            if page == pages or count == 0 or response.status_code != 200:
-                break
-            web_result = propertyparser(response.json(), name)
+            web_result = propertyparser(input_json, name)
             id_list = []
             with Session(db_engine) as session:
                 exist_id = get_list_id(session)
                 for item in web_result:
+                    first_observed.setdefault(item.id, str(date.today()))
                     if item.id not in exist_id:
                         if google_api:
                             count_bars(item)
@@ -308,5 +312,13 @@ if __name__ == "__main__":  #
                         session.merge(item)
                     id_list.append(item.id)
                 session.commit()
-            update_sold(session, name, id_list)
-            to_translate = select_db_no_translation(session)
+                print("We have committed : " + name + " - page: " + str(page))
+                update_sold(session, name, id_list)
+                to_translate = select_db_no_translation(session)
+            if page == pages or count == 0 or response.status_code != 200:
+                total_count = total_count + count
+                print("Property count :" + str(total_count))
+                print("we are in the break")
+                break
+    out_file = open("first_observed.json", "w+")
+    json.dump(first_observed, out_file)
