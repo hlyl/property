@@ -2,9 +2,6 @@
 # http://20.105.249.39:4444/
 import os
 from fnmatch import translate
-from tokenize import String
-from bs4 import BeautifulSoup
-import asyncio
 from googleplaces import GooglePlaces, types, lang
 import requests
 import json
