@@ -1,7 +1,6 @@
 # source /home/hlynge/dev/property/venv/bin/activate
 # http://20.105.249.39:4444/
 import os
-import dateti
 from fnmatch import translate
 from tokenize import String
 from bs4 import BeautifulSoup
