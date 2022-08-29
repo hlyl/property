@@ -132,7 +132,6 @@ def select_db_no_translation(session) -> dict:
     for dic in result_list_of_dict:
         dic["discription"] = str(dic["discription"]).replace("\n", " ")
         dic["discription"] = str(dic["discription"]).replace("  ", " ")
-
         totranslatestr = dic["discription"]
         dic["discription_dk"] = (translator.translate(totranslatestr, "da")).text
 
