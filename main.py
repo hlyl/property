@@ -1,7 +1,7 @@
 # source /home/hlynge/dev/property/venv/bin/activate
 # http://20.105.249.39:4444/
-
-import datetime
+import os
+import dateti
 from fnmatch import translate
 from tokenize import String
 from bs4 import BeautifulSoup
@@ -9,10 +9,9 @@ import asyncio
 from googleplaces import GooglePlaces, types, lang
 import requests
 import json
-import pandas
 import dao
 from dao import Property
-from sqlmodel import Field, SQLModel, create_engine, Session, select, update  #
+from sqlmodel import Field, create_engine, Session, select, update  #
 from typing import List
 import calcdist
 from calcdist import create_rivertree, calc_dist_short, calc_dist_water
@@ -23,8 +22,6 @@ translator = Translator()
 
 production = True
 google_api = False
-API_KEY = open("apiKey.txt", "r").read()
-API_KEY = ""
 tree = calcdist.create_rivertree()
 
 
@@ -202,8 +199,7 @@ def calc_dist_water_main(item: Property) -> Property:
     return item
 
 
-def count_bars(item: Property) -> Property:
-    google_places = GooglePlaces(API_KEY)
+def count_bars(item: Property, google_places: GooglePlaces) -> Property:
     bar_query = google_places.nearby_search(
         lat_lng={"lat": float(item.latitude), "lng": float(item.longitude)},
         radius=2000,
@@ -214,8 +210,7 @@ def count_bars(item: Property) -> Property:
     return item
 
 
-def count_shop(item: Property) -> Property:
-    google_places = GooglePlaces(API_KEY)
+def count_shop(item: Property, google_places: GooglePlaces) -> Property:
     shop_query = google_places.nearby_search(
         lat_lng={"lat": float(item.latitude), "lng": float(item.longitude)},
         radius=2000,
@@ -226,8 +221,7 @@ def count_shop(item: Property) -> Property:
     return item
 
 
-def count_bakery(item: Property) -> Property:
-    google_places = GooglePlaces(API_KEY)
+def count_bakery(item: Property, google_places: GooglePlaces) -> Property:
     bakery_query = google_places.nearby_search(
         lat_lng={"lat": float(item.latitude), "lng": float(item.longitude)},
         radius=2000,
@@ -238,8 +232,7 @@ def count_bakery(item: Property) -> Property:
     return item
 
 
-def count_food(item: Property) -> Property:
-    google_places = GooglePlaces(API_KEY)
+def count_food(item: Property, google_places: GooglePlaces) -> Property:
     food_query = google_places.nearby_search(
         lat_lng={"lat": float(item.latitude), "lng": float(item.longitude)},
         radius=2000,
@@ -258,6 +251,9 @@ def get_list_id(session) -> list:
 
 
 if __name__ == "__main__":  #
+    api_key = os.environ["API_KEY"]
+
+    google_places = GooglePlaces(api_key)
     if production:
         db_engine = dao.create_db("database.db")
         data = [
@@ -301,10 +297,10 @@ if __name__ == "__main__":  #
                     first_observed.setdefault(item.id, str(date.today()))
                     if item.id not in exist_id:
                         if google_api:
-                            count_bars(item)
-                            count_shop(item)
-                            count_bakery(item)
-                            count_food(item)
+                            count_bars(item, google_places)
+                            count_shop(item, google_places)
+                            count_bakery(item, google_places)
+                            count_food(item, google_places)
                         if item.latitude != None and item.longitude != None:
                             calc_dist_cost(item)
                             calc_dist_water_main(item)
@@ -321,4 +317,8 @@ if __name__ == "__main__":  #
                 print("we are in the break")
                 break
     out_file = open("first_observed.json", "w+")
+    new_today = [
+        key for key, value in first_observed.items() if value == str(date.today())
+    ]
+    print(len(new_today))
     json.dump(first_observed, out_file)
