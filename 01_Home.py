@@ -28,6 +28,8 @@ st.set_page_config(page_title=page_title, page_icon=page_icon, layout=layout)
 st.header(page_title + " " + page_icon)
 # df = pd.read_sql("select * from property where sold is 0", con=conn)
 df = pd.read_sql("select * from property", con=conn)
+df["longitude"] = pd.to_numeric(df["longitude"], errors="coerce")
+df["latitude"] = pd.to_numeric(df["latitude"], errors="coerce")
 st.session_state["df"] = df
 
 overview = df[
@@ -50,3 +52,6 @@ base_url = "https://www.immobiliare.it/annunci/"
 
 st.markdown("### All Properties:")
 st.dataframe(overview)
+
+
+st.write(df)
