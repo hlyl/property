@@ -21,7 +21,7 @@ regions = [
     "BOLOGNA",
     "MILAN",
 ]
-layout = "centered"
+layout = "wide"
 conn = sqlite3.connect(database)
 # --------------------------------------------------
 st.set_page_config(page_title=page_title, page_icon=page_icon, layout=layout)

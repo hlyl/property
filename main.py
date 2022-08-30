@@ -263,8 +263,9 @@ if __name__ == "__main__":  #
             ("BOLOGNA", "emi", "BO"),
             ("MILAN", "lom", "MI"),
         ]
-        first_observed = {}
-        first_observed = json.loads(open("first_observed.json").read())
+        with open("first_observed.json") as f:
+            first_observed = json.load(f)
+            print(len(first_observed))
     else:
         db_engine = dao.create_db("test.db")
         data = [
@@ -273,7 +274,6 @@ if __name__ == "__main__":  #
 
     # "https://www.immobiliare.it/api-next/search-list/real-estates/?fkRegione=emi&idProvincia=BO&idNazione=IT&idContratto=1&idCategoria=1&prezzoMinimo=10000&prezzoMassimo=50000&idTipologia[0]=7&idTipologia[1]=31&idTipologia[2]=11&idTipologia[3]=12&idTipologia[4]=13&idTipologia[5]=4&localiMinimo=3&localiMassimo=5&bagni=1&boxAuto[0]=4&cantina=1&noAste=1&pag=1&paramsCount=17&path=%2Fen%2Fsearch-list%2F"
     total_count = 0
-    print(first_observed)
     for name, region, province in data:
         print(name)
         page = 0
@@ -289,7 +289,9 @@ if __name__ == "__main__":  #
             with Session(db_engine) as session:
                 exist_id = get_list_id(session)
                 for item in web_result:
-                    first_observed.setdefault(item.id, str(date.today()))
+                    item_id = str(item.id)
+                    if item_id not in first_observed:
+                        first_observed[item_id] = str(date.today())
                     if item.id not in exist_id:
                         if google_api:
                             count_bars(item, google_places)
@@ -311,9 +313,10 @@ if __name__ == "__main__":  #
                 print("Property count :" + str(total_count))
                 print("we are in the break")
                 break
-    out_file = open("first_observed.json", "w+")
+
     new_today = [
         key for key, value in first_observed.items() if value == str(date.today())
     ]
     print(len(new_today))
-    json.dump(first_observed, out_file)
+    with open("first_observed.json", "w") as f:
+        json.dump(first_observed, f, indent=4)
