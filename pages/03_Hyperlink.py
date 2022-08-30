@@ -29,6 +29,9 @@ df = st.session_state["df"]
 
 df["longitude"] = pd.to_numeric(df["longitude"], errors="coerce")
 df["latitude"] = pd.to_numeric(df["latitude"], errors="coerce")
+df["price"] = pd.to_numeric(df["price"], errors="coerce")
+df["price_m"] = pd.to_numeric(df["price_m"], errors="coerce")
+
 lat_lon = df.dropna(subset=["longitude", "latitude"])
 
 num_rows = lat_lon.count()[0]
@@ -65,5 +68,8 @@ def map_plot(df):
 st.map(lat_lon)
 st.write("Number of Rows in DataFrame :", num_rows)
 
+lat_lon2 = df.dropna(subset=["longitude", "latitude"])
+st.write("test")
+st.write(lat_lon2.dtypes)
 
-st.plotly_chart(map_plot(df))
+st.plotly_chart(map_plot(lat_lon2))
