@@ -21,3 +21,7 @@ def test_1():
         with open("json_mock_file.json") as test_file:
             web_result = propertyparser(json.load(test_file), name)
             print(web_result)
+
+
+if __name__ == "__main__":
+    test_1()

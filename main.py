@@ -306,10 +306,10 @@ if __name__ == "__main__":  #
                     id_list.append(item.id)
                 session.commit()
                 print("We have committed : " + name + " - page: " + str(page))
-                update_sold(session, name, id_list)
                 to_translate = select_db_no_translation(session)
             if page == pages or count == 0 or response.status_code != 200:
                 total_count = total_count + count
+                update_sold(session, name, id_list)
                 print("Property count :" + str(total_count))
                 print("we are in the break")
                 break

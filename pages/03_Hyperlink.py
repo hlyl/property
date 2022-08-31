@@ -38,14 +38,6 @@ num_rows = lat_lon.count()[0]
 
 
 def map_plot(df):
-    # Change the zoom level according to the shape of df
-    size = df["price"]
-    if size <= 25000:
-        zoom = 3
-    elif size > 40000:
-        zoom = 5
-    else:
-        zoom = 4
     # Get time for the moment
     now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     # Construct the figure
@@ -55,9 +47,7 @@ def map_plot(df):
         lat="latitude",
         lon="longitude",
         color="price",
-        size="size",
         color_continuous_scale=px.colors.cyclical.IceFire,
-        zoom=zoom,
     )
     fig.update_traces(textposition="top center")
     fig.update_layout(title_text=f"Overview of propety - {now}", title_x=0.5)
@@ -70,6 +60,5 @@ st.write("Number of Rows in DataFrame :", num_rows)
 
 lat_lon2 = df.dropna(subset=["longitude", "latitude"])
 st.write("test")
-st.write(lat_lon2.dtypes)
 
 st.plotly_chart(map_plot(lat_lon2))
