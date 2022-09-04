@@ -1,0 +1,1070 @@
+{
+    "html_attributions": [],
+    "next_page_token": "AeJbb3flxUzGsi7ElNHojHn-lgwsJQM5YtMccvgOE966wjS5HhoKkfGGZUZXQmhPn07JZ0FCH-92Hc9UhVmNw5nHpqnpUEYlJ_WAwPggnLx-Br6eN7EflURNWg2qW6XEzXP5_Qr2HGspYoaIAsatIi24ZDdK6hGmOkXHerrd0dcsqZg3YcfSzGXK3dBXCkU98YaFUd28zDLDW5EQfjgZXXQCINBWrNzr6utaENDXVbh93FpCueBzIdQB2-4T0Edu0BOeWJhxi913lpZaXi2is3RTKcmbkLmyx-xEQXZ9SCz7qlFA9mtuKgrTbSwBiIlur6ma3xCkbytiI0NoVMWGMiTEBvHq4G6LEnYUNsr0S0Z_v6cIFajkMxmkpYO3s7ztzxqYUeqeny66I5GXTvkfrnDuGUvmLpAzHgaemYZNLN1KqG_t59XEVu5_JtBU4MUi",
+    "results": [
+        {
+            "business_status": "OPERATIONAL",
+            "geometry": {
+                "location": {
+                    "lat": 44.505184,
+                    "lng": 11.341895
+                },
+                "viewport": {
+                    "northeast": {
+                        "lat": 44.5066012802915,
+                        "lng": 11.3432848302915
+                    },
+                    "southwest": {
+                        "lat": 44.5039033197085,
+                        "lng": 11.3405868697085
+                    }
+                }
+            },
+            "icon": "https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/lodging-71.png",
+            "icon_background_color": "#909CE1",
+            "icon_mask_base_uri": "https://maps.gstatic.com/mapfiles/place_api/icons/v2/hotel_pinlet",
+            "name": "UNAHOTELS Bologna Centro",
+            "opening_hours": {
+                "open_now": true
+            },
+            "photos": [
+                {
+                    "height": 1402,
+                    "html_attributions": [
+                        "<a href=\"https://maps.google.com/maps/contrib/104063279523880115642\">UNAHOTELS Bologna Centro</a>"
+                    ],
+                    "photo_reference": "AeJbb3dCYOWtk1Bkm1K35fxUyHUJSRHELA3xasMvR2jK-qICc4vURXsiTWknhPy9xkW3CRYgGsPRHr2Oni9OQsd7PxlgLSz0Jq91dukFeOrciZ-0DkTw0ZCqx6XH9720LorycqkYmbib5dMCbfbd_Pl268l4DAR7R7wbVfJk3vY2rmYHk-YC",
+                    "width": 2100
+                }
+            ],
+            "place_id": "ChIJPzI4qp7Uf0cRUh0AWKsGRjA",
+            "plus_code": {
+                "compound_code": "G84R+3Q Bologna, Metropolitan City of Bologna, Italy",
+                "global_code": "8FPHG84R+3Q"
+            },
+            "rating": 4.3,
+            "reference": "ChIJPzI4qp7Uf0cRUh0AWKsGRjA",
+            "scope": "GOOGLE",
+            "types": [
+                "lodging",
+                "restaurant",
+                "food",
+                "point_of_interest",
+                "establishment"
+            ],
+            "user_ratings_total": 1310,
+            "vicinity": "43, Viale Pietro Pietramellara, 41, Bologna"
+        },
+        {
+            "business_status": "OPERATIONAL",
+            "geometry": {
+                "location": {
+                    "lat": 44.4958518,
+                    "lng": 11.3427008
+                },
+                "viewport": {
+                    "northeast": {
+                        "lat": 44.4971231802915,
+                        "lng": 11.3441113802915
+                    },
+                    "southwest": {
+                        "lat": 44.4944252197085,
+                        "lng": 11.3414134197085
+                    }
+                }
+            },
+            "icon": "https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/lodging-71.png",
+            "icon_background_color": "#909CE1",
+            "icon_mask_base_uri": "https://maps.gstatic.com/mapfiles/place_api/icons/v2/hotel_pinlet",
+            "name": "Grand Hotel Majestic gi\u00e0 Baglioni",
+            "opening_hours": {
+                "open_now": true
+            },
+            "photos": [
+                {
+                    "height": 6656,
+                    "html_attributions": [
+                        "<a href=\"https://maps.google.com/maps/contrib/103953930046194291539\">Grand Hotel Majestic gi\u00e0 Baglioni</a>"
+                    ],
+                    "photo_reference": "AeJbb3dNs6r-jAtuicICpR5J89W-kITkLOXLmcXFLpf4AR1pWKWGRpzd2uIOcwhdP8Wsx0x2DG7Eb8U6KK6RomPLgLB6SWwiPFFJwrQFy9-mA6e-thqskHw2iVblQardS1DJ_g5Mt78DHoly067XJ0x_WpBzgaVku2nD0AmpWRhV8T8e2pKE",
+                    "width": 13312
+                }
+            ],
+            "place_id": "ChIJOV12DJbUf0cR3SG5RyJngAs",
+            "plus_code": {
+                "compound_code": "F8WV+83 Bologna, Metropolitan City of Bologna, Italy",
+                "global_code": "8FPHF8WV+83"
+            },
+            "rating": 4.6,
+            "reference": "ChIJOV12DJbUf0cR3SG5RyJngAs",
+            "scope": "GOOGLE",
+            "types": [
+                "lodging",
+                "restaurant",
+                "food",
+                "point_of_interest",
+                "establishment"
+            ],
+            "user_ratings_total": 826,
+            "vicinity": "Via dell'Indipendenza, 8, Bologna"
+        },
+        {
+            "business_status": "OPERATIONAL",
+            "geometry": {
+                "location": {
+                    "lat": 44.5019837,
+                    "lng": 11.3449308
+                },
+                "viewport": {
+                    "northeast": {
+                        "lat": 44.5033108302915,
+                        "lng": 11.3461443802915
+                    },
+                    "southwest": {
+                        "lat": 44.5006128697085,
+                        "lng": 11.3434464197085
+                    }
+                }
+            },
+            "icon": "https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/restaurant-71.png",
+            "icon_background_color": "#FF9E67",
+            "icon_mask_base_uri": "https://maps.gstatic.com/mapfiles/place_api/icons/v2/restaurant_pinlet",
+            "name": "Ristorante I Portici",
+            "opening_hours": {
+                "open_now": true
+            },
+            "photos": [
+                {
+                    "height": 3264,
+                    "html_attributions": [
+                        "<a href=\"https://maps.google.com/maps/contrib/107989261342461203140\">Alessandro Vaccari</a>"
+                    ],
+                    "photo_reference": "AeJbb3dZRwp7gKSz0ga95rEvJM9meG1bdE73ddHOtcSfpQ18ZipdOiC8JUABxwcpCSi9pemN2F8RtrxZxvproYvfxfkCakLdDHCYHIaUlEWwNN_N6AqDFZNK1SB0FYCrRHG6_mneepXdZIVipcIDsygEaRJUgaBZsBtLOHs1KygFyztmAebo",
+                    "width": 2448
+                }
+            ],
+            "place_id": "ChIJWxw9Q5jUf0cRIkD93IaTeG0",
+            "plus_code": {
+                "compound_code": "G82V+QX Bologna, Metropolitan City of Bologna, Italy",
+                "global_code": "8FPHG82V+QX"
+            },
+            "price_level": 4,
+            "rating": 4.3,
+            "reference": "ChIJWxw9Q5jUf0cRIkD93IaTeG0",
+            "scope": "GOOGLE",
+            "types": [
+                "restaurant",
+                "food",
+                "point_of_interest",
+                "establishment"
+            ],
+            "user_ratings_total": 1585,
+            "vicinity": "Via dell'Indipendenza, 69, Bologna"
+        },
+        {
+            "business_status": "OPERATIONAL",
+            "geometry": {
+                "location": {
+                    "lat": 44.496901,
+                    "lng": 11.3466853
+                },
+                "viewport": {
+                    "northeast": {
+                        "lat": 44.4982605302915,
+                        "lng": 11.3479624302915
+                    },
+                    "southwest": {
+                        "lat": 44.4955625697085,
+                        "lng": 11.3452644697085
+                    }
+                }
+            },
+            "icon": "https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/restaurant-71.png",
+            "icon_background_color": "#FF9E67",
+            "icon_mask_base_uri": "https://maps.gstatic.com/mapfiles/place_api/icons/v2/restaurant_pinlet",
+            "name": "Nicola's",
+            "opening_hours": {
+                "open_now": true
+            },
+            "photos": [
+                {
+                    "height": 4608,
+                    "html_attributions": [
+                        "<a href=\"https://maps.google.com/maps/contrib/100817573545279259280\">adriana buf</a>"
+                    ],
+                    "photo_reference": "AeJbb3d4XmINW5P7hIEaRr95qL6n_COB0xZHQVC9eFvAPuECsDn_Q1UaAbKYeHqYrCVJDge-I4U15N2M2LzR62d_2imM1lzUf5oEeMzPBe7XtO7HEf6YHSpALlCXaC4HvpkJHWD_mNJbv5GFysg7sWWMpcJ3RspggC0aSQEdhJPmm76ybLi3",
+                    "width": 3456
+                }
+            ],
+            "place_id": "ChIJfa6xur3Uf0cRcRblC0JBz3Q",
+            "plus_code": {
+                "compound_code": "F8WW+QM Bologna, Metropolitan City of Bologna, Italy",
+                "global_code": "8FPHF8WW+QM"
+            },
+            "price_level": 2,
+            "rating": 3.9,
+            "reference": "ChIJfa6xur3Uf0cRcRblC0JBz3Q",
+            "scope": "GOOGLE",
+            "types": [
+                "restaurant",
+                "food",
+                "point_of_interest",
+                "establishment"
+            ],
+            "user_ratings_total": 1342,
+            "vicinity": "Piazza San Martino, 9, Bologna"
+        },
+        {
+            "business_status": "OPERATIONAL",
+            "geometry": {
+                "location": {
+                    "lat": 44.4985465,
+                    "lng": 11.345168
+                },
+                "viewport": {
+                    "northeast": {
+                        "lat": 44.4998601802915,
+                        "lng": 11.3465216802915
+                    },
+                    "southwest": {
+                        "lat": 44.4971622197085,
+                        "lng": 11.3438237197085
+                    }
+                }
+            },
+            "icon": "https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/restaurant-71.png",
+            "icon_background_color": "#FF9E67",
+            "icon_mask_base_uri": "https://maps.gstatic.com/mapfiles/place_api/icons/v2/restaurant_pinlet",
+            "name": "Trattoria dal Biassanot",
+            "opening_hours": {
+                "open_now": true
+            },
+            "photos": [
+                {
+                    "height": 4624,
+                    "html_attributions": [
+                        "<a href=\"https://maps.google.com/maps/contrib/114427043472225178192\">Alessandro Goracci</a>"
+                    ],
+                    "photo_reference": "AeJbb3dDuLp9KMVEG-zqajIx0nxp34kP-CM_9B0_aBmZ81VFiJkq65pxHIjPSus9cGG5iyRVgljiUyFR34LF7z87ec-2klYsIsvYZ_CrO6lT66IeOWMufH-9O1QZaj-Qcn453mlKOJzgKKUhSRbvi2LchhIZAT-UDJKeJSfkitFlM3GKN5Ak",
+                    "width": 3472
+                }
+            ],
+            "place_id": "ChIJB6NPYr3Uf0cRzMLugEVIV9M",
+            "plus_code": {
+                "compound_code": "F8XW+C3 Bologna, Metropolitan City of Bologna, Italy",
+                "global_code": "8FPHF8XW+C3"
+            },
+            "price_level": 2,
+            "rating": 4.4,
+            "reference": "ChIJB6NPYr3Uf0cRzMLugEVIV9M",
+            "scope": "GOOGLE",
+            "types": [
+                "restaurant",
+                "food",
+                "point_of_interest",
+                "establishment"
+            ],
+            "user_ratings_total": 2653,
+            "vicinity": "Via Piella, 16, Bologna"
+        },
+        {
+            "business_status": "OPERATIONAL",
+            "geometry": {
+                "location": {
+                    "lat": 44.503652,
+                    "lng": 11.3379391
+                },
+                "viewport": {
+                    "northeast": {
+                        "lat": 44.50495223029149,
+                        "lng": 11.3393412802915
+                    },
+                    "southwest": {
+                        "lat": 44.5022542697085,
+                        "lng": 11.3366433197085
+                    }
+                }
+            },
+            "icon": "https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/restaurant-71.png",
+            "icon_background_color": "#FF9E67",
+            "icon_mask_base_uri": "https://maps.gstatic.com/mapfiles/place_api/icons/v2/restaurant_pinlet",
+            "name": "Zenzero Bologna",
+            "opening_hours": {
+                "open_now": true
+            },
+            "photos": [
+                {
+                    "height": 2535,
+                    "html_attributions": [
+                        "<a href=\"https://maps.google.com/maps/contrib/117870738864850322084\">Zenzero Bologna</a>"
+                    ],
+                    "photo_reference": "AeJbb3egLieDiFGBDQe4HvMBDa8boQn61ZvmYTabfqyRyygs9uAGgfWtjhn7fFV8G6BhLad2KWY4x7pQWUZj0nV1knTEh13o-fgt9r-dh_GXhn28p2RL2b1ErP1yTT3-36ib77zKq-cRbdxB0-L8-AYDP2Xi6e7XAJ8Kt-yT_GiJeZKiGcw0",
+                    "width": 3803
+                }
+            ],
+            "place_id": "ChIJwbr1BpvUf0cRCIO2OK8vYMQ",
+            "plus_code": {
+                "compound_code": "G83Q+F5 Bologna, Metropolitan City of Bologna, Italy",
+                "global_code": "8FPHG83Q+F5"
+            },
+            "price_level": 2,
+            "rating": 4.5,
+            "reference": "ChIJwbr1BpvUf0cRCIO2OK8vYMQ",
+            "scope": "GOOGLE",
+            "types": [
+                "restaurant",
+                "food",
+                "point_of_interest",
+                "establishment"
+            ],
+            "user_ratings_total": 967,
+            "vicinity": "Via Fratelli Rosselli, 18, Bologna"
+        },
+        {
+            "business_status": "OPERATIONAL",
+            "geometry": {
+                "location": {
+                    "lat": 44.49565810000001,
+                    "lng": 11.3450402
+                },
+                "viewport": {
+                    "northeast": {
+                        "lat": 44.4969989302915,
+                        "lng": 11.3463805802915
+                    },
+                    "southwest": {
+                        "lat": 44.4943009697085,
+                        "lng": 11.3436826197085
+                    }
+                }
+            },
+            "icon": "https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/generic_business-71.png",
+            "icon_background_color": "#7B9EB0",
+            "icon_mask_base_uri": "https://maps.gstatic.com/mapfiles/place_api/icons/v2/generic_pinlet",
+            "name": "Centro Natura",
+            "opening_hours": {
+                "open_now": false
+            },
+            "photos": [
+                {
+                    "height": 1365,
+                    "html_attributions": [
+                        "<a href=\"https://maps.google.com/maps/contrib/116536970496726807546\">Centro Natura</a>"
+                    ],
+                    "photo_reference": "AeJbb3e31EYIqcAJn_pN0y6bMtPfpQbP-fhKWJTmSjAMLghzJkBjkm7PW0fMS6f0yj4vxo2pkRlfiG6JxN0whcl42b7vJNPNzoxQJn_Q-FaAY-yynHx7_5a75W5qi88wnwKZxzm00vBkPyxbSSQt3BV9mGlgBTM2xICJF6Iqae3Wg3ZjuhLh",
+                    "width": 2048
+                }
+            ],
+            "place_id": "ChIJKe1e4b3Uf0cRIjadMvVXiqk",
+            "plus_code": {
+                "compound_code": "F8WW+72 Bologna, Metropolitan City of Bologna, Italy",
+                "global_code": "8FPHF8WW+72"
+            },
+            "price_level": 1,
+            "rating": 4.4,
+            "reference": "ChIJKe1e4b3Uf0cRIjadMvVXiqk",
+            "scope": "GOOGLE",
+            "types": [
+                "gym",
+                "spa",
+                "health",
+                "restaurant",
+                "food",
+                "point_of_interest",
+                "establishment"
+            ],
+            "user_ratings_total": 209,
+            "vicinity": "Via degli Albari, 4a, Bologna"
+        },
+        {
+            "business_status": "OPERATIONAL",
+            "geometry": {
+                "location": {
+                    "lat": 44.4989107,
+                    "lng": 11.3459215
+                },
+                "viewport": {
+                    "northeast": {
+                        "lat": 44.50019483029151,
+                        "lng": 11.3472405802915
+                    },
+                    "southwest": {
+                        "lat": 44.49749686970851,
+                        "lng": 11.3445426197085
+                    }
+                }
+            },
+            "icon": "https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/restaurant-71.png",
+            "icon_background_color": "#FF9E67",
+            "icon_mask_base_uri": "https://maps.gstatic.com/mapfiles/place_api/icons/v2/restaurant_pinlet",
+            "name": "Trattoria del Rosso",
+            "opening_hours": {
+                "open_now": true
+            },
+            "photos": [
+                {
+                    "height": 627,
+                    "html_attributions": [
+                        "<a href=\"https://maps.google.com/maps/contrib/111711950173894675225\">Trattoria del Rosso</a>"
+                    ],
+                    "photo_reference": "AeJbb3eDq8HjJB_2AovardHhEVk7inQfZZ1IBBeDMrY-jKz-FECmn0F0UBTWkuKWt7jRs6Oy38eWzsfkXOpMuhXSSYf4rHtoLiRd4SqFQnuLj54v6pDJxJH6dqFz1ZowjHPX4FsER66YsMT1oEBxaiSNvSBGwlNNKaoHj79VmiB93fuzqHxB",
+                    "width": 1116
+                }
+            ],
+            "place_id": "ChIJS0nuMpjUf0cRJiGHPVSr1fo",
+            "plus_code": {
+                "compound_code": "F8XW+H9 Bologna, Metropolitan City of Bologna, Italy",
+                "global_code": "8FPHF8XW+H9"
+            },
+            "price_level": 2,
+            "rating": 4.2,
+            "reference": "ChIJS0nuMpjUf0cRJiGHPVSr1fo",
+            "scope": "GOOGLE",
+            "types": [
+                "restaurant",
+                "food",
+                "point_of_interest",
+                "establishment"
+            ],
+            "user_ratings_total": 3163,
+            "vicinity": "Via Augusto Righi, 30, Bologna"
+        },
+        {
+            "business_status": "OPERATIONAL",
+            "geometry": {
+                "location": {
+                    "lat": 44.5079308,
+                    "lng": 11.3553265
+                },
+                "viewport": {
+                    "northeast": {
+                        "lat": 44.5093154802915,
+                        "lng": 11.3567664802915
+                    },
+                    "southwest": {
+                        "lat": 44.5066175197085,
+                        "lng": 11.3540685197085
+                    }
+                }
+            },
+            "icon": "https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/restaurant-71.png",
+            "icon_background_color": "#FF9E67",
+            "icon_mask_base_uri": "https://maps.gstatic.com/mapfiles/place_api/icons/v2/restaurant_pinlet",
+            "name": "Haiku",
+            "opening_hours": {
+                "open_now": true
+            },
+            "photos": [
+                {
+                    "height": 853,
+                    "html_attributions": [
+                        "<a href=\"https://maps.google.com/maps/contrib/105457142512226608938\">Haiku Restaurant</a>"
+                    ],
+                    "photo_reference": "AeJbb3fbvCc_kLiK8R95AxD2hy8wT3honxdvIiXSJTjUE80gNtqDfxG9LW2oAxxbryzj55ez_4GBYQpXYONUTOY_jTxCQ7XulAUAD-8u7ovfhAk-fa6dzc9N6NipI2hs3s9DijTQMIYjej1A7nyuMML85zsjh-lCt0Ck4uHNbnf2vp8us9qP",
+                    "width": 1280
+                }
+            ],
+            "place_id": "ChIJUzsMUKfUf0cRBJMaJo5gsG8",
+            "plus_code": {
+                "compound_code": "G954+54 Bologna, Metropolitan City of Bologna, Italy",
+                "global_code": "8FPHG954+54"
+            },
+            "price_level": 2,
+            "rating": 4.1,
+            "reference": "ChIJUzsMUKfUf0cRBJMaJo5gsG8",
+            "scope": "GOOGLE",
+            "types": [
+                "restaurant",
+                "food",
+                "point_of_interest",
+                "establishment"
+            ],
+            "user_ratings_total": 622,
+            "vicinity": "Via Stalingrado, 16b, Bologna"
+        },
+        {
+            "business_status": "OPERATIONAL",
+            "geometry": {
+                "location": {
+                    "lat": 44.503598,
+                    "lng": 11.3401734
+                },
+                "viewport": {
+                    "northeast": {
+                        "lat": 44.5049172302915,
+                        "lng": 11.3414663802915
+                    },
+                    "southwest": {
+                        "lat": 44.5022192697085,
+                        "lng": 11.3387684197085
+                    }
+                }
+            },
+            "icon": "https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/restaurant-71.png",
+            "icon_background_color": "#FF9E67",
+            "icon_mask_base_uri": "https://maps.gstatic.com/mapfiles/place_api/icons/v2/restaurant_pinlet",
+            "name": "Il Veliero Ristorante Pizzeria",
+            "opening_hours": {
+                "open_now": true
+            },
+            "photos": [
+                {
+                    "height": 2792,
+                    "html_attributions": [
+                        "<a href=\"https://maps.google.com/maps/contrib/101608575324139643532\">Il Veliero Ristorante Pizzeria</a>"
+                    ],
+                    "photo_reference": "AeJbb3fPJ8hpFpUJi_5YFF4ZjD5bt8t14BuBD1I-8Qu2MLRE3a5E0jHmp_LNlFVLu2uDsNQussHLrrrgr055pr8ysGZwNJHAAFmdgKXipntZdSxce3kSC1OTct-4ULfh2UiF9yma79L72yFjl2YWqmfCSj1B4Y8KLehDrT7hOyrlMt6MQPsW",
+                    "width": 4928
+                }
+            ],
+            "place_id": "ChIJ9SfIxZvUf0cRNIqGfHV1Jq8",
+            "plus_code": {
+                "compound_code": "G83R+C3 Bologna, Metropolitan City of Bologna, Italy",
+                "global_code": "8FPHG83R+C3"
+            },
+            "price_level": 2,
+            "rating": 4.4,
+            "reference": "ChIJ9SfIxZvUf0cRNIqGfHV1Jq8",
+            "scope": "GOOGLE",
+            "types": [
+                "restaurant",
+                "food",
+                "point_of_interest",
+                "establishment"
+            ],
+            "user_ratings_total": 2843,
+            "vicinity": "Via Milazzo, 11/A, Bologna"
+        },
+        {
+            "business_status": "OPERATIONAL",
+            "geometry": {
+                "location": {
+                    "lat": 44.4967,
+                    "lng": 11.349644
+                },
+                "viewport": {
+                    "northeast": {
+                        "lat": 44.49806708029151,
+                        "lng": 11.3509925802915
+                    },
+                    "southwest": {
+                        "lat": 44.49536911970851,
+                        "lng": 11.3482946197085
+                    }
+                }
+            },
+            "icon": "https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/restaurant-71.png",
+            "icon_background_color": "#FF9E67",
+            "icon_mask_base_uri": "https://maps.gstatic.com/mapfiles/place_api/icons/v2/restaurant_pinlet",
+            "name": "To Steki",
+            "photos": [
+                {
+                    "height": 1843,
+                    "html_attributions": [
+                        "<a href=\"https://maps.google.com/maps/contrib/100130805491357397116\">To Steki</a>"
+                    ],
+                    "photo_reference": "AeJbb3do1x9R01mLQMU8xgAQHBX_2VfM4D3ReYnzkjf27mZpEE4GD7yPlh02IHFSBHv_P7OC4FSZu_ghEcKehgPJz5uFWmNNGcfjnW4ZKv-VFCmHdXKB1jYPryqHgO2_RZlZy_jiU8tBgkoRufoWdis6EXxv9lxxnyBUp3u8NUUTRMQhKWB2",
+                    "width": 2764
+                }
+            ],
+            "place_id": "ChIJn0zgi7vUf0cR8IS4xseeyXQ",
+            "plus_code": {
+                "compound_code": "F8WX+MV Bologna, Metropolitan City of Bologna, Italy",
+                "global_code": "8FPHF8WX+MV"
+            },
+            "price_level": 2,
+            "rating": 4.4,
+            "reference": "ChIJn0zgi7vUf0cR8IS4xseeyXQ",
+            "scope": "GOOGLE",
+            "types": [
+                "restaurant",
+                "food",
+                "point_of_interest",
+                "establishment"
+            ],
+            "user_ratings_total": 2704,
+            "vicinity": "Largo Respighi, 4e, Bologna"
+        },
+        {
+            "business_status": "OPERATIONAL",
+            "geometry": {
+                "location": {
+                    "lat": 44.4978312,
+                    "lng": 11.3506071
+                },
+                "viewport": {
+                    "northeast": {
+                        "lat": 44.4991297302915,
+                        "lng": 11.3519701802915
+                    },
+                    "southwest": {
+                        "lat": 44.4964317697085,
+                        "lng": 11.3492722197085
+                    }
+                }
+            },
+            "icon": "https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/restaurant-71.png",
+            "icon_background_color": "#FF9E67",
+            "icon_mask_base_uri": "https://maps.gstatic.com/mapfiles/place_api/icons/v2/restaurant_pinlet",
+            "name": "Ristorante Matusel Bologna centro",
+            "opening_hours": {
+                "open_now": true
+            },
+            "photos": [
+                {
+                    "height": 3024,
+                    "html_attributions": [
+                        "<a href=\"https://maps.google.com/maps/contrib/105518804808326880460\">Ristorante Matusel Bologna centro</a>"
+                    ],
+                    "photo_reference": "AeJbb3fPaG6UWLIrLdGmnrA5l5lbugOl5bCw2jV1eHXk0EVuBIr15QM-8GFEkJf3xpMhp2wAfSDVmMBcv9HyQXF_VmnLqochFdIiQnoOLfrBMcxvecnF5vBJv9zeSIxilK7th4eb7gXViRPb-p2OTCAD-tygwZEu25LwW6ROXnb2BXQU437v",
+                    "width": 4032
+                }
+            ],
+            "place_id": "ChIJ8W3gQbvUf0cR5PsIuJqtbEM",
+            "plus_code": {
+                "compound_code": "F9X2+46 Bologna, Metropolitan City of Bologna, Italy",
+                "global_code": "8FPHF9X2+46"
+            },
+            "price_level": 2,
+            "rating": 4.4,
+            "reference": "ChIJ8W3gQbvUf0cR5PsIuJqtbEM",
+            "scope": "GOOGLE",
+            "types": [
+                "restaurant",
+                "food",
+                "point_of_interest",
+                "establishment"
+            ],
+            "user_ratings_total": 529,
+            "vicinity": "Via delle Belle Arti, 20, Bologna"
+        },
+        {
+            "business_status": "OPERATIONAL",
+            "geometry": {
+                "location": {
+                    "lat": 44.49815,
+                    "lng": 11.34923
+                },
+                "viewport": {
+                    "northeast": {
+                        "lat": 44.49948158029149,
+                        "lng": 11.3505271802915
+                    },
+                    "southwest": {
+                        "lat": 44.4967836197085,
+                        "lng": 11.3478292197085
+                    }
+                }
+            },
+            "icon": "https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/restaurant-71.png",
+            "icon_background_color": "#FF9E67",
+            "icon_mask_base_uri": "https://maps.gstatic.com/mapfiles/place_api/icons/v2/restaurant_pinlet",
+            "name": "Cantina Bentivoglio",
+            "opening_hours": {
+                "open_now": true
+            },
+            "photos": [
+                {
+                    "height": 2441,
+                    "html_attributions": [
+                        "<a href=\"https://maps.google.com/maps/contrib/116067751840452174499\">Cantina Bentivoglio</a>"
+                    ],
+                    "photo_reference": "AeJbb3d4hSlGr6JFApqfIUxBbhoN-5UQfZz31IFNqr1Wl0GkvN3MhwHk9dwSrLL4PI3Crr8Pev76JAVS0HhQDYRNDWjZNaDp4VWqcz2f_IJTOPjy6KkQlE9ntJG9g-HC2-2RS1J7Cmo4IqLZ2HEWRU6hGPZVCGqSHLTW0VKc7tv-jo0rCacm",
+                    "width": 3661
+                }
+            ],
+            "place_id": "ChIJJUpc7bzUf0cR0Uuh9JG81Eo",
+            "plus_code": {
+                "compound_code": "F8XX+7M Bologna, Metropolitan City of Bologna, Italy",
+                "global_code": "8FPHF8XX+7M"
+            },
+            "price_level": 2,
+            "rating": 4.3,
+            "reference": "ChIJJUpc7bzUf0cR0Uuh9JG81Eo",
+            "scope": "GOOGLE",
+            "types": [
+                "restaurant",
+                "night_club",
+                "bar",
+                "food",
+                "point_of_interest",
+                "establishment"
+            ],
+            "user_ratings_total": 1659,
+            "vicinity": "Via Mascarella, 4b, Bologna"
+        },
+        {
+            "business_status": "OPERATIONAL",
+            "geometry": {
+                "location": {
+                    "lat": 44.4977309,
+                    "lng": 11.342957
+                },
+                "viewport": {
+                    "northeast": {
+                        "lat": 44.4990425802915,
+                        "lng": 11.34429753029151
+                    },
+                    "southwest": {
+                        "lat": 44.4963446197085,
+                        "lng": 11.3415995697085
+                    }
+                }
+            },
+            "icon": "https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/restaurant-71.png",
+            "icon_background_color": "#FF9E67",
+            "icon_mask_base_uri": "https://maps.gstatic.com/mapfiles/place_api/icons/v2/restaurant_pinlet",
+            "name": "Ristorante Diana",
+            "opening_hours": {
+                "open_now": true
+            },
+            "photos": [
+                {
+                    "height": 1800,
+                    "html_attributions": [
+                        "<a href=\"https://maps.google.com/maps/contrib/107555792398874612567\">Luigi Orchitano</a>"
+                    ],
+                    "photo_reference": "AeJbb3fhVqSRj_ljpWr_LerkeTpua88P-dud68b4Dsjmupxskp-H-xxGM_vnUxANGv1yNiq1Rwl7yFz8rNFlXc6IBrrgRlY52HGzkPPxcEANbqa4ihtC4FGgoMDzy5NKu1JbIf0_yT8u7xnT7XqKM3GF-mpxu11QH15B_BrGu9mIamOckfBj",
+                    "width": 3239
+                }
+            ],
+            "place_id": "ChIJGcm7NZbUf0cROMiHUj4FLdg",
+            "plus_code": {
+                "compound_code": "F8XV+35 Bologna, Metropolitan City of Bologna, Italy",
+                "global_code": "8FPHF8XV+35"
+            },
+            "price_level": 3,
+            "rating": 4,
+            "reference": "ChIJGcm7NZbUf0cROMiHUj4FLdg",
+            "scope": "GOOGLE",
+            "types": [
+                "restaurant",
+                "food",
+                "point_of_interest",
+                "establishment"
+            ],
+            "user_ratings_total": 890,
+            "vicinity": "Via Volturno, 5, Bologna"
+        },
+        {
+            "business_status": "OPERATIONAL",
+            "geometry": {
+                "location": {
+                    "lat": 44.49651219999999,
+                    "lng": 11.3417551
+                },
+                "viewport": {
+                    "northeast": {
+                        "lat": 44.49789678029149,
+                        "lng": 11.3430589802915
+                    },
+                    "southwest": {
+                        "lat": 44.49519881970849,
+                        "lng": 11.3403610197085
+                    }
+                }
+            },
+            "icon": "https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/restaurant-71.png",
+            "icon_background_color": "#FF9E67",
+            "icon_mask_base_uri": "https://maps.gstatic.com/mapfiles/place_api/icons/v2/restaurant_pinlet",
+            "name": "Trattoria Osteria Buca Manzoni",
+            "opening_hours": {
+                "open_now": true
+            },
+            "photos": [
+                {
+                    "height": 2736,
+                    "html_attributions": [
+                        "<a href=\"https://maps.google.com/maps/contrib/116660191920555399445\">antonio taliento</a>"
+                    ],
+                    "photo_reference": "AeJbb3fsr-pHQ9LqwBfjpsQKKoWze-XxcJaPanZCcoK2a4Kj2cmcV-BE9y4zY-qYg1jP5H7EuG99MIHsPmrfRQJCNu9iIKZU4k8di8EKQt7t-wUwICiLh0ZB_opnE1exmpU81k6DvbXVSxtNG-YqKv3UH_1V89eeMxSW6fqqDQn7UCUTOGDu",
+                    "width": 3648
+                }
+            ],
+            "place_id": "ChIJGVDBZZbUf0cRhEYdfY3ldYk",
+            "plus_code": {
+                "compound_code": "F8WR+JP Bologna, Metropolitan City of Bologna, Italy",
+                "global_code": "8FPHF8WR+JP"
+            },
+            "price_level": 2,
+            "rating": 4.2,
+            "reference": "ChIJGVDBZZbUf0cRhEYdfY3ldYk",
+            "scope": "GOOGLE",
+            "types": [
+                "restaurant",
+                "food",
+                "point_of_interest",
+                "establishment"
+            ],
+            "user_ratings_total": 1701,
+            "vicinity": "Via Manzoni, 6g, Bologna"
+        },
+        {
+            "business_status": "OPERATIONAL",
+            "geometry": {
+                "location": {
+                    "lat": 44.49761400000001,
+                    "lng": 11.3492904
+                },
+                "viewport": {
+                    "northeast": {
+                        "lat": 44.4989853302915,
+                        "lng": 11.3506212802915
+                    },
+                    "southwest": {
+                        "lat": 44.4962873697085,
+                        "lng": 11.3479233197085
+                    }
+                }
+            },
+            "icon": "https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/restaurant-71.png",
+            "icon_background_color": "#FF9E67",
+            "icon_mask_base_uri": "https://maps.gstatic.com/mapfiles/place_api/icons/v2/restaurant_pinlet",
+            "name": "Anna Maria Trattoria",
+            "opening_hours": {
+                "open_now": true
+            },
+            "photos": [
+                {
+                    "height": 4080,
+                    "html_attributions": [
+                        "<a href=\"https://maps.google.com/maps/contrib/104293615009587910837\">Cristian M. Mure\u0219an</a>"
+                    ],
+                    "photo_reference": "AeJbb3cOtUFuThL4PLUqqVgkOw9DLLqKxbPPlPaV6opQf4OAFrsJbubToN7CETTIoWOJUErCRweRKNij5DM7Ek20qF_yo0WY4_r-rnGyN9ckHnmZNa7lwvMu4kyHhnuFc5E9Skl882kCvPfqdsIpVk9zXcRkORMAGwPmvcqPGT580oRDRTnu",
+                    "width": 3072
+                }
+            ],
+            "place_id": "ChIJ-y5uj7zUf0cRjglyKr3Hdcs",
+            "plus_code": {
+                "compound_code": "F8XX+2P Bologna, Metropolitan City of Bologna, Italy",
+                "global_code": "8FPHF8XX+2P"
+            },
+            "price_level": 3,
+            "rating": 4,
+            "reference": "ChIJ-y5uj7zUf0cRjglyKr3Hdcs",
+            "scope": "GOOGLE",
+            "types": [
+                "restaurant",
+                "food",
+                "point_of_interest",
+                "establishment"
+            ],
+            "user_ratings_total": 1039,
+            "vicinity": "Via delle Belle Arti, 17/a, Bologna"
+        },
+        {
+            "business_status": "OPERATIONAL",
+            "geometry": {
+                "location": {
+                    "lat": 44.499703,
+                    "lng": 11.3393499
+                },
+                "viewport": {
+                    "northeast": {
+                        "lat": 44.5010531802915,
+                        "lng": 11.3406994802915
+                    },
+                    "southwest": {
+                        "lat": 44.4983552197085,
+                        "lng": 11.3380015197085
+                    }
+                }
+            },
+            "icon": "https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/restaurant-71.png",
+            "icon_background_color": "#FF9E67",
+            "icon_mask_base_uri": "https://maps.gstatic.com/mapfiles/place_api/icons/v2/restaurant_pinlet",
+            "name": "Ristorante \u00c8 Cucina Leopardi",
+            "opening_hours": {
+                "open_now": true
+            },
+            "photos": [
+                {
+                    "height": 2592,
+                    "html_attributions": [
+                        "<a href=\"https://maps.google.com/maps/contrib/114390493459936661549\">Ali Tal</a>"
+                    ],
+                    "photo_reference": "AeJbb3e_XbnzKzObMeEkp6YJCAEA44-1u5SSuu9bje0xvvTPDJ-jgEYSErQcG_6jQ6qTJdBB9ctD7wJsUfze7a5Ir06a5CbO0J7BDO1fREQcUtfAjNgukELmTlzfarSgMT8Bqj3YKBA-ZQQh8VmsncNz8E0_FKPNCJDXlj-GNHCI1VIFNiWw",
+                    "width": 4608
+                }
+            ],
+            "place_id": "ChIJj22PnuzUf0cRujqOTEAsT6M",
+            "plus_code": {
+                "compound_code": "F8XQ+VP Bologna, Metropolitan City of Bologna, Italy",
+                "global_code": "8FPHF8XQ+VP"
+            },
+            "price_level": 1,
+            "rating": 4.4,
+            "reference": "ChIJj22PnuzUf0cRujqOTEAsT6M",
+            "scope": "GOOGLE",
+            "types": [
+                "restaurant",
+                "food",
+                "point_of_interest",
+                "establishment"
+            ],
+            "user_ratings_total": 1949,
+            "vicinity": "Via Giacomo Leopardi, 4, Bologna"
+        },
+        {
+            "business_status": "OPERATIONAL",
+            "geometry": {
+                "location": {
+                    "lat": 44.49887589999999,
+                    "lng": 11.3355976
+                },
+                "viewport": {
+                    "northeast": {
+                        "lat": 44.5001857802915,
+                        "lng": 11.3368877802915
+                    },
+                    "southwest": {
+                        "lat": 44.4974878197085,
+                        "lng": 11.3341898197085
+                    }
+                }
+            },
+            "icon": "https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/restaurant-71.png",
+            "icon_background_color": "#FF9E67",
+            "icon_mask_base_uri": "https://maps.gstatic.com/mapfiles/place_api/icons/v2/restaurant_pinlet",
+            "name": "Da Bertino",
+            "opening_hours": {
+                "open_now": true
+            },
+            "photos": [
+                {
+                    "height": 2272,
+                    "html_attributions": [
+                        "<a href=\"https://maps.google.com/maps/contrib/105776422514092322366\">Antonello Profita</a>"
+                    ],
+                    "photo_reference": "AeJbb3daur1Y5lQNW8XB8KniBpm75cHZWyRwTIqeZtdm9c8R4ajViYSL4vr_VhIxrseeXa83nHv3iFY3I6amhGRfJWRCTdKtvZ6TpG3HlXZFpX23mDNP6N7oRGoUYKf6Ma9BD9F1s3nCGEoAKS1vFQHs4aODiRv_5_Ahu37e_VcA7G4VgvDy",
+                    "width": 4608
+                }
+            ],
+            "place_id": "ChIJr4t-TpDUf0cRdFLNa1Nccn8",
+            "plus_code": {
+                "compound_code": "F8XP+H6 Bologna, Metropolitan City of Bologna, Italy",
+                "global_code": "8FPHF8XP+H6"
+            },
+            "price_level": 2,
+            "rating": 4.2,
+            "reference": "ChIJr4t-TpDUf0cRdFLNa1Nccn8",
+            "scope": "GOOGLE",
+            "types": [
+                "restaurant",
+                "food",
+                "point_of_interest",
+                "establishment"
+            ],
+            "user_ratings_total": 1427,
+            "vicinity": "Via delle Lame, 55a, Bologna"
+        },
+        {
+            "business_status": "OPERATIONAL",
+            "geometry": {
+                "location": {
+                    "lat": 44.4979143,
+                    "lng": 11.3493092
+                },
+                "viewport": {
+                    "northeast": {
+                        "lat": 44.49927193029151,
+                        "lng": 11.3505888302915
+                    },
+                    "southwest": {
+                        "lat": 44.49657396970851,
+                        "lng": 11.3478908697085
+                    }
+                }
+            },
+            "icon": "https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/restaurant-71.png",
+            "icon_background_color": "#FF9E67",
+            "icon_mask_base_uri": "https://maps.gstatic.com/mapfiles/place_api/icons/v2/restaurant_pinlet",
+            "name": "Bravo Caff\u00e8",
+            "opening_hours": {
+                "open_now": true
+            },
+            "photos": [
+                {
+                    "height": 2000,
+                    "html_attributions": [
+                        "<a href=\"https://maps.google.com/maps/contrib/110122764878668927160\">Bravo Caff\u00e8</a>"
+                    ],
+                    "photo_reference": "AeJbb3cQVCe0pvr72pKNyeJi9_iiP3LJUKWhP1bHxUQZPBoKBt8YmwfmaniADo6XYix5C__pu9QODDPtcx9GdPjRCivt9TDZ2NzaVald2PARBVOVdTYpnVFyvzAo0UJ8EZuv9Waw2JqGtUXGgcLHNT2ttaD9XC1XauWqYLMG7GrXu-nn0kz5",
+                    "width": 3000
+                }
+            ],
+            "place_id": "ChIJS6m6krzUf0cRNcOgalnV_zs",
+            "plus_code": {
+                "compound_code": "F8XX+5P Bologna, Metropolitan City of Bologna, Italy",
+                "global_code": "8FPHF8XX+5P"
+            },
+            "price_level": 3,
+            "rating": 4.4,
+            "reference": "ChIJS6m6krzUf0cRNcOgalnV_zs",
+            "scope": "GOOGLE",
+            "types": [
+                "restaurant",
+                "bar",
+                "food",
+                "point_of_interest",
+                "establishment"
+            ],
+            "user_ratings_total": 939,
+            "vicinity": "Via Mascarella, 1e, Bologna"
+        },
+        {
+            "business_status": "OPERATIONAL",
+            "geometry": {
+                "location": {
+                    "lat": 44.49491219999999,
+                    "lng": 11.3454252
+                },
+                "viewport": {
+                    "northeast": {
+                        "lat": 44.4963766802915,
+                        "lng": 11.3468680802915
+                    },
+                    "southwest": {
+                        "lat": 44.4936787197085,
+                        "lng": 11.3441701197085
+                    }
+                }
+            },
+            "icon": "https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/shopping-71.png",
+            "icon_background_color": "#4B96F3",
+            "icon_mask_base_uri": "https://maps.gstatic.com/mapfiles/place_api/icons/v2/shopping_pinlet",
+            "name": "L'Asporto",
+            "opening_hours": {
+                "open_now": true
+            },
+            "photos": [
+                {
+                    "height": 3266,
+                    "html_attributions": [
+                        "<a href=\"https://maps.google.com/maps/contrib/103735024405959296872\">L&#39;Asporto</a>"
+                    ],
+                    "photo_reference": "AeJbb3cUnUeUARB5uZy8spNcK6fduXVDgsSI1kanBdpGrXtZwq7P_j_wY_zZ7s9ZZmFouLwM8O6F9zFgvZSFs5tezzrT6qSVW-3db71zvPEsOFZ8DmXKuMKItmQBkDNinrfxF5ZFOC6vpL17Uqj9P506dLxAIkVVLwLZFLW12NgAnZ84tc2z",
+                    "width": 4897
+                }
+            ],
+            "place_id": "ChIJlWSFw73Uf0cRtu-lUNgv13A",
+            "plus_code": {
+                "compound_code": "F8VW+X5 Bologna, Metropolitan City of Bologna, Italy",
+                "global_code": "8FPHF8VW+X5"
+            },
+            "rating": 4,
+            "reference": "ChIJlWSFw73Uf0cRtu-lUNgv13A",
+            "scope": "GOOGLE",
+            "types": [
+                "restaurant",
+                "food",
+                "point_of_interest",
+                "store",
+                "establishment"
+            ],
+            "user_ratings_total": 200,
+            "vicinity": "Via Guglielmo Oberdan, 6a, Bologna"
+        }
+    ],
+    "status": "OK"
+}

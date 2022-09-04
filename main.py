@@ -2,7 +2,7 @@
 # http://20.105.249.39:4444/
 import os
 from fnmatch import translate
-from googleplaces import GooglePlaces, types, lang
+from googleplaces import GooglePlaces, types
 import requests
 import json
 import dao
@@ -170,6 +170,17 @@ def update_sold(session, region, id_list):
     session.commit()
 
 
+def update_sold2(session, first_observed, id_list):
+    sold_items = []
+    for item in first_observed:
+        item_id = str(item)
+        if item_id not in id_list:
+            sold_items.append(item_id)
+    statement = update(Property).values(sold=1).where(~Property.id.in_(sold_items))
+    session.execute(statement)
+    session.commit()
+
+
 def calc_dist_cost(item: Property) -> Property:
     lat_input = float(item.latitude)
     long_input = float(item.longitude)
@@ -202,6 +213,7 @@ def count_bars(item: Property, google_places: GooglePlaces) -> Property:
     )
     bar_count = len(bar_query.places)
     item.pub_count = bar_count
+    print("The count of bars is :" + str(bar_count))
     return item
 
 
@@ -247,7 +259,6 @@ def get_list_id(session) -> list:
 
 if __name__ == "__main__":  #
     api_key = os.environ["API_KEY"]
-
     google_places = GooglePlaces(api_key)
     if production:
         db_engine = dao.create_db("database.db")
@@ -310,13 +321,13 @@ if __name__ == "__main__":  #
             if page == pages or count == 0 or response.status_code != 200:
                 total_count = total_count + count
                 update_sold(session, name, id_list)
-                print("Property count :" + str(total_count))
-                print("we are in the break")
                 break
 
     new_today = [
         key for key, value in first_observed.items() if value == str(date.today())
     ]
     print(len(new_today))
+    with Session(db_engine) as session:
+        update_sold2(session, first_observed, id_list)
     with open("first_observed.json", "w") as f:
         json.dump(first_observed, f, indent=4)
