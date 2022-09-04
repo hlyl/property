@@ -89,8 +89,6 @@ def call_googleapi(
     headers = {}
     response = requests.request("GET", url, headers=headers, data=payload)
     input_json = response.json()
-    print(url)
-    print(input_json)
     print("The count is: " + str(len(input_json["results"])))
     return len(input_json["results"])
 
