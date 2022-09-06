@@ -170,12 +170,20 @@ def update_sold(session, region, id_list):
     session.commit()
 
 
+def update_sold1(session):
+    statement = update(Property).values(sold=0)
+    session.execute(statement)
+    session.commit()
+
+
 def update_sold2(session, first_observed, id_list):
     sold_items = []
+    print(id_list)
     for item in first_observed:
         item_id = str(item)
         if item_id not in id_list:
             sold_items.append(item_id)
+    print(sold_items)
     statement = update(Property).values(sold=1).where(~Property.id.in_(sold_items))
     session.execute(statement)
     session.commit()
@@ -283,11 +291,13 @@ if __name__ == "__main__":  #
             ("MILAN", "lom", "MI"),
         ]
 
-    # "https://www.immobiliare.it/api-next/search-list/real-estates/?fkRegione=emi&idProvincia=BO&idNazione=IT&idContratto=1&idCategoria=1&prezzoMinimo=10000&prezzoMassimo=50000&idTipologia[0]=7&idTipologia[1]=31&idTipologia[2]=11&idTipologia[3]=12&idTipologia[4]=13&idTipologia[5]=4&localiMinimo=3&localiMassimo=5&bagni=1&boxAuto[0]=4&cantina=1&noAste=1&pag=1&paramsCount=17&path=%2Fen%2Fsearch-list%2F"
+    # "https://www.immobiliare.it/api-next/search-list/real-estates/?fkRegione=tos&idProvincia=LU&idNazione=IT&idContratto=1&idCategoria=1&prezzoMinimo=10000&prezzoMassimo=50000&idTipologia[0]=7&idTipologia[1]=31&idTipologia[2]=11&idTipologia[3]=12&idTipologia[4]=13&idTipologia[5]=4&localiMinimo=3&localiMassimo=5&bagni=1&boxAuto[0]=4&cantina=1&noAste=1&pag=1&paramsCount=17&path=%2Fen%2Fsearch-list%2F"
     total_count = 0
+    id_list = []
     for name, region, province in data:
         print(name)
         page = 0
+
         while True:
             page = page + 1
             url = f"https://www.immobiliare.it/api-next/search-list/real-estates/?fkRegione={region}&idProvincia={province}&idNazione=IT&idContratto=1&idCategoria=1&prezzoMinimo=10000&prezzoMassimo=50000&idTipologia[0]=7&idTipologia[1]=31&idTipologia[2]=11&idTipologia[3]=12&idTipologia[4]=13&idTipologia[5]=4&localiMinimo=3&localiMassimo=5&bagni=1&boxAuto[0]=4&cantina=1&noAste=1&pag={page}&paramsCount=17&path=%2Fen%2Fsearch-list%2F"
@@ -296,14 +306,14 @@ if __name__ == "__main__":  #
             pages = input_json["maxPages"]
             count = input_json["count"]
             web_result = propertyparser(input_json, name)
-            id_list = []
+
             with Session(db_engine) as session:
-                exist_id = get_list_id(session)
+                # exist_id = get_list_id(session)
                 for item in web_result:
                     item_id = str(item.id)
                     if item_id not in first_observed:
                         first_observed[item_id] = str(date.today())
-                    if item.id not in exist_id:
+                        # if item.id not in exist_id:
                         if google_api:
                             count_bars(item, google_places)
                             count_shop(item, google_places)
@@ -314,13 +324,13 @@ if __name__ == "__main__":  #
                             calc_dist_water_main(item)
                         item.observed = str(date.today())
                         session.merge(item)
-                    id_list.append(item.id)
+                    id_list.append(str(item.id))
                 session.commit()
+                print(id_list)
                 print("We have committed : " + name + " - page: " + str(page))
                 to_translate = select_db_no_translation(session)
             if page == pages or count == 0 or response.status_code != 200:
                 total_count = total_count + count
-                update_sold(session, name, id_list)
                 break
 
     new_today = [
@@ -328,6 +338,7 @@ if __name__ == "__main__":  #
     ]
     print(len(new_today))
     with Session(db_engine) as session:
+        update_sold1(session)
         update_sold2(session, first_observed, id_list)
     with open("first_observed.json", "w") as f:
         json.dump(first_observed, f, indent=4)
