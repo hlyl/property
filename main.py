@@ -178,13 +178,13 @@ def update_sold1(session):
 
 def update_sold2(session, first_observed, id_list):
     sold_items = []
-    print(id_list)
     for item in first_observed:
         item_id = str(item)
         if item_id not in id_list:
             sold_items.append(item_id)
+    print("Items sold are: ")
     print(sold_items)
-    statement = update(Property).values(sold=1).where(~Property.id.in_(sold_items))
+    statement = update(Property).values(sold=1).where(Property.id.in_(sold_items))
     session.execute(statement)
     session.commit()
 
@@ -326,7 +326,6 @@ if __name__ == "__main__":  #
                         session.merge(item)
                     id_list.append(str(item.id))
                 session.commit()
-                print(id_list)
                 print("We have committed : " + name + " - page: " + str(page))
                 to_translate = select_db_no_translation(session)
             if page == pages or count == 0 or response.status_code != 200:
@@ -337,6 +336,7 @@ if __name__ == "__main__":  #
         key for key, value in first_observed.items() if value == str(date.today())
     ]
     print(len(new_today))
+    print(new_today)
     with Session(db_engine) as session:
         update_sold1(session)
         update_sold2(session, first_observed, id_list)

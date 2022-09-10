@@ -81,3 +81,4 @@ st.write(rslt.to_html(escape=False, index=False), unsafe_allow_html=True)
 st.header("This is  the map:")
 lat_lon = rslt.dropna(subset=["longitude", "latitude"])
 st.map(lat_lon)
+st.session_state["rslt"] = rslt
