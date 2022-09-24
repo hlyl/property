@@ -143,9 +143,9 @@ def update_counts(session, api_key):
 
 
 if __name__ == "__main__":
-    api_key = os.environ["test_key"]
+    api_key = os.environ["API_KEY"]
     print(api_key)
 
-#    db_engine = create_db("database.db")
-#    with Session(db_engine) as session:
-#        exist_id = update_counts(session, api_key)
+    db_engine = create_db("database.db")
+    with Session(db_engine) as session:
+        exist_id = update_counts(session, api_key)

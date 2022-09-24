@@ -17,7 +17,7 @@ from googletrans import Translator
 translator = Translator()
 
 production = True
-google_api = False
+google_api = True
 tree = calcdist.create_rivertree()
 
 
@@ -266,6 +266,10 @@ def get_list_id(session) -> list:
 
 
 if __name__ == "__main__":  #
+    from loguru import logger
+
+    logger.add("logging.txt")
+    logger.debug("That's it, beautiful and simple logging!")
     api_key = os.environ["API_KEY"]
     google_places = GooglePlaces(api_key)
     if production:
@@ -326,7 +330,7 @@ if __name__ == "__main__":  #
                         session.merge(item)
                     id_list.append(str(item.id))
                 session.commit()
-                print("We have committed : " + name + " - page: " + str(page))
+                logger.debug("We have committed : " + name + " - page: " + str(page))
                 to_translate = select_db_no_translation(session)
             if page == pages or count == 0 or response.status_code != 200:
                 total_count = total_count + count
@@ -336,7 +340,7 @@ if __name__ == "__main__":  #
         key for key, value in first_observed.items() if value == str(date.today())
     ]
     print(len(new_today))
-    print(new_today)
+    logger.debug("Today we have added :" + str(new_today))
     with Session(db_engine) as session:
         update_sold1(session)
         update_sold2(session, first_observed, id_list)

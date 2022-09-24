@@ -1,0 +1,27 @@
+2022-09-24 05:11:21.934 | DEBUG    | __main__:<module>:272 - That's it, beautiful and simple logging!
+2022-09-24 05:11:22.591 | DEBUG    | __main__:<module>:333 - We have committed : LUCCA - page: 1
+2022-09-24 05:11:22.942 | DEBUG    | __main__:<module>:333 - We have committed : PISA - page: 1
+2022-09-24 05:11:23.309 | DEBUG    | __main__:<module>:333 - We have committed : LEGHORN - page: 1
+2022-09-24 05:11:23.744 | DEBUG    | __main__:<module>:333 - We have committed : VENICE - page: 1
+2022-09-24 05:11:24.220 | DEBUG    | __main__:<module>:333 - We have committed : TREVISO - page: 1
+2022-09-24 05:11:24.786 | DEBUG    | __main__:<module>:333 - We have committed : PORDENONE - page: 1
+2022-09-24 05:11:25.061 | DEBUG    | __main__:<module>:333 - We have committed : PADUA - page: 1
+2022-09-24 05:11:25.597 | DEBUG    | __main__:<module>:333 - We have committed : ROViGO - page: 1
+2022-09-24 05:11:26.081 | DEBUG    | __main__:<module>:333 - We have committed : ROViGO - page: 2
+2022-09-24 05:11:26.670 | DEBUG    | __main__:<module>:333 - We have committed : BOLOGNA - page: 1
+2022-09-24 05:11:27.148 | DEBUG    | __main__:<module>:333 - We have committed : BOLOGNA - page: 2
+2022-09-24 05:11:27.583 | DEBUG    | __main__:<module>:333 - We have committed : MILAN - page: 1
+2022-09-24 05:11:49.826 | DEBUG    | __main__:<module>:272 - That's it, beautiful and simple logging!
+2022-09-24 05:11:50.158 | DEBUG    | __main__:<module>:333 - We have committed : LUCCA - page: 1
+2022-09-24 05:11:50.426 | DEBUG    | __main__:<module>:333 - We have committed : PISA - page: 1
+2022-09-24 05:11:50.716 | DEBUG    | __main__:<module>:333 - We have committed : LEGHORN - page: 1
+2022-09-24 05:11:51.025 | DEBUG    | __main__:<module>:333 - We have committed : VENICE - page: 1
+2022-09-24 05:11:51.262 | DEBUG    | __main__:<module>:333 - We have committed : TREVISO - page: 1
+2022-09-24 05:11:51.515 | DEBUG    | __main__:<module>:333 - We have committed : PORDENONE - page: 1
+2022-09-24 05:11:51.784 | DEBUG    | __main__:<module>:333 - We have committed : PADUA - page: 1
+2022-09-24 05:11:52.232 | DEBUG    | __main__:<module>:333 - We have committed : ROViGO - page: 1
+2022-09-24 05:11:52.477 | DEBUG    | __main__:<module>:333 - We have committed : ROViGO - page: 2
+2022-09-24 05:11:52.783 | DEBUG    | __main__:<module>:333 - We have committed : BOLOGNA - page: 1
+2022-09-24 05:11:53.081 | DEBUG    | __main__:<module>:333 - We have committed : BOLOGNA - page: 2
+2022-09-24 05:11:53.387 | DEBUG    | __main__:<module>:333 - We have committed : MILAN - page: 1
+2022-09-24 05:11:53.390 | DEBUG    | __main__:<module>:343 - Today we have added :[]
