@@ -296,6 +296,11 @@ if __name__ == "__main__":  #
         ]
 
     # "https://www.immobiliare.it/api-next/search-list/real-estates/?fkRegione=tos&idProvincia=LU&idNazione=IT&idContratto=1&idCategoria=1&prezzoMinimo=10000&prezzoMassimo=50000&idTipologia[0]=7&idTipologia[1]=31&idTipologia[2]=11&idTipologia[3]=12&idTipologia[4]=13&idTipologia[5]=4&localiMinimo=3&localiMassimo=5&bagni=1&boxAuto[0]=4&cantina=1&noAste=1&pag=1&paramsCount=17&path=%2Fen%2Fsearch-list%2F"
+
+    # "https://www.immobiliare.it/api-next/search-list/real-estates/?fkRegione=tos&idProvincia=LU&idNazione=IT&idContratto=1&idCategoria=1&prezzoMinimo=10000&prezzoMassimo=50000&idTipologia[0]=7&idTipologia[1]=31&idTipologia[2]=11&idTipologia[3]=12&idTipologia[4]=13&idTipologia[5]=4&localiMinimo=3&localiMassimo=5&bagni=1&boxAuto[0]=4&cantina=1&noAste=1&pag=1&paramsCount=17&path=%2Fen%2Fsearch-list%2F"
+    # "https://www.immobiliare.it/api-next/search-list/real-estates/?raggio=300000&centro=44.51456,11.29172&idContratto=1&idCategoria=1&prezzoMinimo=20000&prezzoMassimo=90000&idTipologia[0]=7&idTipologia[1]=31&idTipologia[2]=11&idTipologia[3]=12&idTipologia[4]=13&idTipologia[5]=4&localiMinimo=4&criterio=rilevanza&__lang=en&pag=1&paramsCount=11&path=/en/search-list/"
+
+    # "https://www.immobiliare.it/api-next/search-list/real-estates/?raggio=200000&centro=44.339565,7.9953&idContratto=1&idCategoria=1&prezzoMinimo=20000&prezzoMassimo=90000&localiMinimo=4&criterio=rilevanza&__lang=en&pag=1&paramsCount=11&path=/en/search-list/"
     total_count = 0
     id_list = []
     for name, region, province in data:
@@ -318,14 +323,14 @@ if __name__ == "__main__":  #
                     if item_id not in first_observed:
                         first_observed[item_id] = str(date.today())
                         # if item.id not in exist_id:
-                        if google_api:
-                            count_bars(item, google_places)
-                            count_shop(item, google_places)
-                            count_bakery(item, google_places)
-                            count_food(item, google_places)
                         if item.latitude != None and item.longitude != None:
                             calc_dist_cost(item)
                             calc_dist_water_main(item)
+                            if google_api:
+                                count_bars(item, google_places)
+                                count_shop(item, google_places)
+                                count_bakery(item, google_places)
+                                count_food(item, google_places)
                         item.observed = str(date.today())
                         session.merge(item)
                     id_list.append(str(item.id))

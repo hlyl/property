@@ -25,3 +25,41 @@
 2022-09-24 05:11:53.081 | DEBUG    | __main__:<module>:333 - We have committed : BOLOGNA - page: 2
 2022-09-24 05:11:53.387 | DEBUG    | __main__:<module>:333 - We have committed : MILAN - page: 1
 2022-09-24 05:11:53.390 | DEBUG    | __main__:<module>:343 - Today we have added :[]
+2022-12-17 06:20:44.718 | DEBUG    | __main__:<module>:272 - That's it, beautiful and simple logging!
+2022-12-17 06:20:46.962 | DEBUG    | __main__:<module>:333 - We have committed : LUCCA - page: 1
+2022-12-17 06:20:56.269 | DEBUG    | __main__:<module>:333 - We have committed : PISA - page: 1
+2022-12-17 06:20:56.576 | DEBUG    | __main__:<module>:333 - We have committed : LEGHORN - page: 1
+2022-12-17 06:20:56.869 | DEBUG    | __main__:<module>:333 - We have committed : VENICE - page: 1
+2022-12-17 06:21:00.311 | DEBUG    | __main__:<module>:333 - We have committed : TREVISO - page: 1
+2022-12-17 06:21:15.583 | DEBUG    | __main__:<module>:333 - We have committed : PORDENONE - page: 1
+2022-12-17 06:21:16.512 | DEBUG    | __main__:<module>:333 - We have committed : PADUA - page: 1
+2022-12-22 16:32:29.674 | DEBUG    | __main__:<module>:272 - That's it, beautiful and simple logging!
+2022-12-22 16:32:32.666 | DEBUG    | __main__:<module>:333 - We have committed : LUCCA - page: 1
+2022-12-22 16:32:42.612 | DEBUG    | __main__:<module>:333 - We have committed : PISA - page: 1
+2022-12-22 16:32:45.533 | DEBUG    | __main__:<module>:333 - We have committed : LEGHORN - page: 1
+2022-12-22 16:32:45.991 | DEBUG    | __main__:<module>:333 - We have committed : VENICE - page: 1
+2022-12-22 16:32:49.382 | DEBUG    | __main__:<module>:333 - We have committed : TREVISO - page: 1
+2022-12-22 16:33:01.789 | DEBUG    | __main__:<module>:333 - We have committed : PORDENONE - page: 1
+2022-12-22 16:33:02.894 | DEBUG    | __main__:<module>:333 - We have committed : PADUA - page: 1
+2022-12-23 06:48:25.859 | DEBUG    | __main__:<module>:272 - That's it, beautiful and simple logging!
+2022-12-23 06:48:29.778 | DEBUG    | __main__:<module>:333 - We have committed : LUCCA - page: 1
+2022-12-23 06:48:43.119 | DEBUG    | __main__:<module>:333 - We have committed : PISA - page: 1
+2022-12-23 06:48:46.800 | DEBUG    | __main__:<module>:333 - We have committed : LEGHORN - page: 1
+2022-12-23 06:48:47.143 | DEBUG    | __main__:<module>:333 - We have committed : VENICE - page: 1
+2022-12-23 06:48:51.380 | DEBUG    | __main__:<module>:333 - We have committed : TREVISO - page: 1
+2022-12-23 06:49:04.364 | DEBUG    | __main__:<module>:333 - We have committed : PORDENONE - page: 1
+2022-12-23 06:49:05.446 | DEBUG    | __main__:<module>:333 - We have committed : PADUA - page: 1
+2022-12-23 06:50:06.907 | DEBUG    | __main__:<module>:272 - That's it, beautiful and simple logging!
+2022-12-23 06:50:07.467 | DEBUG    | __main__:<module>:333 - We have committed : LUCCA - page: 1
+2022-12-23 06:50:08.097 | DEBUG    | __main__:<module>:333 - We have committed : PISA - page: 1
+2022-12-23 06:50:08.508 | DEBUG    | __main__:<module>:333 - We have committed : LEGHORN - page: 1
+2022-12-23 06:50:08.815 | DEBUG    | __main__:<module>:333 - We have committed : VENICE - page: 1
+2022-12-23 06:50:09.425 | DEBUG    | __main__:<module>:333 - We have committed : TREVISO - page: 1
+2022-12-23 06:50:09.934 | DEBUG    | __main__:<module>:333 - We have committed : PORDENONE - page: 1
+2022-12-23 06:50:10.392 | DEBUG    | __main__:<module>:333 - We have committed : PADUA - page: 1
+2022-12-23 06:50:14.839 | DEBUG    | __main__:<module>:333 - We have committed : ROViGO - page: 1
+2022-12-23 06:50:30.288 | DEBUG    | __main__:<module>:333 - We have committed : ROViGO - page: 2
+2022-12-23 06:50:33.198 | DEBUG    | __main__:<module>:333 - We have committed : BOLOGNA - page: 1
+2022-12-23 06:50:46.018 | DEBUG    | __main__:<module>:333 - We have committed : BOLOGNA - page: 2
+2022-12-23 06:50:48.405 | DEBUG    | __main__:<module>:333 - We have committed : MILAN - page: 1
+2022-12-23 06:50:54.204 | DEBUG    | __main__:<module>:343 - Today we have added :['99943204', '99108270', '94613846', '78026536', '99183786', '99794198', '99724120', '99565002', '99565076', '99351384', '96294718', '99514994', '99493912', '99350196', '99153858', '98805834', '98574304', '98639212', '99640114', '99639296', '99418440', '98016862', '86209904', '80492383']
