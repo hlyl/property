@@ -294,7 +294,7 @@ if __name__ == "__main__":  #
         data = [
             ("MILAN", "lom", "MI"),
         ]
-
+    # "Test of what branch we are using"
     # "https://www.immobiliare.it/api-next/search-list/real-estates/?fkRegione=tos&idProvincia=LU&idNazione=IT&idContratto=1&idCategoria=1&prezzoMinimo=10000&prezzoMassimo=50000&idTipologia[0]=7&idTipologia[1]=31&idTipologia[2]=11&idTipologia[3]=12&idTipologia[4]=13&idTipologia[5]=4&localiMinimo=3&localiMassimo=5&bagni=1&boxAuto[0]=4&cantina=1&noAste=1&pag=1&paramsCount=17&path=%2Fen%2Fsearch-list%2F"
 
     # "https://www.immobiliare.it/api-next/search-list/real-estates/?fkRegione=tos&idProvincia=LU&idNazione=IT&idContratto=1&idCategoria=1&prezzoMinimo=10000&prezzoMassimo=50000&idTipologia[0]=7&idTipologia[1]=31&idTipologia[2]=11&idTipologia[3]=12&idTipologia[4]=13&idTipologia[5]=4&localiMinimo=3&localiMassimo=5&bagni=1&boxAuto[0]=4&cantina=1&noAste=1&pag=1&paramsCount=17&path=%2Fen%2Fsearch-list%2F"
