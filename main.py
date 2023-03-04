@@ -25,26 +25,37 @@ def deserialise_property(item, region) -> Property:
     stringid = item["realEstate"]["id"]
     is_new = item["realEstate"]["isNew"]
     price = item["realEstate"]["price"]["value"]
-    price_drop = item["realEstate"]["price"]["loweredPrice"]
+    price_drop = None
     if price_drop is None:
         price_drop = "No"
     else:
         print("WE have a PriceDrop")
         price_drop = item["realEstate"]["price"]["loweredPrice"]["originalPrice"]
         print("The orginal price was: " + str(price_drop))
-    bathrooms = item["realEstate"]["properties"][0]["bathrooms"]
-    caption = item["realEstate"]["properties"][0]["caption"]
+    # bathrooms = item["realEstate"]["properties"][0]["bathrooms"]
+    bathrooms = item.get("bathrooms", None)
+    caption = item["realEstate"]["title"]
     category = item["realEstate"]["properties"][0]["category"]["name"]
-    discription = item["realEstate"]["properties"][0]["description"]
+    discription = item.get("description", None)
+    if discription is None:
+        discription = "There is not Discription"
+    else:
+        discription = item["realEstate"]["properties"][0]["description"]
     discription_dk = ""
-    floor = item["realEstate"]["properties"][0]["floor"]
+    # floor = item["realEstate"]["properties"][0]["floor"]
+    floor = item.get("floor", None)
     if floor is None:
-        floor = "not assigned"
+        floor = "No Floor has been assigned"
     else:
         floor = item["realEstate"]["properties"][0]["floor"]["value"]
     rooms = item["realEstate"]["properties"][0]["rooms"]
     surface = item["realEstate"]["properties"][0]["surface"]
-    price_m = round(price / int(surface.split()[0]))
+    if surface is None:
+        surface = "1"
+    else:
+        surface = surface.split()[0]
+    surface = surface.replace(",", "")
+    price_m = round(price / int(surface))
     lon = item["realEstate"]["properties"][0]["location"]["longitude"]
     lat = item["realEstate"]["properties"][0]["location"]["latitude"]
     marker = item["realEstate"]["properties"][0]["location"]["marker"]
@@ -273,73 +284,70 @@ if __name__ == "__main__":  #
     api_key = os.environ["API_KEY"]
     google_places = GooglePlaces(api_key)
     if production:
-        db_engine = dao.create_db("database.db")
-        data = [
-            ("LUCCA", "tos", "LU"),
-            ("PISA", "tos", "PI"),
-            ("LEGHORN", "tos", "LI"),
-            ("VENICE", "ven", "VE"),
-            ("TREVISO", "ven", "TV"),
-            ("PORDENONE", "fri", "PN"),
-            ("PADUA", "ven", "PD"),
-            ("ROViGO", "ven", "RO"),
-            ("BOLOGNA", "emi", "BO"),
-            ("MILAN", "lom", "MI"),
-        ]
+        db_engine = dao.create_db("radius_database.db")
         with open("first_observed.json") as f:
             first_observed = json.load(f)
             print(len(first_observed))
     else:
         db_engine = dao.create_db("test.db")
-        data = [
-            ("MILAN", "lom", "MI"),
-        ]
     # "Test of what branch we are using"
     # "https://www.immobiliare.it/api-next/search-list/real-estates/?fkRegione=tos&idProvincia=LU&idNazione=IT&idContratto=1&idCategoria=1&prezzoMinimo=10000&prezzoMassimo=50000&idTipologia[0]=7&idTipologia[1]=31&idTipologia[2]=11&idTipologia[3]=12&idTipologia[4]=13&idTipologia[5]=4&localiMinimo=3&localiMassimo=5&bagni=1&boxAuto[0]=4&cantina=1&noAste=1&pag=1&paramsCount=17&path=%2Fen%2Fsearch-list%2F"
 
     # "https://www.immobiliare.it/api-next/search-list/real-estates/?fkRegione=tos&idProvincia=LU&idNazione=IT&idContratto=1&idCategoria=1&prezzoMinimo=10000&prezzoMassimo=50000&idTipologia[0]=7&idTipologia[1]=31&idTipologia[2]=11&idTipologia[3]=12&idTipologia[4]=13&idTipologia[5]=4&localiMinimo=3&localiMassimo=5&bagni=1&boxAuto[0]=4&cantina=1&noAste=1&pag=1&paramsCount=17&path=%2Fen%2Fsearch-list%2F"
+    # "https://www.immobiliare.it/api-next/search-list/real-estates/?raggio=300000&centro=44.51456,11.29172&idContratto=1&idCategoria=1&prezzoMinimo=20000&prezzoMassimo=90000&idTipologia[0]=7&idTipologia[1]=31&idTipologia[2]=11&idTipologia[3]=12&idTipologia[4]=13&idTipologia[5]=4&localiMinimo=4&bagni=1&boxAuto[0]=4&cantina=1&noAste=1&criterio=rilevanza&__lang=en&pag=1&paramsCount=11&path=/en/search-list/"
+    # The good one:
+    # "https://www.immobiliare.it/api-next/search-list/real-estates/?raggio=300000&centro=44.51456%2C11.29172&idContratto=1&idCategoria=1&prezzoMinimo=20000&prezzoMassimo=75000&idTipologia[0]=7&idTipologia[1]=11&idTipologia[2]=12&idTipologia[3]=13&localiMinimo=4&tipoProprieta=1&boxAuto[0]=1&boxAuto[1]=3&giardino[0]=10&giardino[1]=40&giardino[2]=20&criterio=rilevanza&noAste=1&__lang=en&pag=1&paramsCount=15&path=%2Fen%2Fsearch-list%2F"
+
     # "https://www.immobiliare.it/api-next/search-list/real-estates/?raggio=300000&centro=44.51456,11.29172&idContratto=1&idCategoria=1&prezzoMinimo=20000&prezzoMassimo=90000&idTipologia[0]=7&idTipologia[1]=31&idTipologia[2]=11&idTipologia[3]=12&idTipologia[4]=13&idTipologia[5]=4&localiMinimo=4&criterio=rilevanza&__lang=en&pag=1&paramsCount=11&path=/en/search-list/"
 
     # "https://www.immobiliare.it/api-next/search-list/real-estates/?raggio=200000&centro=44.339565,7.9953&idContratto=1&idCategoria=1&prezzoMinimo=20000&prezzoMassimo=90000&localiMinimo=4&criterio=rilevanza&__lang=en&pag=1&paramsCount=11&path=/en/search-list/"
     total_count = 0
     id_list = []
-    for name, region, province in data:
-        print(name)
-        page = 0
+    print("Running")
+    page = 0
+    name = "Radius"
+    region = "Radius"
+    while True:
+        page = page + 1
+        #        url = f"https://www.immobiliare.it/api-next/search-list/real-estates/?raggio=300000&centro=44.51456%2C11.29172&idContratto=1&idCategoria=1&prezzoMinimo=20000&prezzoMassimo=75000&idTipologia[0]=7&idTipologia[1]=11&idTipologia[2]=12&idTipologia[3]=13&localiMinimo=4&tipoProprieta=1&boxAuto[0]=1&boxAuto[1]=3&giardino[0]=10&giardino[1]=40&giardino[2]=20&criterio=rilevanza&noAste=1&__lang=en&pag={page}&paramsCount=15&path=%2Fen%2Fsearch-list%2F"
+        url = f"https://www.immobiliare.it/api-next/search-list/real-estates/?raggio=300000&centro=44.51456%2C11.29172&idContratto=1&idCategoria=1&prezzoMinimo=20000&prezzoMassimo=75000&superficieMinima=200&idTipologia[0]=7&idTipologia[1]=11&idTipologia[2]=12&idTipologia[3]=13&localiMinimo=4&tipoProprieta=1&boxAuto[0]=1&boxAuto[1]=3&balconeOterrazzo[0]=terrazzo&balconeOterrazzo[1]=balcone&giardino[0]=10&giardino[1]=40&giardino[2]=20&giardino[3]=40&criterio=rilevanza&noAste=1&__lang=en&pag={page}&paramsCount=17&path=%2Fen%2Fsearch-list%2F"
+        response = requests.get(url)
+        input_json = response.json()
+        pages = int(input_json["maxPages"])
+        count = int(input_json["count"])
+        web_result = propertyparser(input_json, name)
 
-        while True:
-            page = page + 1
-            url = f"https://www.immobiliare.it/api-next/search-list/real-estates/?fkRegione={region}&idProvincia={province}&idNazione=IT&idContratto=1&idCategoria=1&prezzoMinimo=10000&prezzoMassimo=50000&idTipologia[0]=7&idTipologia[1]=31&idTipologia[2]=11&idTipologia[3]=12&idTipologia[4]=13&idTipologia[5]=4&localiMinimo=3&localiMassimo=5&bagni=1&boxAuto[0]=4&cantina=1&noAste=1&pag={page}&paramsCount=17&path=%2Fen%2Fsearch-list%2F"
-            response = requests.get(url)
-            input_json = response.json()
-            pages = input_json["maxPages"]
-            count = input_json["count"]
-            web_result = propertyparser(input_json, name)
-
-            with Session(db_engine) as session:
-                # exist_id = get_list_id(session)
-                for item in web_result:
-                    item_id = str(item.id)
-                    if item_id not in first_observed:
-                        first_observed[item_id] = str(date.today())
-                        # if item.id not in exist_id:
-                        if item.latitude != None and item.longitude != None:
-                            calc_dist_cost(item)
-                            calc_dist_water_main(item)
-                            if google_api:
-                                count_bars(item, google_places)
-                                count_shop(item, google_places)
-                                count_bakery(item, google_places)
-                                count_food(item, google_places)
-                        item.observed = str(date.today())
-                        session.merge(item)
-                    id_list.append(str(item.id))
-                session.commit()
-                logger.debug("We have committed : " + name + " - page: " + str(page))
-                to_translate = select_db_no_translation(session)
-            if page == pages or count == 0 or response.status_code != 200:
-                total_count = total_count + count
-                break
+        with Session(db_engine) as session:
+            # exist_id = get_list_id(session)
+            for item in web_result:
+                item_id = str(item.id)
+                if item_id not in first_observed:
+                    first_observed[item_id] = str(date.today())
+                    # if item.id not in exist_id:
+                    if item.latitude != None and item.longitude != None:
+                        calc_dist_cost(item)
+                        calc_dist_water_main(item)
+                        if google_api:
+                            count_bars(item, google_places)
+                            count_shop(item, google_places)
+                            count_bakery(item, google_places)
+                            count_food(item, google_places)
+                    item.observed = str(date.today())
+                    session.merge(item)
+                id_list.append(str(item.id))
+            session.commit()
+            logger.debug(
+                "We have committed : "
+                + name
+                + " - page: "
+                + str(page)
+                + " - out of total pages: "
+                + str(pages)
+            )
+            # to_translate = select_db_no_translation(session)
+        if page == pages or count == 0 or response.status_code != 200:
+            total_count = total_count + count
+            break
 
     new_today = [
         key for key, value in first_observed.items() if value == str(date.today())
