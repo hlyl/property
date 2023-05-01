@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Folium Map with SQLite</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+</head>
+<body>
+
+  {{ m|safe }}
+
+  <script>
+    $(".btn").click(function(e) {
+      e.preventDefault();
+      var url = $(this).attr('href');
+      $.post(url, function(data) {
+        if (data.success) {
+          location.reload();
+        }
+      });
+    });
+  </script>
+
+</body>
+</html>
