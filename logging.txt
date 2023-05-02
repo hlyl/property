@@ -995,3 +995,30 @@
 2023-04-29 08:10:29.774 | DEBUG    | __main__:<module>:339 - We have committed : Radius - page: 25 - out of total pages: 26
 2023-04-29 08:10:30.592 | DEBUG    | __main__:<module>:339 - We have committed : Radius - page: 26 - out of total pages: 26
 2023-04-29 08:10:30.595 | DEBUG    | __main__:<module>:356 - Today we have added :['102773814', '96331732', '102832712', '102746338', '89509315', '102817932', '102773402', '79033165', '102776694', '94819334', '102802392', '102792738', '102827102']
+2023-05-01 10:14:05.541 | DEBUG    | __main__:<module>:283 - That's it, beautiful and simple logging!
+2023-05-01 10:14:06.916 | DEBUG    | __main__:<module>:339 - We have committed : Radius - page: 1 - out of total pages: 25
+2023-05-01 10:14:08.516 | DEBUG    | __main__:<module>:339 - We have committed : Radius - page: 2 - out of total pages: 25
+2023-05-01 10:14:09.865 | DEBUG    | __main__:<module>:339 - We have committed : Radius - page: 3 - out of total pages: 25
+2023-05-01 10:14:11.293 | DEBUG    | __main__:<module>:339 - We have committed : Radius - page: 4 - out of total pages: 25
+2023-05-01 10:14:12.778 | DEBUG    | __main__:<module>:339 - We have committed : Radius - page: 5 - out of total pages: 25
+2023-05-01 10:14:14.153 | DEBUG    | __main__:<module>:339 - We have committed : Radius - page: 6 - out of total pages: 25
+2023-05-01 10:14:15.412 | DEBUG    | __main__:<module>:339 - We have committed : Radius - page: 7 - out of total pages: 25
+2023-05-01 10:14:16.874 | DEBUG    | __main__:<module>:339 - We have committed : Radius - page: 8 - out of total pages: 25
+2023-05-01 10:14:18.318 | DEBUG    | __main__:<module>:339 - We have committed : Radius - page: 9 - out of total pages: 25
+2023-05-01 10:14:19.574 | DEBUG    | __main__:<module>:339 - We have committed : Radius - page: 10 - out of total pages: 25
+2023-05-01 10:14:20.909 | DEBUG    | __main__:<module>:339 - We have committed : Radius - page: 11 - out of total pages: 25
+2023-05-01 10:14:22.105 | DEBUG    | __main__:<module>:339 - We have committed : Radius - page: 12 - out of total pages: 25
+2023-05-01 10:14:23.423 | DEBUG    | __main__:<module>:339 - We have committed : Radius - page: 13 - out of total pages: 25
+2023-05-01 10:14:24.709 | DEBUG    | __main__:<module>:339 - We have committed : Radius - page: 14 - out of total pages: 25
+2023-05-01 10:14:26.179 | DEBUG    | __main__:<module>:339 - We have committed : Radius - page: 15 - out of total pages: 25
+2023-05-01 10:14:27.516 | DEBUG    | __main__:<module>:339 - We have committed : Radius - page: 16 - out of total pages: 25
+2023-05-01 10:14:28.784 | DEBUG    | __main__:<module>:339 - We have committed : Radius - page: 17 - out of total pages: 25
+2023-05-01 10:14:30.290 | DEBUG    | __main__:<module>:339 - We have committed : Radius - page: 18 - out of total pages: 25
+2023-05-01 10:14:31.464 | DEBUG    | __main__:<module>:339 - We have committed : Radius - page: 19 - out of total pages: 25
+2023-05-01 10:14:32.689 | DEBUG    | __main__:<module>:339 - We have committed : Radius - page: 20 - out of total pages: 25
+2023-05-01 10:14:33.878 | DEBUG    | __main__:<module>:339 - We have committed : Radius - page: 21 - out of total pages: 25
+2023-05-01 10:14:35.104 | DEBUG    | __main__:<module>:339 - We have committed : Radius - page: 22 - out of total pages: 25
+2023-05-01 10:14:36.196 | DEBUG    | __main__:<module>:339 - We have committed : Radius - page: 23 - out of total pages: 25
+2023-05-01 10:14:37.344 | DEBUG    | __main__:<module>:339 - We have committed : Radius - page: 24 - out of total pages: 25
+2023-05-01 10:14:38.735 | DEBUG    | __main__:<module>:339 - We have committed : Radius - page: 25 - out of total pages: 25
+2023-05-01 10:14:38.737 | DEBUG    | __main__:<module>:356 - Today we have added :[]
