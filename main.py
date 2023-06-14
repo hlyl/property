@@ -277,6 +277,9 @@ def get_list_id(session) -> list:
 
 
 if __name__ == "__main__":  #
+    script_dir = os.path.dirname(os.path.realpath(__file__))
+    prod_db_file = os.path.join(script_dir, "radius_database.db")
+    test_db_file = os.path.join(script_dir, "test.db")
     from loguru import logger
 
     logger.add("logging.txt")
@@ -284,12 +287,12 @@ if __name__ == "__main__":  #
     api_key = os.environ["API_KEY"]
     google_places = GooglePlaces(api_key)
     if production:
-        db_engine = dao.create_db("radius_database.db")
+        db_engine = dao.create_db(prod_db_file)
         with open("first_observed.json") as f:
             first_observed = json.load(f)
             print(len(first_observed))
     else:
-        db_engine = dao.create_db("test.db")
+        db_engine = dao.create_db(test_db_file)
     # "Test of what branch we are using"
     # "https://www.immobiliare.it/api-next/search-list/real-estates/?fkRegione=tos&idProvincia=LU&idNazione=IT&idContratto=1&idCategoria=1&prezzoMinimo=10000&prezzoMassimo=50000&idTipologia[0]=7&idTipologia[1]=31&idTipologia[2]=11&idTipologia[3]=12&idTipologia[4]=13&idTipologia[5]=4&localiMinimo=3&localiMassimo=5&bagni=1&boxAuto[0]=4&cantina=1&noAste=1&pag=1&paramsCount=17&path=%2Fen%2Fsearch-list%2F"
 
