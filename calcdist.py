@@ -1,4 +1,5 @@
 import json
+import os
 import shapely
 from shapely import wkt
 from shapely.strtree import STRtree
@@ -10,11 +11,13 @@ from pyproj import Transformer
 wgs_proj = pyproj.CRS("EPSG:4326")
 utm_proj = pyproj.CRS("EPSG:32633")
 project = pyproj.Transformer.from_crs(wgs_proj, utm_proj, always_xy=True).transform
+script_dir = os.path.dirname(os.path.realpath(__file__))
 
 
 def create_rivertree() -> STRtree:
+    Italy_waterline = os.path.join(script_dir, "Italy_waterLines.geojson")
     lst_lines = []
-    with open("Italy_waterLines.geojson") as f:
+    with open(Italy_waterline) as f:
         features = json.load(f)["features"]
         flat_features = []
         for feature in features:
@@ -37,8 +40,8 @@ def format_t(items):
 def format_point(point):
     return f"POINT ({point[1]} {point[0]})"
 
-
-your_json_file = json.loads(open("PolyShoreItaly.geojson").read())
+PolyShoreItaly = os.path.join(script_dir, "PolyShoreItaly.geojson")
+your_json_file = json.loads(open(PolyShoreItaly).read())
 jsonString = your_json_file["features"][0]["geometry"]["coordinates"][0]
 shore_italy = shapely.wkt.loads(format_t(jsonString))
 

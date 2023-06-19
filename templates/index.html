@@ -7,8 +7,8 @@
 </head>
 
 <body>
-  <div id="mapdiv" style="width: 100%; height: 600px"></div>
-  {{ m|safe }}
+  <iframe src="{{ url_for('static', filename='map.html') }}" style="border:none;width:100%;height:100vh;"></iframe>
+
 
   <script>
     $(".btn").click(function (e) {
@@ -21,7 +21,6 @@
       });
     });
   </script>
-
 </body>
 
 </html>

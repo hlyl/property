@@ -9,6 +9,7 @@ from sqlmodel import Field, create_engine, Session, select, update
 import sys
 
 app = Flask(__name__)
+app.secret_key = 'lynge_property'
 db_engine = dao.create_db("radius_database.db")
 # Set default values
 default_zoom = 8
@@ -18,10 +19,13 @@ default_longitude = 10.745
 
 @app.route('/')
 def index():
-    map_center = session.get('map_center', [default_latitude, default_longitude]) 
-    map_zoom = session.get('map_zoom',default_zoom)
+#    map_center = session.get('map_center', [default_latitude, default_longitude]) 
+#    map_zoom = session.get('map_zoom',default_zoom)
+#    print("map_center "+str(map_center))
 
-    m = folium.Map(map_center, map_zoom)
+#    m = folium.Map(location = map_center, zoom_start = map_zoom, width="%100",height="100%")
+    m = folium.Map(location = ['44.715','10.745'], zoom_start = '8', width="%100",height="100%")
+
 
     with Session(db_engine) as db_session:
         price_category = case(
@@ -70,16 +74,14 @@ def index():
                             popup=popup,
                             icon = folium.Icon(color=icon_color, icon="glyphicon-home"))
             marker.add_to(m)
-    print('This is error output', file=sys.stderr)
-    print('This is standard output', file=sys.stdout)
 
-    m = m._repr_html_()
-    return render_template('index.html', m=m)
+#    m = m._repr_html_()
+#    return render_template('index.html', m=m)
 
-#    m.save('templates/map.html')
-#    return render_template('index.html')
+    m.save('static/map.html')
+    return render_template('index.html')
 
-@app.route('/update/<int:id>', methods=['POST'])
+@app.route('/update/<int:id>', methods=['GET','POST'])
 def update_value(id):
     session['map_zoom'] = request.form.get('zoom')
     session['map_center'] = request.form.get('center')
@@ -89,7 +91,8 @@ def update_value(id):
         db_session.execute(stmt)
         db_session.commit()
         print("item removed", file=sys.stderr)
-    
+        print(session['map_zoom'], file=sys.stderr)
+        print(session['map_center'], file=sys.stderr)
     return redirect(url_for('index'))
 
 if __name__ == '__main__':

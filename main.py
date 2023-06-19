@@ -12,6 +12,7 @@ from typing import List
 import calcdist
 from calcdist import create_rivertree, calc_dist_short, calc_dist_water
 from datetime import date
+import datetime
 from googletrans import Translator
 
 translator = Translator()
@@ -193,8 +194,8 @@ def update_sold2(session, first_observed, id_list):
         item_id = str(item)
         if item_id not in id_list:
             sold_items.append(item_id)
-    print("Items sold are: ")
-    print(sold_items)
+    #print("Items sold are: ")
+    #print(sold_items)
     statement = update(Property).values(sold=1).where(Property.id.in_(sold_items))
     session.execute(statement)
     session.commit()
@@ -280,15 +281,22 @@ if __name__ == "__main__":  #
     script_dir = os.path.dirname(os.path.realpath(__file__))
     prod_db_file = os.path.join(script_dir, "radius_database.db")
     test_db_file = os.path.join(script_dir, "test.db")
+    api_key_file = os.path.join(script_dir, "apiKey.txt")
     from loguru import logger
 
     logger.add("logging.txt")
-    logger.debug("That's it, beautiful and simple logging!")
-    api_key = os.environ["API_KEY"]
+    now = datetime.datetime.now()
+    logger.debug("The cron job is running now "+now.strftime("%Y-%m-%d %H:%M:%S"))
+
+    with open(api_key_file, 'r') as file:
+        api_key = file.read()
+
+    #api_key = os.environ["API_KEY"]
     google_places = GooglePlaces(api_key)
+    first_obs_json = os.path.join(script_dir, "first_observed.json")
     if production:
         db_engine = dao.create_db(prod_db_file)
-        with open("first_observed.json") as f:
+        with open(first_obs_json) as f:
             first_observed = json.load(f)
             print(len(first_observed))
     else:
@@ -339,14 +347,14 @@ if __name__ == "__main__":  #
                     session.merge(item)
                 id_list.append(str(item.id))
             session.commit()
-            logger.debug(
-                "We have committed : "
-                + name
-                + " - page: "
-                + str(page)
-                + " - out of total pages: "
-                + str(pages)
-            )
+            #logger.debug(
+            #    "We have committed : "
+            #    + name
+            #    + " - page: "
+            #    + str(page)
+            #    + " - out of total pages: "
+            #    + str(pages)
+            #)
             # to_translate = select_db_no_translation(session)
         if page == pages or count == 0 or response.status_code != 200:
             total_count = total_count + count
