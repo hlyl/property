@@ -30,6 +30,7 @@ def index():
     with Session(db_engine) as db_session:
         price_category = case(
                 [
+                    (Property.reviewed == 2, 'Hot'),
                     (Property.observed > text("(date('now','-15 day'))"), 'New'),
                     (Property.price.between(20000, 35000), 'Low'),
                     (Property.price.between(35001, 50000), 'Mid'),
@@ -46,6 +47,8 @@ def index():
                 return 'red'
             elif price_category == 'New':
                 return 'pink'
+            elif price_category == 'Hot':
+                return 'black'
             else:
                 return 'blue'
 
@@ -55,19 +58,22 @@ def index():
             Property.latitude,
             Property.longitude,
             Property.observed,
+            Property.reviewed,
             price_category.label('price_category')
-        ).where((Property.reviewed == 0) & (Property.sold == 0))
+        ).where((Property.reviewed != 1) & (Property.sold == 0))
         data = db_session.execute(statement)
 
         for item in data:
             url = f"https://www.immobiliare.it/en/annunci/{item.id}/?imm_source=homepage"
             mapsgoogle = f"https://www.google.com/maps?q={item.latitude},{item.longitude}"
-            btn = f'<a href="/update/{item.id}" class="update-btn">Remove</a>'
+            btn_remove = f'<a href="/update/{item.id}" class="update-btn">Remove</a>'
+            btn_interested = f'<a href="/interested/{item.id}" class="update-btn">Interested</a>'
+    
             dkk = item.price * 7.4
             popup_text = f'<a href="{url}" target="_blank">Annonce: {item.id}</a><br>\
             Price: {item.price}<br>\
             <a href="{mapsgoogle}" target="_blank">GoogleMaps<br>\
-            {btn}<br>DKK: {dkk:,}</a>'
+            {btn_remove}<br>{btn_interested}<br>DKK: {dkk:,}</a>'
             popup = folium.Popup(popup_text, max_width=250)
             icon_color = get_icon_color(item.price_category)
             marker = folium.Marker(location=[float(item.latitude), float(item.longitude)],
@@ -93,6 +99,15 @@ def update_value(id):
         print("item removed", file=sys.stderr)
         print(session['map_zoom'], file=sys.stderr)
         print(session['map_center'], file=sys.stderr)
+    return redirect(url_for('index'))
+
+@app.route('/interested/<int:id>', methods=['GET','POST'])
+def mark_as_interested(id):
+    with Session(db_engine) as db_session:  # Create a new session inside the function
+        stmt = update(Property).where(Property.id == id).values(reviewed=2)
+        db_session.execute(stmt)
+        db_session.commit()
+        print("item marked as interested", file=sys.stderr)
     return redirect(url_for('index'))
 
 if __name__ == '__main__':
