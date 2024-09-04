@@ -87,7 +87,7 @@ def index():
     m.save('static/map.html')
     return render_template('index.html')
 
-@app.route('/update/<int:id>', methods=['GET','POST'])
+""" @app.route('/update/<int:id>', methods=['GET','POST'])
 def update_value(id):
     session['map_zoom'] = request.form.get('zoom')
     session['map_center'] = request.form.get('center')
@@ -99,6 +99,18 @@ def update_value(id):
         print("item removed", file=sys.stderr)
         print(session['map_zoom'], file=sys.stderr)
         print(session['map_center'], file=sys.stderr)
+    return redirect(url_for('index')) """
+
+
+@app.route('/update/<int:id>', methods=['GET','POST'])
+def update_value(id):
+    session['map_zoom'] = request.form.get('zoom')
+    session['map_center'] = request.form.get('center')
+    
+    with Session(db_engine) as db_session:  # Create a new session inside the function
+        stmt = update(Property).where(Property.id == id).values(reviewed=1)
+        db_session.execute(stmt)
+        db_session.commit()
     return redirect(url_for('index'))
 
 @app.route('/interested/<int:id>', methods=['GET','POST'])
