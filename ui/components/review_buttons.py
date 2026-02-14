@@ -6,8 +6,9 @@ across all Streamlit pages.
 
 import streamlit as st
 from sqlmodel import Session, create_engine
-from property_tracker.services.review import ReviewService
+
 from property_tracker.config.settings import get_database_url
+from property_tracker.services.review import ReviewService
 
 
 def render_review_buttons(
