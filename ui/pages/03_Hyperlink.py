@@ -160,7 +160,9 @@ with st.expander("🔍 Debug Info"):
     st.write(f"Price range: €{lat_lon['price'].min():,.0f} to €{lat_lon['price'].max():,.0f}")
     st.dataframe(lat_lon[["id", "caption", "latitude", "longitude", "price"]].head(10))
 
-st.write("**How to use:** Click on any marker to see a popup with property details and a clickable 'Open Property' button.")
+st.write(
+    "**How to use:** Click on any marker to see a popup with property details and a clickable 'Open Property' button. The property will be auto-selected below for quick review."
+)
 st.write("**Color coding:** 🟢 Green (<€50k) | 🔵 Blue (€50-75k) | 🟠 Orange (€75-100k) | 🔴 Red (>€100k)")
 st.markdown("---")
 
@@ -171,4 +173,71 @@ folium_map = create_folium_map(lat_lon)
 st.subheader("🗺️ Interactive Property Map")
 
 # Display Folium map
-st_folium(folium_map, width=None, height=700, use_container_width=True, key="property_map")
+map_output = st_folium(folium_map, width=None, height=700, use_container_width=True, key="property_map")
+
+# Quick Review Actions
+st.markdown("---")
+st.subheader("⚡ Quick Review Actions")
+
+# Check if a marker was clicked on the map
+clicked_property_id = None
+if map_output and map_output.get("last_object_clicked"):
+    # The tooltip contains "ID - Caption - Price", extract the ID
+    tooltip = map_output["last_object_clicked"].get("tooltip")
+    if tooltip:
+        # Extract property ID from tooltip (format: "Caption - €Price")
+        # We need to match by coordinates instead
+        clicked_lat = map_output["last_object_clicked"].get("lat")
+        clicked_lon = map_output["last_object_clicked"].get("lng")
+        if clicked_lat and clicked_lon:
+            # Find the property with matching coordinates
+            for _idx, row in lat_lon.iterrows():
+                if abs(row["latitude"] - clicked_lat) < 0.0001 and abs(row["longitude"] - clicked_lon) < 0.0001:
+                    clicked_property_id = int(row["id"])
+                    break
+
+# Property selector
+col_select, col_buttons = st.columns([2, 3])
+
+with col_select:
+    # Create list of properties for selection
+    property_options = [f"{row['id']} - {(row.get('caption') or 'Property')[:50]}" for _, row in lat_lon.iterrows()]
+
+    # Find the index of clicked property if any
+    default_index = 0
+    if clicked_property_id:
+        for _idx, row in lat_lon.iterrows():
+            if int(row["id"]) == clicked_property_id:
+                default_index = _idx
+                break
+
+    selected_property_idx = st.selectbox(
+        "Select a property to review:",
+        range(len(property_options)),
+        index=default_index,
+        format_func=lambda x: property_options[x],
+        key="property_selector",
+    )
+
+with col_buttons:
+    if selected_property_idx is not None:
+        selected_property = lat_lon.iloc[selected_property_idx]
+        property_id = int(selected_property["id"])
+        current_status = selected_property.get("review_status", "To Review")
+
+        st.write(f"**Current Status:** {current_status}")
+
+        # Three action buttons side by side
+        btn_col1, btn_col2, btn_col3 = st.columns(3)
+
+        with btn_col1:
+            if st.button("🤔 Perhaps", key=f"perhaps_{property_id}", use_container_width=True):
+                update_property_status(property_id, "To Review")
+
+        with btn_col2:
+            if st.button("✅ Yes", key=f"yes_{property_id}", use_container_width=True, type="primary"):
+                update_property_status(property_id, "Interested")
+
+        with btn_col3:
+            if st.button("❌ No", key=f"no_{property_id}", use_container_width=True):
+                update_property_status(property_id, "Rejected")
