@@ -49,10 +49,15 @@ def load_properties_df(status_filter=None, region_filter=None):
 
         # Execute query and convert to DataFrame
         properties = session.exec(statement).all()
-        df = pd.DataFrame([prop.model_dump() for prop in properties])
 
-        if len(df) == 0:
-            return df
+        if len(properties) == 0:
+            # Return empty DataFrame with proper column structure
+            return pd.DataFrame(columns=['id', 'region', 'price', 'price_m', 'rooms',
+                                        'bathrooms', 'surface', 'latitude', 'longitude',
+                                        'dist_coast', 'dist_water', 'review_status',
+                                        'reviewed_date', 'photo_list', 'discription'])
+
+        df = pd.DataFrame([prop.model_dump() for prop in properties])
 
         # Convert numeric columns
         df['longitude'] = pd.to_numeric(df['longitude'], errors='coerce')
