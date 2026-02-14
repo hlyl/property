@@ -46,7 +46,7 @@ class DeepTranslatorService:
             raise ImportError(
                 "deep-translator library not installed. "
                 "Install with: uv sync (should be in main dependencies)"
-            )
+            ) from None
 
         self.service = service
         if service == "google":
@@ -121,7 +121,7 @@ class GoogleTransService:
             raise ImportError(
                 "googletrans library not installed. "
                 "Install with: uv sync --extra google"
-            )
+            ) from None
 
         self.translator = Translator()
         logger.warning(

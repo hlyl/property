@@ -6,8 +6,8 @@ import pytest
 from main import calc_dist_cost, propertyparser
 
 # Import new services for testing
-from poi_service import OverpassPOIService, POICounts
-from translation_service import DeepTranslatorService
+from property_tracker.services.poi import OverpassPOIService, POICounts
+from property_tracker.services.translation import DeepTranslatorService
 
 test_data = [
     ("MILAN", "lom", "MI"),

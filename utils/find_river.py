@@ -1,7 +1,6 @@
 import json
 
 import pyproj
-from shapely.geometry import *
 from shapely.geometry import LineString, Point
 from shapely.ops import nearest_points, transform
 from shapely.strtree import STRtree

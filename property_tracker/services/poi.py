@@ -146,7 +146,7 @@ class GooglePlacesPOIService:
             raise ImportError(
                 "googleplaces library not installed. "
                 "Install with: uv sync --extra google"
-            )
+            ) from None
 
         self.google_places = GooglePlaces(api_key)
         self.types = types

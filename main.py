@@ -168,13 +168,13 @@ def deserialise_property(item, region) -> Property:
 
 def propertyparser(results, region) -> list[Property]:
     aresults = []
-    for json in results["results"]:
-        item = deserialise_property(json, region)
+    for result_item in results["results"]:
+        item = deserialise_property(result_item, region)
         aresults.append(item)
     return aresults
 
 
-def updateTest():
+def update_test():
     prop_1 = Property(
         id=12345678,
         region="TOSCANA",
@@ -228,13 +228,6 @@ def select_db_no_translation(session) -> dict:
     return result_list_of_dict
 
 
-def get_list_id(sesson) -> list:
-    statement = select(Property.id)
-    data = session.execute(statement)
-    resultlst = [i[0] for i in data]
-    return resultlst
-
-
 def update_observed(session):
     statement = (
         update(Property)
@@ -280,7 +273,7 @@ def calc_dist_cost(item: Property) -> Property:
     long_input = float(item.longitude)
     try:
         dist_coast = distance_calculator.calculate_coast_distance(lat_input, long_input)
-    except:
+    except Exception:
         dist_coast = -1
     item.dist_coast = round(dist_coast, 2)
     return item
@@ -291,7 +284,7 @@ def calc_dist_water_main(item: Property) -> Property:
     long_input = float(item.longitude)
     try:
         dist_water = distance_calculator.calculate_water_distance(lat_input, long_input)
-    except:
+    except Exception:
         dist_water = -1
     item.dist_water = round(dist_water, 2)
     return item

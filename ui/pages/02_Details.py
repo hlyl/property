@@ -1,3 +1,4 @@
+# noqa: N999
 import pandas as pd
 import streamlit as st
 from sqlmodel import Session, create_engine

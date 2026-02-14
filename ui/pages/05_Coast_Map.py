@@ -1,3 +1,4 @@
+# noqa: N999
 """Coast Distance Map - Interactive Folium Map
 
 Displays an interactive map showing properties and their distance to the Italian coast.
@@ -129,15 +130,8 @@ if selected_property != "None" and selected_property in filtered_df["id"].values
 
     # Add surface area - handle both numeric and string values
     surface_val = selected_row.get('surface')
-    if pd.notna(surface_val):
-        # If it's already a string with units, use it directly
-        if isinstance(surface_val, str):
-            surface_display = surface_val
-        else:
-            # If it's numeric, format it with units
-            surface_display = f"{int(surface_val)} m²"
-    else:
-        surface_display = 'N/A'
+    # If it's already a string with units, use it directly; if numeric, format it with units
+    surface_display = (surface_val if isinstance(surface_val, str) else f"{int(surface_val)} m²") if pd.notna(surface_val) else 'N/A'
     st.sidebar.write(f"- Surface: {surface_display}")
 
     # Add rooms

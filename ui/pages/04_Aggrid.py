@@ -1,3 +1,4 @@
+# noqa: N999
 """Grid View Page - Property Data Table
 
 Displays properties in an interactive table view.

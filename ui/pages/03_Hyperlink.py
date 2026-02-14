@@ -1,3 +1,4 @@
+# noqa: N999
 """
 Interactive Property Map with Click Selection
 Uses native Streamlit Plotly selection (Streamlit 1.35+)
@@ -205,7 +206,7 @@ if selected_point_index is not None and selected_point_index < len(lat_lon):
                     for i, photo in enumerate(photos[:4]):
                         with cols[i]:
                             st.image(photo, use_container_width=True)
-        except:
+        except Exception:
             pass
 
     # Link
