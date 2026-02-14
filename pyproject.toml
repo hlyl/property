@@ -1,0 +1,117 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "italian-property-tracker"
+version = "0.1.0"
+description = "Italian real estate tracker with geospatial analysis and POI enrichment"
+readme = "README.md"
+requires-python = ">=3.12,<3.14"  # Pin to 3.12-3.13 range
+dependencies = [
+    "streamlit>=1.37.0", # Require 1.37+ for latest features
+    "pandas>=2.2.0", # Major update from 1.4.3
+    "sqlmodel>=0.0.16", # Update from 0.0.6
+    "shapely>=2.0.0", # Major update, 2-5x faster
+    "pyproj>=3.6.0",
+    "plotly>=5.18.0",
+    "requests>=2.31.0", # Security patches
+    "rtree>=1.2.0",
+    "loguru>=0.7.2",
+    "python-dotenv>=1.0.0", # NEW: .env support
+    "deep-translator>=1.11.4", # NEW: Free translation
+    "overpy>=0.7", # NEW: Overpass API (OSM)
+    "ipython>=8.20.0", # NEW: For IPython.display in frontend
+    "folium>=0.15.0", # NEW: Interactive maps
+    "streamlit-folium>=0.19.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0.0",
+    "ruff>=0.2.0",
+    "mypy>=1.8.0",
+    "pandas-stubs>=2.2.0",
+    "types-requests>=2.31.0",
+]
+# Google packages commented out - incompatible with Python 3.13+
+# Uncomment only if you need them and are using Python 3.12
+# google = [
+#     "python-google-places>=1.4.2",
+#     "googletrans==3.1.0a0",
+# ]
+
+
+[tool.ruff]
+line-length = 150  # Match current flake8
+target-version = "py312"
+extend-exclude = [".venv", "venv", "__pycache__", "*.db"]
+
+[tool.ruff.lint]
+select = [
+    "E",   # pycodestyle errors
+    "W",   # pycodestyle warnings
+    "F",   # pyflakes
+    "I",   # isort
+    "N",   # pep8-naming
+    "UP",  # pyupgrade (auto-upgrade syntax)
+    "B",   # flake8-bugbear
+    "SIM", # flake8-simplify
+]
+ignore = [
+    "E501",  # Line too long (handled by formatter)
+    "B008",  # Function call in default argument (common in SQLModel)
+]
+
+[tool.ruff.lint.per-file-ignores]
+"test_*.py" = ["D"]  # No docstrings required in tests
+"__init__.py" = ["F401"]  # Unused imports OK in __init__
+
+[tool.ruff.lint.isort]
+known-first-party = ["dao", "calcdist", "main", "poi_service", "translation_service"]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+
+[tool.mypy]
+python_version = "3.12"
+warn_return_any = true
+warn_unused_configs = true
+check_untyped_defs = true
+warn_redundant_casts = true
+warn_unused_ignores = true
+no_implicit_optional = true
+strict_equality = true
+disallow_untyped_defs = false  # Start lenient, enable incrementally
+
+[[tool.mypy.overrides]]
+module = [
+    "streamlit.*",
+    "plotly.*",
+    "shapely.*",
+    "pyproj.*",
+    "sqlmodel.*",
+    "overpy.*",
+    "deep_translator.*",
+    "googleplaces.*",
+    "googletrans.*",
+]
+ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+module = "dao"
+disallow_untyped_defs = true
+
+[[tool.mypy.overrides]]
+module = "calcdist"
+disallow_untyped_defs = true
+
+[tool.pytest.ini_options]
+testpaths = ["."]
+python_files = "test_*.py"
+python_functions = "test_*"
+addopts = "-v --strict-markers"
+
+[tool.setuptools]
+packages = ["property_tracker", "property_tracker.models", "property_tracker.services", "property_tracker.config", "property_tracker.utils"]

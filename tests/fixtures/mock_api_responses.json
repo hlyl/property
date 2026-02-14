@@ -1,0 +1,82 @@
+{
+  "total": 3,
+  "results": [
+    {
+      "id": "94471966",
+      "type": "sale",
+      "category": "Residenziale",
+      "region": "TUSCANY",
+      "province": "LU",
+      "city": "Lucca",
+      "price": {
+        "value": 250000,
+        "currency": "EUR"
+      },
+      "surface": 100,
+      "rooms": 3,
+      "bathrooms": 2,
+      "floor": "2",
+      "coordinates": {
+        "latitude": 43.8438,
+        "longitude": 10.5077
+      },
+      "description": "Spacious 3-bedroom apartment with modern amenities in the heart of Lucca",
+      "photos": [
+        "https://example.com/photo1.jpg",
+        "https://example.com/photo2.jpg"
+      ],
+      "url": "https://www.immobiliare.it/annunci/94471966"
+    },
+    {
+      "id": "94471967",
+      "type": "sale",
+      "category": "Residenziale",
+      "region": "LOMBARDY",
+      "province": "MI",
+      "city": "Milano",
+      "price": {
+        "value": 450000,
+        "currency": "EUR"
+      },
+      "surface": 112,
+      "rooms": 4,
+      "bathrooms": 3,
+      "floor": "5",
+      "coordinates": {
+        "latitude": 45.4642,
+        "longitude": 9.1900
+      },
+      "description": "Contemporary 4-bedroom loft with stunning city views",
+      "photos": [
+        "https://example.com/photo3.jpg",
+        "https://example.com/photo4.jpg"
+      ],
+      "url": "https://www.immobiliare.it/annunci/94471967"
+    },
+    {
+      "id": "94471968",
+      "type": "sale",
+      "category": "Residenziale",
+      "region": "VENETO",
+      "province": "VE",
+      "city": "Venezia",
+      "price": {
+        "value": 550000,
+        "currency": "EUR"
+      },
+      "surface": 100,
+      "rooms": 2,
+      "bathrooms": 1,
+      "floor": "1",
+      "coordinates": {
+        "latitude": 45.4408,
+        "longitude": 12.3155
+      },
+      "description": "Charming 2-bedroom apartment with canal views",
+      "photos": [
+        "https://example.com/photo6.jpg"
+      ],
+      "url": "https://www.immobiliare.it/annunci/94471968"
+    }
+  ]
+}

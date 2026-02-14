@@ -1,6 +1,51 @@
+# API Keys and Secrets
 apiKey.txt
-.vscode
-__pycache__
 .env
 dev.env
-backup
+
+# IDE
+.vscode
+.idea/
+
+# Python
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+*.py[cod]
+*$py.class
+
+# Virtual Environments
+venv/
+.venv/
+ENV/
+env/
+
+# Testing and Coverage
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Type Checking and Linting
+.mypy_cache/
+.ruff_cache/
+.dmypy.json
+dmypy.json
+
+# Databases
+*.db
+*.db-journal
+*.sqlite
+*.sqlite3
+data/*.db
+
+# Backups
+backup/
+
+# Logs
+*.log
+logging.txt
+
+# OS
+.DS_Store
+Thumbs.db

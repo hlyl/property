@@ -1,0 +1,26 @@
+"""Check sold field values."""
+from sqlmodel import create_engine, Session
+import pandas as pd
+
+engine = create_engine("sqlite:///test.db")
+
+with Session(engine) as session:
+    # Check all properties
+    df = pd.read_sql("SELECT COUNT(*) as total FROM property", con=session.connection())
+    print(f"Total properties (all): {df['total'].iloc[0]}")
+
+    # Check by sold status
+    df_sold = pd.read_sql(
+        "SELECT sold, COUNT(*) as count FROM property GROUP BY sold",
+        con=session.connection()
+    )
+    print("\nBy sold status:")
+    print(df_sold.to_string(index=False))
+
+    # Check sample properties with sold status
+    df_sample = pd.read_sql(
+        "SELECT id, region, price, sold, review_status FROM property LIMIT 10",
+        con=session.connection()
+    )
+    print("\nSample properties:")
+    print(df_sample.to_string(index=False))

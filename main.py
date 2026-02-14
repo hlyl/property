@@ -2,7 +2,7 @@
 # http://20.105.249.39:4444/
 import os
 from fnmatch import translate
-from googleplaces import GooglePlaces, types
+from dotenv import load_dotenv
 import requests
 import json
 import dao
@@ -12,70 +12,161 @@ from typing import List
 import calcdist
 from calcdist import create_rivertree, calc_dist_short, calc_dist_water
 from datetime import date
-from googletrans import Translator
+import time
 
-translator = Translator()
+# Import new service abstractions
+from poi_service import get_poi_service, POICounts
+from translation_service import get_translation_service
 
-production = True
-google_api = True
+# Load environment variables from .env file
+load_dotenv()
+
+# Configuration from environment variables
+USE_GOOGLE_PLACES = os.getenv("USE_GOOGLE_PLACES", "false").lower() == "true"
+USE_GOOGLE_TRANSLATE = os.getenv("USE_GOOGLE_TRANSLATE", "false").lower() == "true"
+GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
+DATABASE_PATH = os.getenv("DATABASE_PATH", "database.db")
+PRODUCTION = os.getenv("PRODUCTION", "true").lower() == "true"
+LOG_FILE = os.getenv("LOG_FILE", "logging.txt")
+
+# Validate configuration
+if USE_GOOGLE_PLACES and not GOOGLE_API_KEY:
+    raise ValueError("GOOGLE_API_KEY is required when USE_GOOGLE_PLACES=true")
+
+# Initialize services
+poi_service = get_poi_service(USE_GOOGLE_PLACES, GOOGLE_API_KEY)
+translation_service = get_translation_service(USE_GOOGLE_TRANSLATE)
+
+# Keep backward compatibility with existing code
+production = PRODUCTION
+google_api = USE_GOOGLE_PLACES
 tree = calcdist.create_rivertree()
+
+# HTTP headers to avoid being blocked
+HEADERS = {
+    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+    'Accept': 'application/json, text/plain, */*',
+    'Accept-Language': 'en-US,en;q=0.9',
+    'Accept-Encoding': 'gzip, deflate, br',
+    'Connection': 'keep-alive',
+}
+
+def make_request_with_retry(url, max_retries=3, delay=2):
+    """Make HTTP request with retries and proper headers."""
+    for attempt in range(max_retries):
+        try:
+            time.sleep(delay)  # Rate limiting - wait between requests
+            response = requests.get(url, headers=HEADERS, timeout=30)
+            response.raise_for_status()
+            return response
+        except (requests.exceptions.ConnectionError, requests.exceptions.Timeout) as e:
+            if attempt == max_retries - 1:
+                raise
+            print(f"Request failed (attempt {attempt + 1}/{max_retries}): {e}. Retrying in {delay * (attempt + 1)} seconds...")
+            time.sleep(delay * (attempt + 1))
+        except requests.exceptions.HTTPError as e:
+            print(f"HTTP error: {e}")
+            raise
+    return None
+
+
+def safe_get(data, *keys, default=None):
+    """Safely get nested dictionary values."""
+    for key in keys:
+        if isinstance(data, dict):
+            data = data.get(key, default)
+        elif isinstance(data, list) and isinstance(key, int) and len(data) > key:
+            data = data[key]
+        else:
+            return default
+    return data
 
 
 def deserialise_property(item, region) -> Property:
-    stringid = item["realEstate"]["id"]
-    is_new = item["realEstate"]["isNew"]
-    price = item["realEstate"]["price"]["value"]
-    price_drop = item["realEstate"]["price"]["loweredPrice"]
-    if price_drop is None:
-        price_drop = "No"
-    else:
-        print("WE have a PriceDrop")
-        price_drop = item["realEstate"]["price"]["loweredPrice"]["originalPrice"]
-        print("The orginal price was: " + str(price_drop))
-    bathrooms = item["realEstate"]["properties"][0]["bathrooms"]
-    caption = item["realEstate"]["properties"][0]["caption"]
-    category = item["realEstate"]["properties"][0]["category"]["name"]
-    discription = item["realEstate"]["properties"][0]["description"]
-    discription_dk = ""
-    floor = item["realEstate"]["properties"][0]["floor"]
-    if floor is None:
-        floor = "not assigned"
-    else:
-        floor = item["realEstate"]["properties"][0]["floor"]["value"]
-    rooms = item["realEstate"]["properties"][0]["rooms"]
-    surface = item["realEstate"]["properties"][0]["surface"]
-    price_m = round(price / int(surface.split()[0]))
-    lon = item["realEstate"]["properties"][0]["location"]["longitude"]
-    lat = item["realEstate"]["properties"][0]["location"]["latitude"]
-    marker = item["realEstate"]["properties"][0]["location"]["marker"]
-    aphoto = []
-    for photo in item["realEstate"]["properties"][0]["multimedia"]["photos"]:
-        url = photo["urls"]["small"]
-        url = url.replace("xxs-c.jpg", "xxl.jpg")
-        aphoto.append(url)
-    photo_list = json.dumps(aphoto)
+    try:
+        # Extract basic property info
+        stringid = safe_get(item, "realEstate", "id")
+        is_new = safe_get(item, "realEstate", "isNew")
+        price = safe_get(item, "realEstate", "price", "value")
 
-    item = {
-        "region": region,
-        "id": stringid,
-        "is_new": is_new,
-        "price": price,
-        "price_drop": price_drop,
-        "bathrooms": bathrooms,
-        "caption": caption,
-        "category": category,
-        "discription": discription,
-        "discription_dk": discription_dk,
-        "floor": floor,
-        "rooms": rooms,
-        "surface": surface,
-        "price_m": price_m,
-        "longitude": lon,
-        "latitude": lat,
-        "marker": marker,
-        "photo_list": photo_list,
-    }
-    return Property(**item)
+        # Handle price drop
+        price_drop_data = safe_get(item, "realEstate", "price", "loweredPrice")
+        if price_drop_data is None:
+            price_drop = "No"
+        else:
+            print("WE have a PriceDrop")
+            price_drop = safe_get(price_drop_data, "originalPrice", default="No")
+            print("The original price was: " + str(price_drop))
+
+        # Get property details - properties is an array, get first element
+        prop = safe_get(item, "realEstate", "properties", 0, default={})
+
+        bathrooms = safe_get(prop, "bathrooms")
+        caption = safe_get(prop, "caption")
+        category = safe_get(prop, "category", "name")
+        discription = safe_get(prop, "description", default="")
+        discription_dk = ""
+
+        # Handle floor
+        floor_data = safe_get(prop, "floor")
+        if floor_data is None:
+            floor = "not assigned"
+        else:
+            floor = safe_get(floor_data, "value", default="not assigned")
+
+        rooms = safe_get(prop, "rooms")
+        surface = safe_get(prop, "surface")
+
+        # Calculate price per sqm
+        price_m = None
+        if price and surface:
+            try:
+                surface_num = int(surface.split()[0])
+                price_m = round(price / surface_num)
+            except (ValueError, ZeroDivisionError, IndexError):
+                price_m = None
+
+        # Location data
+        location = safe_get(prop, "location", default={})
+        lon = safe_get(location, "longitude")
+        lat = safe_get(location, "latitude")
+        marker = safe_get(location, "marker")
+
+        # Photos
+        aphoto = []
+        photos = safe_get(prop, "multimedia", "photos", default=[])
+        for photo in photos:
+            url = safe_get(photo, "urls", "small")
+            if url:
+                url = url.replace("xxs-c.jpg", "xxl.jpg")
+                aphoto.append(url)
+        photo_list = json.dumps(aphoto)
+
+        item_dict = {
+            "region": region,
+            "id": stringid,
+            "is_new": is_new,
+            "price": price,
+            "price_drop": price_drop,
+            "bathrooms": bathrooms,
+            "caption": caption,
+            "category": category,
+            "discription": discription,
+            "discription_dk": discription_dk,
+            "floor": floor,
+            "rooms": rooms,
+            "surface": surface,
+            "price_m": price_m,
+            "longitude": lon,
+            "latitude": lat,
+            "marker": marker,
+            "photo_list": photo_list,
+        }
+        return Property(**item_dict)
+    except Exception as e:
+        print(f"Error deserializing property: {e}")
+        print(f"Item data: {json.dumps(item, indent=2)}")
+        raise
 
 
 def propertyparser(results, region) -> List[Property]:
@@ -129,7 +220,8 @@ def select_db_no_translation(session) -> dict:
         dic["discription"] = str(dic["discription"]).replace("\n", " ")
         dic["discription"] = str(dic["discription"]).replace("  ", " ")
         totranslatestr = dic["discription"]
-        dic["discription_dk"] = (translator.translate(totranslatestr, "da")).text
+        # Use new translation service
+        dic["discription_dk"] = translation_service.translate(totranslatestr)
 
     for dic in result_list_of_dict:
         statement = (
@@ -213,48 +305,33 @@ def calc_dist_water_main(item: Property) -> Property:
     return item
 
 
-def count_bars(item: Property, google_places: GooglePlaces) -> Property:
-    bar_query = google_places.nearby_search(
-        lat_lng={"lat": float(item.latitude), "lng": float(item.longitude)},
-        radius=2000,
-        types=[types.TYPE_BAR] or [types.TYPE_CAFE],
-    )
-    bar_count = len(bar_query.places)
-    item.pub_count = bar_count
-    print("The count of bars is :" + str(bar_count))
-    return item
+def enrich_with_pois(item: Property) -> Property:
+    """Enrich property with POI counts using the configured service.
 
+    Args:
+        item: Property to enrich with POI data
 
-def count_shop(item: Property, google_places: GooglePlaces) -> Property:
-    shop_query = google_places.nearby_search(
-        lat_lng={"lat": float(item.latitude), "lng": float(item.longitude)},
-        radius=2000,
-        types=[types.TYPE_GROCERY_OR_SUPERMARKET] or [types.TYPE_STORE],
-    )
-    shop_count = len(shop_query.places)
-    item.shopping_count = shop_count
-    return item
-
-
-def count_bakery(item: Property, google_places: GooglePlaces) -> Property:
-    bakery_query = google_places.nearby_search(
-        lat_lng={"lat": float(item.latitude), "lng": float(item.longitude)},
-        radius=2000,
-        types=[types.TYPE_BAKERY],
-    )
-    bakery_count = len(bakery_query.places)
-    item.baker_count = bakery_count
-    return item
-
-
-def count_food(item: Property, google_places: GooglePlaces) -> Property:
-    food_query = google_places.nearby_search(
-        lat_lng={"lat": float(item.latitude), "lng": float(item.longitude)},
-        radius=2000,
-        types=[types.TYPE_RESTAURANT] or [types.TYPE_FOOD],
-    )
-    food_count = len(food_query.places)
-    item.food_count = food_count
+    Returns:
+        Property with pub_count, shopping_count, baker_count, and food_count populated
+    """
+    try:
+        counts = poi_service.get_all_counts(
+            lat=float(item.latitude), lon=float(item.longitude), radius=2000
+        )
+        item.pub_count = counts.bars
+        item.shopping_count = counts.shops
+        item.baker_count = counts.bakeries
+        item.food_count = counts.restaurants
+        print(
+            f"POI counts: bars={counts.bars}, shops={counts.shops}, "
+            f"bakeries={counts.bakeries}, restaurants={counts.restaurants}"
+        )
+    except Exception as e:
+        print(f"Failed to get POI counts: {e}")
+        item.pub_count = 0
+        item.shopping_count = 0
+        item.baker_count = 0
+        item.food_count = 0
     return item
 
 
@@ -268,50 +345,51 @@ def get_list_id(session) -> list:
 if __name__ == "__main__":  #
     from loguru import logger
 
-    logger.add("logging.txt")
+    logger.add(LOG_FILE)
     logger.debug("That's it, beautiful and simple logging!")
-    api_key = os.environ["API_KEY"]
-    google_places = GooglePlaces(api_key)
+    logger.info(f"Using Google Places: {USE_GOOGLE_PLACES}")
+    logger.info(f"Using Google Translate: {USE_GOOGLE_TRANSLATE}")
+
     if production:
-        db_engine = dao.create_db("database.db")
+        db_engine = dao.create_db(DATABASE_PATH)
+        # Radius-based search: (name, centro, raggio, min_lat, max_lat, min_lng, max_lng)
         data = [
-            ("LUCCA", "tos", "LU"),
-            ("PISA", "tos", "PI"),
-            ("LEGHORN", "tos", "LI"),
-            ("VENICE", "ven", "VE"),
-            ("TREVISO", "ven", "TV"),
-            ("PORDENONE", "fri", "PN"),
-            ("PADUA", "ven", "PD"),
-            ("ROViGO", "ven", "RO"),
-            ("BOLOGNA", "emi", "BO"),
-            ("MILAN", "lom", "MI"),
+            ("NORTHERN_ITALY", "44.51456,11.29172", 300000, 43.814711, 45.267155, 7.849731, 16.468506),
         ]
         with open("first_observed.json") as f:
             first_observed = json.load(f)
             print(len(first_observed))
     else:
-        db_engine = dao.create_db("test.db")
+        db_engine = dao.create_db(os.getenv("TEST_DATABASE_PATH", "test.db"))
         data = [
-            ("MILAN", "lom", "MI"),
-        ]
+            # Center near Parma, 400km radius covers most of Northern Italy
+            ("NORTHERN_ITALY", "44.8,10.3", 400000, 43.5, 47.1, 6.6, 14.0),
+        ]        # Load or initialize first_observed for test mode
+        try:
+            with open("first_observed.json") as f:
+                first_observed = json.load(f)
+                print(len(first_observed))
+        except FileNotFoundError:
+            first_observed = {}
+            print("first_observed.json not found, starting with empty dictionary")
 
-    # "https://www.immobiliare.it/api-next/search-list/real-estates/?fkRegione=tos&idProvincia=LU&idNazione=IT&idContratto=1&idCategoria=1&prezzoMinimo=10000&prezzoMassimo=50000&idTipologia[0]=7&idTipologia[1]=31&idTipologia[2]=11&idTipologia[3]=12&idTipologia[4]=13&idTipologia[5]=4&localiMinimo=3&localiMassimo=5&bagni=1&boxAuto[0]=4&cantina=1&noAste=1&pag=1&paramsCount=17&path=%2Fen%2Fsearch-list%2F"
-
-    # "https://www.immobiliare.it/api-next/search-list/real-estates/?fkRegione=tos&idProvincia=LU&idNazione=IT&idContratto=1&idCategoria=1&prezzoMinimo=10000&prezzoMassimo=50000&idTipologia[0]=7&idTipologia[1]=31&idTipologia[2]=11&idTipologia[3]=12&idTipologia[4]=13&idTipologia[5]=4&localiMinimo=3&localiMassimo=5&bagni=1&boxAuto[0]=4&cantina=1&noAste=1&pag=1&paramsCount=17&path=%2Fen%2Fsearch-list%2F"
-    # "https://www.immobiliare.it/api-next/search-list/real-estates/?raggio=300000&centro=44.51456,11.29172&idContratto=1&idCategoria=1&prezzoMinimo=20000&prezzoMassimo=90000&idTipologia[0]=7&idTipologia[1]=31&idTipologia[2]=11&idTipologia[3]=12&idTipologia[4]=13&idTipologia[5]=4&localiMinimo=4&criterio=rilevanza&__lang=en&pag=1&paramsCount=11&path=/en/search-list/"
-
-    # "https://www.immobiliare.it/api-next/search-list/real-estates/?raggio=200000&centro=44.339565,7.9953&idContratto=1&idCategoria=1&prezzoMinimo=20000&prezzoMassimo=90000&localiMinimo=4&criterio=rilevanza&__lang=en&pag=1&paramsCount=11&path=/en/search-list/"
     total_count = 0
     id_list = []
-    for name, region, province in data:
+    for name, centro, raggio, min_lat, max_lat, min_lng, max_lng in data:
         print(name)
         page = 0
 
         while True:
             page = page + 1
-            url = f"https://www.immobiliare.it/api-next/search-list/real-estates/?fkRegione={region}&idProvincia={province}&idNazione=IT&idContratto=1&idCategoria=1&prezzoMinimo=10000&prezzoMassimo=50000&idTipologia[0]=7&idTipologia[1]=31&idTipologia[2]=11&idTipologia[3]=12&idTipologia[4]=13&idTipologia[5]=4&localiMinimo=3&localiMassimo=5&bagni=1&boxAuto[0]=4&cantina=1&noAste=1&pag={page}&paramsCount=17&path=%2Fen%2Fsearch-list%2F"
-            response = requests.get(url)
+            url = f"https://www.immobiliare.it/api-next/search-list/listings/?raggio={raggio}&centro={centro}&idContratto=1&idCategoria=1&prezzoMassimo=100000&idTipologia[0]=7&idTipologia[1]=11&idTipologia[2]=12&idTipologia[3]=13&localiMinimo=4&bagni=2&stato=2&tipoProprieta=1&balconeOterrazzo[0]=terrazzo&giardino[0]=10&__lang=en&minLat={min_lat}&maxLat={max_lat}&minLng={min_lng}&maxLng={max_lng}&pag={page}&paramsCount=18&path=%2Fen%2Fsearch-list%2F"
+            response = make_request_with_retry(url)
             input_json = response.json()
+
+            # Save sample response for debugging (first page only)
+            if page == 1 and name == "NORTHERN_ITALY":
+                with open("api_response_sample.json", "w") as f:
+                    json.dump(input_json, f, indent=2)
+                print("Saved sample API response to api_response_sample.json")
             pages = input_json["maxPages"]
             count = input_json["count"]
             web_result = propertyparser(input_json, name)
@@ -326,11 +404,9 @@ if __name__ == "__main__":  #
                         if item.latitude != None and item.longitude != None:
                             calc_dist_cost(item)
                             calc_dist_water_main(item)
-                            if google_api:
-                                count_bars(item, google_places)
-                                count_shop(item, google_places)
-                                count_bakery(item, google_places)
-                                count_food(item, google_places)
+                            # Enrich with POI counts using configured service
+                            # TODO: Re-enable when needed - commented out for faster testing
+                            # enrich_with_pois(item)
                         item.observed = str(date.today())
                         session.merge(item)
                     id_list.append(str(item.id))

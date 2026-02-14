@@ -1,60 +1,56 @@
-import json
-import shapely
-from shapely import wkt
-from shapely.strtree import STRtree
-from shapely.geometry import Point, LineString
-from shapely.ops import nearest_points, transform
-import pyproj
-from pyproj import Transformer
+"""Backwards compatibility shim for calcdist module.
 
-wgs_proj = pyproj.CRS("EPSG:4326")
-utm_proj = pyproj.CRS("EPSG:32633")
-project = pyproj.Transformer.from_crs(wgs_proj, utm_proj, always_xy=True).transform
+This module provides backwards compatibility by delegating to the new
+property_tracker.utils.distance module with lazy-loading.
 
+DEPRECATED: Use property_tracker.utils.distance.DistanceCalculator instead.
+"""
 
-def create_rivertree() -> STRtree:
-    lst_lines = []
-    with open("Italy_waterLines.geojson") as f:
-        features = json.load(f)["features"]
-        flat_features = []
-        for feature in features:
-            chords = feature["geometry"]["coordinates"]
-            line_geom = LineString(chords)
-            lst_lines.append(transform(project, line_geom))
-    tree = STRtree(lst_lines)
-    return tree
+from property_tracker.utils.distance import get_calculator
+from typing import Tuple
+
+# Get the shared calculator instance
+_calculator = get_calculator()
 
 
-def format_p(item):
-    return f"{item[0]} {item[1]}"
+def calc_dist_short(poi: Tuple[float, float]) -> float:
+    """Calculate distance from a point to the nearest coastline.
+
+    DEPRECATED: Use DistanceCalculator.calculate_coast_distance() instead.
+
+    Args:
+        poi: Tuple of (latitude, longitude)
+
+    Returns:
+        Distance to coastline in kilometers
+    """
+    lat, lon = poi
+    return _calculator.calculate_coast_distance(lat, lon)
 
 
-def format_t(items):
-    items = ", ".join(list(map(format_p, items)))
-    return f"POLYGON (({items}))"
+def calc_dist_water(tree, poi: Tuple[float, float]) -> float:
+    """Calculate distance from a point to the nearest water feature.
+
+    DEPRECATED: Use DistanceCalculator.calculate_water_distance() instead.
+
+    Args:
+        tree: Unused (kept for backwards compatibility)
+        poi: Tuple of (latitude, longitude)
+
+    Returns:
+        Distance to nearest water feature in kilometers
+    """
+    lat, lon = poi
+    return _calculator.calculate_water_distance(lat, lon)
 
 
-def format_point(point):
-    return f"POINT ({point[1]} {point[0]})"
+def create_rivertree():
+    """Create a spatial index tree (DEPRECATED).
 
+    This function is no longer needed as the new DistanceCalculator
+    handles spatial indexing internally.
 
-your_json_file = json.loads(open("PolyShoreItaly.geojson").read())
-jsonString = your_json_file["features"][0]["geometry"]["coordinates"][0]
-shore_italy = shapely.wkt.loads(format_t(jsonString))
-
-
-def calc_dist_short(poi):
-    pt = wkt.loads(format_point(poi))
-    p1, p2 = nearest_points(shore_italy.boundary, pt)
-    p1utm_point = transform(project, p1)
-    p2utm_point = transform(project, p2)
-    distance = p1utm_point.distance(p2utm_point)
-    return distance / 1000
-
-
-def calc_dist_water(tree, poi):
-    pt = wkt.loads(format_point(poi))
-    pt = transform(project, pt)
-    p1, p2 = nearest_points(pt, tree.nearest_geom(pt))
-    distance = pt.distance(p2)
-    return distance / 1000
+    Returns:
+        None (placeholder for backwards compatibility)
+    """
+    return None

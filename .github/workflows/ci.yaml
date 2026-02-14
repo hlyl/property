@@ -1,35 +1,49 @@
-name: Python based app for da
+name: Python Property Tracker CI
 
-on: [push]
+on: [push, pull_request]
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: [3.8]
+        python-version: ["3.12"]
 
     steps:
-    - uses: actions/checkout@v2
-    - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v2
+    - uses: actions/checkout@v4
+
+    - name: Install UV
+      uses: astral-sh/setup-uv@v2
       with:
-        python-version: ${{ matrix.python-version }}
+        version: "latest"
+
+    - name: Set up Python ${{ matrix.python-version }}
+      run: uv python install ${{ matrix.python-version }}
+
     - name: Install dependencies
       run: |
-        ls
-        pwd
-        python -m pip install --upgrade pip
-        pip install flake8 pytest
-        if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
-    - name: Test with pytest
+        uv sync --extra dev
+
+    - name: Run Ruff format check
       run: |
-        export PYTHONPATH=.
-        pytest
-    - name: Lint with flake8
+        uv run ruff format --check .
+
+    - name: Run Ruff linter
       run: |
-        # stop the build if there are Python syntax errors or undefined names
-        flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
-        # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
-        flake8 . --count --exit-zero --max-complexity=10 --max-line-length=150 --statistics
+        uv run ruff check .
+
+    - name: Run mypy type checker
+      run: |
+        uv run mypy dao.py calcdist.py
+      continue-on-error: true  # Don't fail build initially while improving types
+
+    - name: Run tests with pytest
+      run: |
+        uv run pytest -v
+      env:
+        PYTHONPATH: .
+        # Test environment variables
+        USE_GOOGLE_PLACES: "false"
+        USE_GOOGLE_TRANSLATE: "false"
+        DATABASE_PATH: "test.db"
+        PRODUCTION: "false"
