@@ -6,6 +6,7 @@ dev.env
 # IDE
 .vscode
 .idea/
+.ipynb_checkpoints/
 
 # Python
 __pycache__
@@ -38,9 +39,11 @@ dmypy.json
 *.sqlite
 *.sqlite3
 data/*.db
+first_observed.json
 
 # Backups
 backup/
+*.backup
 
 # Logs
 *.log

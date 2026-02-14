@@ -9,14 +9,13 @@ import dao
 from dao import Property
 from sqlmodel import Field, create_engine, Session, select, update  #
 from typing import List
-import calcdist
-from calcdist import create_rivertree, calc_dist_short, calc_dist_water
 from datetime import date
 import time
 
 # Import new service abstractions
-from poi_service import get_poi_service, POICounts
-from translation_service import get_translation_service
+from property_tracker.services.poi import get_poi_service, POICounts
+from property_tracker.services.translation import get_translation_service
+from property_tracker.utils.distance import get_calculator
 
 # Load environment variables from .env file
 load_dotenv()
@@ -40,7 +39,8 @@ translation_service = get_translation_service(USE_GOOGLE_TRANSLATE)
 # Keep backward compatibility with existing code
 production = PRODUCTION
 google_api = USE_GOOGLE_PLACES
-tree = calcdist.create_rivertree()
+# Get the distance calculator instance
+distance_calculator = get_calculator()
 
 # HTTP headers to avoid being blocked
 HEADERS = {
@@ -286,7 +286,7 @@ def calc_dist_cost(item: Property) -> Property:
     long_input = float(item.longitude)
     poi = [lat_input, long_input]
     try:
-        dist_coast = calcdist.calc_dist_short(poi)
+        dist_coast = distance_calculator.calculate_coast_distance(lat_input, long_input)
     except:
         dist_coast = -1
     item.dist_coast = round(dist_coast, 2)
@@ -298,7 +298,7 @@ def calc_dist_water_main(item: Property) -> Property:
     long_input = float(item.longitude)
     poi = [lat_input, long_input]
     try:
-        dist_water = calcdist.calc_dist_water(tree, poi)
+        dist_water = distance_calculator.calculate_water_distance(lat_input, long_input)
     except:
         dist_water = -1
     item.dist_water = round(dist_water, 2)
@@ -354,7 +354,8 @@ if __name__ == "__main__":  #
         db_engine = dao.create_db(DATABASE_PATH)
         # Radius-based search: (name, centro, raggio, min_lat, max_lat, min_lng, max_lng)
         data = [
-            ("NORTHERN_ITALY", "44.51456,11.29172", 300000, 43.814711, 45.267155, 7.849731, 16.468506),
+            # Center near Parma, 400km radius covers most of Northern Italy
+            ("NORTHERN_ITALY", "44.8,10.3", 400000, 43.5, 47.1, 6.6, 14.0),
         ]
         with open("first_observed.json") as f:
             first_observed = json.load(f)
