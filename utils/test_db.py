@@ -19,6 +19,10 @@ def id_test(item):
     assert item_id == "94471966"
 
 
+@pytest.mark.skipif(
+    not os.path.exists("json_mock_file.json"),
+    reason="json_mock_file.json not found - skipping legacy test",
+)
 def test_1():
     for name, _region, _province in test_data:
         print(name)
@@ -91,5 +95,9 @@ def test_translation_service_chunking():
     print(f"Long text translation: {len(long_text)} chars -> {len(result)} chars")
 
 
+@pytest.mark.skipif(
+    not os.path.exists("json_mock_file.json"),
+    reason="json_mock_file.json not found - skipping legacy test",
+)
 def test_main():
     test_1()
