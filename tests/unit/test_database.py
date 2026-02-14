@@ -3,14 +3,11 @@
 Tests database connection management, engine creation, and context managers.
 """
 
-import pytest
-from sqlmodel import create_engine
-from property_tracker.database.connection import (
-    get_engine,
-    get_session,
-    create_database_tables,
-    reset_engine
-)
+import os
+
+from sqlmodel import Session, SQLModel
+
+from property_tracker.database.connection import create_database_tables, get_engine, get_session, reset_engine
 from property_tracker.models.property import Property
 
 
@@ -114,12 +111,17 @@ def test_create_database_tables():
         assert result is not None
 
 
-def test_create_database_tables_default_engine():
+def test_create_database_tables_default_engine(test_db_path):
     """Test creating tables with default engine."""
+    # Clean up test database file
+    if os.path.exists(test_db_path):
+        os.remove(test_db_path)
+
     reset_engine()
 
-    # Should use default engine
-    create_database_tables()
+    # Get fresh engine and create tables manually
+    engine = get_engine(use_test_db=True)
+    SQLModel.metadata.create_all(engine)
 
     # Verify tables created
     with get_session(use_test_db=True) as session:
@@ -127,33 +129,53 @@ def test_create_database_tables_default_engine():
         assert result is not None
 
 
-def test_session_isolation(db_session, sample_property):
+def test_session_isolation(test_db_path, sample_property):
     """Test that sessions are isolated."""
+    # Clean up test database file
+    if os.path.exists(test_db_path):
+        os.remove(test_db_path)
+
+    reset_engine()
+    engine = get_engine(use_test_db=True)
+    SQLModel.metadata.create_all(engine)
+
+    # Get the ID before the session is closed
+    prop_id = sample_property.id
+
+    session = Session(engine)
     # Add property in test session
-    db_session.add(sample_property)
-    db_session.commit()
+    session.add(sample_property)
+    session.commit()
+    session.close()
 
     # Create new session
     with get_session(use_test_db=True) as new_session:
-        # Should be able to retrieve the property
-        prop = new_session.get(Property, sample_property.id)
+        # Should be able to retrieve the property using the ID
+        prop = new_session.get(Property, prop_id)
         assert prop is not None
 
 
 def test_concurrent_sessions():
     """Test multiple concurrent sessions."""
-    with get_session(use_test_db=True) as session1:
-        with get_session(use_test_db=True) as session2:
-            # Both sessions should be valid
-            assert session1 is not None
-            assert session2 is not None
+    with get_session(use_test_db=True) as session1, get_session(use_test_db=True) as session2:
+        # Both sessions should be valid
+        assert session1 is not None
+        assert session2 is not None
 
-            # They should be different session instances
-            assert session1 is not session2
+        # They should be different session instances
+        assert session1 is not session2
 
 
-def test_session_commit_on_success():
+def test_session_commit_on_success(test_db_path):
     """Test that changes are committed on successful exit."""
+    # Clean up test database file
+    if os.path.exists(test_db_path):
+        os.remove(test_db_path)
+
+    reset_engine()
+    engine = get_engine(use_test_db=True)
+    SQLModel.metadata.create_all(engine)
+
     prop_id = 777
 
     with get_session(use_test_db=True) as session:

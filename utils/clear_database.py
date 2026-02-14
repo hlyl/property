@@ -3,8 +3,9 @@
 Use this when you want to reset the database and fetch fresh data with new search criteria.
 """
 
-from sqlmodel import create_engine, Session, text
 import sys
+
+from sqlmodel import Session, create_engine, text
 
 
 def clear_properties(db_path: str) -> bool:

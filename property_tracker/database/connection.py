@@ -4,11 +4,11 @@ This module provides centralized database engine creation and session
 management using SQLModel and SQLAlchemy.
 """
 
-from sqlmodel import create_engine, Session, SQLModel
+from collections.abc import Generator
 from contextlib import contextmanager
-from typing import Generator
-from sqlalchemy import Engine
 
+from sqlalchemy import Engine
+from sqlmodel import Session, SQLModel, create_engine
 
 # Global engine instance (singleton pattern)
 _engine: Engine | None = None

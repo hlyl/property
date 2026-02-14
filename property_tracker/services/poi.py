@@ -5,8 +5,9 @@ Provides two implementations:
 - GooglePlacesPOIService: Google Places API (requires API key and costs $)
 """
 
-from typing import Protocol
 from dataclasses import dataclass
+from typing import Protocol
+
 from loguru import logger
 
 
@@ -46,8 +47,9 @@ class OverpassPOIService:
 
     def __init__(self) -> None:
         """Initialize the Overpass API client."""
-        import overpy
         import time
+
+        import overpy
 
         self.api = overpy.Overpass()
         self.time = time

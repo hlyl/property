@@ -3,12 +3,11 @@
 Tests ReviewService, POIService, and TranslationService functionality.
 """
 
-import pytest
-from datetime import datetime
-from sqlmodel import select
-from property_tracker.services.review import ReviewService
-from property_tracker.models.property import Property
 
+import pytest
+
+from property_tracker.models.property import Property
+from property_tracker.services.review import ReviewService
 
 # ============================================================================
 # ReviewService Tests

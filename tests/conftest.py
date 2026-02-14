@@ -4,13 +4,15 @@ This module provides test configuration and reusable fixtures
 for the Property Tracker test suite.
 """
 
-import pytest
-import os
 import json
+import os
 from pathlib import Path
-from sqlmodel import create_engine, Session, SQLModel
-from property_tracker.models.property import Property
+
+import pytest
+from sqlmodel import Session, SQLModel, create_engine
+
 from property_tracker.config.settings import TEST_DATABASE_PATH
+from property_tracker.models.property import Property
 
 
 @pytest.fixture(scope="session", autouse=True)

@@ -6,7 +6,7 @@ configuration constants for database, API, file paths, and feature flags.
 
 import os
 from pathlib import Path
-from typing import Optional
+
 from dotenv import load_dotenv
 
 # Load environment variables from .env file
@@ -37,7 +37,7 @@ def use_test_database() -> bool:
     return True
 
 
-def get_database_url(use_test_db: Optional[bool] = None) -> str:
+def get_database_url(use_test_db: bool | None = None) -> str:
     """Get SQLAlchemy database URL.
 
     Args:

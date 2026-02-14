@@ -3,9 +3,10 @@
 Displays properties in an interactive table view.
 """
 
-import streamlit as st
 import pandas as pd
-from sqlmodel import create_engine, Session
+import streamlit as st
+from sqlmodel import Session, create_engine
+
 from property_tracker.config.settings import get_database_url
 
 # Load data from session state or database

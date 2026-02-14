@@ -4,14 +4,15 @@ Streamlit app for reviewing and managing Italian property listings.
 Provides visual overview of review progress and quick action buttons.
 """
 
-import streamlit as st
 import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
-from sqlmodel import create_engine, Session, select
-from property_tracker.services.review import ReviewService
-from property_tracker.models.property import Property
+import streamlit as st
+from sqlmodel import Session, create_engine, select
+
 from property_tracker.config.settings import get_database_url
+from property_tracker.models.property import Property
+from property_tracker.services.review import ReviewService
 
 # ================ CONFIGURATION ================
 PAGE_TITLE = "Property Review Dashboard"
@@ -191,7 +192,7 @@ def render_quick_actions(df):
 
     st.markdown(f"Showing {len(to_review_df)} properties ready for review")
 
-    for idx, row in to_review_df.iterrows():
+    for _idx, row in to_review_df.iterrows():
         col1, col2, col3, col4, col5 = st.columns([1, 3, 1.2, 1.2, 1])
 
         with col1:

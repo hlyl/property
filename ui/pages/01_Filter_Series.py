@@ -1,6 +1,7 @@
-import streamlit as st
 import pandas as pd
-from sqlmodel import create_engine, Session
+import streamlit as st
+from sqlmodel import Session, create_engine
+
 from property_tracker.config.settings import get_database_url
 
 st.set_page_config(page_title="Filter Properties", page_icon="🔍", layout="wide")

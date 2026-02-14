@@ -4,10 +4,11 @@ Provides business logic for managing property review status,
 separate from database and UI concerns.
 """
 
-from sqlmodel import Session, select, update, func
-from property_tracker.models.property import Property
 from datetime import datetime
-from typing import Dict, List, Optional
+
+from sqlmodel import Session, func, select, update
+
+from property_tracker.models.property import Property
 
 
 class ReviewService:
@@ -48,7 +49,7 @@ class ReviewService:
             self.session.rollback()
             return False
 
-    def get_status_counts(self) -> Dict[str, int]:
+    def get_status_counts(self) -> dict[str, int]:
         """Get counts for each review status.
 
         Returns:
@@ -72,10 +73,10 @@ class ReviewService:
 
     def get_properties_by_status(
         self,
-        status: Optional[str] = None,
-        region: Optional[str] = None,
-        limit: Optional[int] = None
-    ) -> List[Property]:
+        status: str | None = None,
+        region: str | None = None,
+        limit: int | None = None
+    ) -> list[Property]:
         """Get properties filtered by review status and region.
 
         Args:
@@ -99,7 +100,7 @@ class ReviewService:
 
         return self.session.exec(statement).all()
 
-    def bulk_update_status(self, property_ids: List[int], new_status: str) -> int:
+    def bulk_update_status(self, property_ids: list[int], new_status: str) -> int:
         """Bulk update multiple properties to the same status.
 
         Args:
@@ -126,7 +127,7 @@ class ReviewService:
             self.session.rollback()
             return 0
 
-    def get_recent_reviews(self, limit: int = 10) -> List[Property]:
+    def get_recent_reviews(self, limit: int = 10) -> list[Property]:
         """Get recently reviewed properties.
 
         Args:

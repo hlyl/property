@@ -1,14 +1,10 @@
-from shapely.geometry import Point, LineString, Point
-from shapely.geometry import *
-from shapely.strtree import STRtree
-from shapely.ops import transform, nearest_points
-from shapely import affinity
-from shapely import wkb, wkt
-import shapely
 import json
-import time
-import pyproj
 
+import pyproj
+from shapely.geometry import *
+from shapely.geometry import LineString, Point
+from shapely.ops import nearest_points, transform
+from shapely.strtree import STRtree
 
 wgs_proj = pyproj.CRS("EPSG:4326")
 utm_proj = pyproj.CRS("EPSG:32633")

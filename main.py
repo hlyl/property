@@ -1,19 +1,19 @@
 # source /home/hlynge/dev/property/venv/bin/activate
 # http://20.105.249.39:4444/
-import os
-from fnmatch import translate
-from dotenv import load_dotenv
-import requests
 import json
+import os
+import time
+from datetime import date
+
+import requests
+from dotenv import load_dotenv
+from sqlmodel import Session, select, update  #
+
 import dao
 from dao import Property
-from sqlmodel import Field, create_engine, Session, select, update  #
-from typing import List
-from datetime import date
-import time
 
 # Import new service abstractions
-from property_tracker.services.poi import get_poi_service, POICounts
+from property_tracker.services.poi import get_poi_service
 from property_tracker.services.translation import get_translation_service
 from property_tracker.utils.distance import get_calculator
 
@@ -109,10 +109,7 @@ def deserialise_property(item, region) -> Property:
 
         # Handle floor
         floor_data = safe_get(prop, "floor")
-        if floor_data is None:
-            floor = "not assigned"
-        else:
-            floor = safe_get(floor_data, "value", default="not assigned")
+        floor = "not assigned" if floor_data is None else safe_get(floor_data, "value", default="not assigned")
 
         rooms = safe_get(prop, "rooms")
         surface = safe_get(prop, "surface")
@@ -169,7 +166,7 @@ def deserialise_property(item, region) -> Property:
         raise
 
 
-def propertyparser(results, region) -> List[Property]:
+def propertyparser(results, region) -> list[Property]:
     aresults = []
     for json in results["results"]:
         item = deserialise_property(json, region)
@@ -201,10 +198,7 @@ def exist_db_property(id) -> bool:
     with Session(db_engine) as session:
         statement = select(Property.id).where(Property.id == id)
         data = session.execute(statement)
-        if data == None:
-            return True
-        else:
-            return False
+        return data is None
 
 
 def select_db_no_translation(session) -> dict:
@@ -245,7 +239,7 @@ def update_observed(session):
     statement = (
         update(Property)
         .values(observed=str(date.today()))
-        .where(Property.observed == None)
+        .where(Property.observed is None)
     )
     session.execute(statement)
     session.commit()
@@ -284,7 +278,6 @@ def update_sold2(session, first_observed, id_list):
 def calc_dist_cost(item: Property) -> Property:
     lat_input = float(item.latitude)
     long_input = float(item.longitude)
-    poi = [lat_input, long_input]
     try:
         dist_coast = distance_calculator.calculate_coast_distance(lat_input, long_input)
     except:
@@ -296,7 +289,6 @@ def calc_dist_cost(item: Property) -> Property:
 def calc_dist_water_main(item: Property) -> Property:
     lat_input = float(item.latitude)
     long_input = float(item.longitude)
-    poi = [lat_input, long_input]
     try:
         dist_water = distance_calculator.calculate_water_distance(lat_input, long_input)
     except:
@@ -402,7 +394,7 @@ if __name__ == "__main__":  #
                     if item_id not in first_observed:
                         first_observed[item_id] = str(date.today())
                         # if item.id not in exist_id:
-                        if item.latitude != None and item.longitude != None:
+                        if item.latitude is not None and item.longitude is not None:
                             calc_dist_cost(item)
                             calc_dist_water_main(item)
                             # Enrich with POI counts using configured service

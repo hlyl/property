@@ -6,14 +6,13 @@ avoiding the 8.7MB import-time overhead of the original implementation.
 """
 
 import json
-from typing import Tuple, Optional
-from pathlib import Path
-from shapely import wkt
-from shapely.strtree import STRtree
-from shapely.geometry import Point, LineString
-from shapely.ops import nearest_points, transform
+
 import pyproj
 from pyproj import Transformer
+from shapely import wkt
+from shapely.geometry import LineString
+from shapely.ops import nearest_points, transform
+from shapely.strtree import STRtree
 
 from property_tracker.config.settings import COASTLINE_PATH, WATERLINES_PATH
 
@@ -160,7 +159,7 @@ class DistanceCalculator:
         distance_m = point_utm.distance(nearest_water)
         return distance_m / 1000.0
 
-    def calculate_both_distances(self, lat: float, lon: float) -> Tuple[float, float]:
+    def calculate_both_distances(self, lat: float, lon: float) -> tuple[float, float]:
         """Calculate both coast and water distances in one call.
 
         Args:
@@ -180,7 +179,7 @@ class DistanceCalculator:
 
 
 # Module-level convenience instance (lazy-loaded)
-_default_calculator: Optional[DistanceCalculator] = None
+_default_calculator: DistanceCalculator | None = None
 
 
 def get_calculator() -> DistanceCalculator:

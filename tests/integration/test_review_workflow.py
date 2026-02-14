@@ -4,11 +4,11 @@ Tests complete review workflow including database operations,
 status updates, and multi-step processes.
 """
 
-import pytest
 from sqlmodel import select
+
+from property_tracker.database.connection import get_session
 from property_tracker.models.property import Property
 from property_tracker.services.review import ReviewService
-from property_tracker.database.connection import get_session
 
 
 def test_full_review_workflow(db_engine):

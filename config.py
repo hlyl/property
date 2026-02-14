@@ -4,7 +4,7 @@ This module provides centralized configuration management for the application.
 """
 
 import os
-from typing import Optional
+
 from dotenv import load_dotenv
 
 # Load environment variables from .env file
@@ -51,7 +51,7 @@ def use_test_database() -> bool:
     return True
 
 
-def get_database_url(use_test_db: Optional[bool] = None):
+def get_database_url(use_test_db: bool | None = None):
     """Get the database URL for SQLAlchemy/SQLModel.
 
     Args:

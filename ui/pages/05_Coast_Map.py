@@ -3,27 +3,26 @@
 Displays an interactive map showing properties and their distance to the Italian coast.
 """
 
-import streamlit as st
-import pandas as pd
-import folium
-from streamlit_folium import st_folium
-from folium.features import DivIcon
 import json
-import shapely
-from shapely import wkt
-from shapely.geometry import Point
-from shapely.ops import nearest_points, transform
-import pyproj
 import os
 import sys
 from pathlib import Path
-from sqlmodel import create_engine, Session
+
+import folium
+import pandas as pd
+import pyproj
+import shapely
+import streamlit as st
+from shapely.geometry import Point
+from shapely.ops import nearest_points
+from sqlmodel import Session, create_engine
+from streamlit_folium import st_folium
+
+from property_tracker.config.settings import COASTLINE_PATH, get_database_url
 from property_tracker.services.review import ReviewService
-from property_tracker.config.settings import get_database_url, COASTLINE_PATH
 
 # Add parent directory to path for component imports
 sys.path.insert(0, str(Path(__file__).parent.parent))
-from components.review_buttons import render_review_buttons
 
 st.set_page_config(page_title="Coast Distance Map", page_icon="🗺️", layout="wide")
 
@@ -105,10 +104,7 @@ review_filter = st.sidebar.multiselect(
 )
 
 # Filter dataframe
-if "review_status" in df.columns and review_filter:
-    filtered_df = df[df["review_status"].isin(review_filter)]
-else:
-    filtered_df = df.copy()
+filtered_df = df[df["review_status"].isin(review_filter)] if "review_status" in df.columns and review_filter else df.copy()
 
 # Select a property to highlight
 property_ids = filtered_df["id"].tolist()
@@ -123,7 +119,7 @@ st.sidebar.markdown("---")
 st.sidebar.metric("Properties on Map", len(filtered_df))
 if selected_property != "None" and selected_property in filtered_df["id"].values:
     selected_row = filtered_df[filtered_df["id"] == selected_property].iloc[0]
-    st.sidebar.markdown(f"**Selected Property:**")
+    st.sidebar.markdown("**Selected Property:**")
     st.sidebar.write(f"- Region: {selected_row['region']}")
     st.sidebar.write(f"- Price: €{int(selected_row['price']):,}")
 
@@ -173,9 +169,8 @@ if selected_property != "None" and selected_property in filtered_df["id"].values
             update_property_status(selected_property, "Rejected")
 
     # Reset to "To Review" button
-    if current_status != "To Review":
-        if st.sidebar.button("🔄 Reset to Review", key=f"reset_{selected_property}", width='stretch'):
-            update_property_status(selected_property, "To Review")
+    if current_status != "To Review" and st.sidebar.button("🔄 Reset to Review", key=f"reset_{selected_property}", width='stretch'):
+        update_property_status(selected_property, "To Review")
 
     # View listing button
     st.sidebar.markdown("---")
@@ -226,7 +221,7 @@ geo_j = folium.GeoJson(
 geo_j.add_to(m)
 
 # Add property markers
-for idx, row in filtered_df.iterrows():
+for _idx, row in filtered_df.iterrows():
     lat = row.get("latitude")
     lon = row.get("longitude")
 

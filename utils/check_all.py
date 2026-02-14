@@ -1,6 +1,6 @@
 """Check all properties including sold."""
-from sqlmodel import create_engine, Session
 import pandas as pd
+from sqlmodel import Session, create_engine
 
 engine = create_engine("sqlite:///test.db")
 

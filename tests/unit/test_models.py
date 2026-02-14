@@ -4,7 +4,6 @@ Tests the Property model including defaults, field validation,
 and database operations.
 """
 
-import pytest
 from property_tracker.models.property import Property
 
 

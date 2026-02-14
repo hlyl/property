@@ -1,43 +1,15 @@
-from typing import Optional
-from sqlmodel import Field, SQLModel, create_engine, Session
+"""Database access layer - backwards compatibility module.
+
+This module re-exports the Property model from property_tracker for backwards compatibility.
+New code should import directly from property_tracker.models.property.
+"""
+
 from sqlalchemy import Engine
+from sqlmodel import create_engine
 
+from property_tracker.models.property import Property
 
-class Property(SQLModel, table=True):  #
-    __table_args__ = {'extend_existing': True}
-
-    id: Optional[int] = Field(default=None, primary_key=True)  #
-    region: str
-    is_new: Optional[int] = None
-    price: Optional[int] = None
-    price_drop: Optional[str] = None
-    bathrooms: Optional[str] = None
-    caption: Optional[str] = None
-    category: str
-    discription: str
-    discription_dk: str
-    floor: Optional[str] = None
-    rooms: Optional[str] = None
-    surface: Optional[str] = None
-    price_m: Optional[int] = None
-    longitude: Optional[str] = None
-    latitude: Optional[str] = None
-    marker: Optional[str] = None
-    photo_list: str
-    dist_coast: Optional[str] = None
-    dist_water: Optional[str] = None
-    shopping_count: Optional[int] = None
-    pub_count: Optional[int] = None
-    baker_count: Optional[int] = None
-    food_count: Optional[int] = None
-    sold: int = 0
-    observed: Optional[str] = None
-    review_status: str = Field(default="To Review")  # "To Review" | "Rejected" | "Interested"
-    reviewed_date: Optional[str] = None  # ISO datetime when status changed
-    favorite: Optional[int] = Field(default=0)
-    viewed: Optional[int] = Field(default=0)
-    hidden: Optional[int] = Field(default=0)
-    notes: Optional[str] = Field(default=None)
+__all__ = ['Property', 'create_db']
 
 
 def create_db(db_name: str) -> Engine:
@@ -49,6 +21,8 @@ def create_db(db_name: str) -> Engine:
     Returns:
         SQLAlchemy Engine instance for the database
     """
+    from sqlmodel import SQLModel
     engine = create_engine(f"sqlite:///{db_name}")
     SQLModel.metadata.create_all(engine)
     return engine
+

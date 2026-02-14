@@ -4,8 +4,9 @@ Adds review_status and reviewed_date columns to the property table.
 Safe to run multiple times - checks if columns exist before adding.
 """
 
-from sqlmodel import create_engine, Session, text
 import sys
+
+from sqlmodel import Session, create_engine, text
 
 
 def migrate_add_review_fields(db_path: str) -> bool:

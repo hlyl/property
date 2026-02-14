@@ -79,7 +79,7 @@ def _update_status(property_id: int, new_status: str) -> None:
     """
     try:
         # Create engine and session
-            engine = create_engine(get_database_url())
+        engine = create_engine(get_database_url())
 
         with Session(engine) as session:
             service = ReviewService(session)

@@ -3,7 +3,6 @@
 Tests DistanceCalculator with lazy-loading and geospatial calculations.
 """
 
-import pytest
 from property_tracker.utils.distance import DistanceCalculator, get_calculator
 
 

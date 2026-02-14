@@ -1,11 +1,9 @@
-import dao
 import json
 import os
+
 import pytest
-import main
-from main import propertyparser, calc_dist_cost
-from sqlmodel import Field, SQLModel, create_engine, Session, select  #
-from pydantic import condecimal
+
+from main import calc_dist_cost, propertyparser
 
 # Import new services for testing
 from poi_service import OverpassPOIService, POICounts
@@ -22,12 +20,12 @@ def id_test(item):
 
 
 def test_1():
-    for name, region, province in test_data:
+    for name, _region, _province in test_data:
         print(name)
         with open("json_mock_file.json") as test_file:
             web_result = propertyparser(json.load(test_file), name)
             for item in web_result:
-                item_id = str(item.id)
+                str(item.id)
                 id_test(item)
                 assert item.region == "MILAN"
                 assert item.category == "Residenziale"

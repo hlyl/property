@@ -2,8 +2,9 @@
 
 Adds: favorite, viewed, hidden, notes columns
 """
-from sqlmodel import create_engine, Session, text
 import sys
+
+from sqlmodel import Session, create_engine, text
 
 
 def add_interaction_fields(db_path: str) -> bool:

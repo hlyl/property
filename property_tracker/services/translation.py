@@ -6,6 +6,7 @@ Provides two implementations:
 """
 
 from typing import Protocol
+
 from loguru import logger
 
 
@@ -90,7 +91,7 @@ class DeepTranslatorService:
                     return result
                 else:
                     logger.warning(
-                        f"Translation returned empty result, returning original text"
+                        "Translation returned empty result, returning original text"
                     )
                     return text
         except Exception as e:

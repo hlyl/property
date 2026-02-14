@@ -6,14 +6,14 @@ property_tracker.utils.distance module with lazy-loading.
 DEPRECATED: Use property_tracker.utils.distance.DistanceCalculator instead.
 """
 
+
 from property_tracker.utils.distance import get_calculator
-from typing import Tuple
 
 # Get the shared calculator instance
 _calculator = get_calculator()
 
 
-def calc_dist_short(poi: Tuple[float, float]) -> float:
+def calc_dist_short(poi: tuple[float, float]) -> float:
     """Calculate distance from a point to the nearest coastline.
 
     DEPRECATED: Use DistanceCalculator.calculate_coast_distance() instead.
@@ -28,7 +28,7 @@ def calc_dist_short(poi: Tuple[float, float]) -> float:
     return _calculator.calculate_coast_distance(lat, lon)
 
 
-def calc_dist_water(tree, poi: Tuple[float, float]) -> float:
+def calc_dist_water(tree, poi: tuple[float, float]) -> float:
     """Calculate distance from a point to the nearest water feature.
 
     DEPRECATED: Use DistanceCalculator.calculate_water_distance() instead.

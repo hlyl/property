@@ -3,14 +3,16 @@ Interactive Property Map with Click Selection
 Uses native Streamlit Plotly selection (Streamlit 1.35+)
 No external dependencies like streamlit-plotly-events needed!
 """
-import streamlit as st
+import json
+from datetime import datetime
+
 import pandas as pd
 import plotly.express as px
-from datetime import datetime
-from sqlmodel import create_engine, Session
+import streamlit as st
+from sqlmodel import Session, create_engine
+
 from property_tracker.config.settings import get_database_url
 from property_tracker.services.review import ReviewService
-import json
 
 st.set_page_config(page_title="Property Map", page_icon="🗺️", layout="wide")
 
@@ -169,30 +171,30 @@ elif "selected_property_index" in st.session_state:
 # Display selected property details
 if selected_point_index is not None and selected_point_index < len(lat_lon):
     selected = lat_lon.iloc[selected_point_index]
-    
+
     st.divider()
     st.subheader(f"🏠 {selected['caption']}")
-    
+
     # Property details
     col1, col2, col3 = st.columns(3)
-    
+
     with col1:
         st.metric("Price", f"€{selected['price']:,.0f}")
         st.metric("Price/m²", f"€{selected['price_m']:,.0f}")
-    
+
     with col2:
         st.metric("Rooms", selected['rooms'])
         st.metric("Bathrooms", selected['bathrooms'])
-    
+
     with col3:
         st.metric("Surface", selected['surface'])
         st.metric("Region", selected['region'])
-    
+
     # Description
     if selected.get('discription'):
         with st.expander("📝 Description"):
             st.write(selected['discription'])
-    
+
     # Photos
     if selected.get('photo_list'):
         try:
@@ -205,7 +207,7 @@ if selected_point_index is not None and selected_point_index < len(lat_lon):
                             st.image(photo, use_container_width=True)
         except:
             pass
-    
+
     # Link
     st.markdown(f"🔗 [View on Immobiliare.it](https://www.immobiliare.it/en/annunci/{selected['id']}/)")
 
@@ -226,6 +228,5 @@ if selected_point_index is not None and selected_point_index < len(lat_lon):
             update_property_status(int(selected['id']), "Rejected")
 
     with col_btn3:
-        if current_status != "To Review":
-            if st.button("🔄 Reset to Review", key=f"reset_map_{selected['id']}", use_container_width=True):
-                update_property_status(int(selected['id']), "To Review")
+        if current_status != "To Review" and st.button("🔄 Reset to Review", key=f"reset_map_{selected['id']}", use_container_width=True):
+            update_property_status(int(selected['id']), "To Review")
