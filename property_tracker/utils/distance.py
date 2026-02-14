@@ -6,6 +6,7 @@ avoiding the 8.7MB import-time overhead of the original implementation.
 """
 
 import json
+from typing import Any
 
 import pyproj
 from pyproj import Transformer
@@ -35,9 +36,9 @@ class DistanceCalculator:
         GeoJSON files are NOT loaded here - they're loaded on first use.
         """
         # Lazy-loaded data (None until first use)
-        self._coastline = None
-        self._water_lines = None  # Store the actual geometries
-        self._water_tree = None  # Store the spatial index
+        self._coastline: Any | None = None
+        self._water_lines: list[Any] | None = None  # Store the actual geometries
+        self._water_tree: STRtree | None = None  # Store the spatial index
 
         # Coordinate transformers
         self._wgs_proj = pyproj.CRS("EPSG:4326")  # WGS84 (lat/lon)
@@ -107,6 +108,7 @@ class DistanceCalculator:
         """
         # Lazy-load coastline data on first use
         self._load_coastline()
+        assert self._coastline is not None  # Type narrowing for mypy
 
         # Create point from coordinates
         point_wkt = f"POINT ({lon} {lat})"
@@ -120,7 +122,7 @@ class DistanceCalculator:
         p_query_utm = transform(self._transformer.transform, p_query)
 
         # Calculate distance in meters, convert to kilometers
-        distance_m = p_coast_utm.distance(p_query_utm)
+        distance_m: float = p_coast_utm.distance(p_query_utm)
         return distance_m / 1000.0
 
     def calculate_water_distance(self, lat: float, lon: float) -> float:
@@ -139,6 +141,8 @@ class DistanceCalculator:
         """
         # Lazy-load water tree on first use
         self._load_water_tree()
+        assert self._water_tree is not None  # Type narrowing for mypy
+        assert self._water_lines is not None  # Type narrowing for mypy
 
         # Create point from coordinates
         point_wkt = f"POINT ({lon} {lat})"
@@ -152,7 +156,7 @@ class DistanceCalculator:
         nearest_water = self._water_lines[nearest_idx]
 
         # Calculate distance in meters, convert to kilometers
-        distance_m = point_utm.distance(nearest_water)
+        distance_m: float = point_utm.distance(nearest_water)
         return distance_m / 1000.0
 
     def calculate_both_distances(self, lat: float, lon: float) -> tuple[float, float]:
