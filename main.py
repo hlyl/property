@@ -44,12 +44,13 @@ distance_calculator = get_calculator()
 
 # HTTP headers to avoid being blocked
 HEADERS = {
-    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-    'Accept': 'application/json, text/plain, */*',
-    'Accept-Language': 'en-US,en;q=0.9',
-    'Accept-Encoding': 'gzip, deflate, br',
-    'Connection': 'keep-alive',
+    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+    "Accept": "application/json, text/plain, */*",
+    "Accept-Language": "en-US,en;q=0.9",
+    "Accept-Encoding": "gzip, deflate, br",
+    "Connection": "keep-alive",
 }
+
 
 def make_request_with_retry(url, max_retries=3, delay=2):
     """Make HTTP request with retries and proper headers."""
@@ -202,14 +203,9 @@ def exist_db_property(id) -> bool:
 
 
 def select_db_no_translation(session) -> dict:
-    statement = select(
-        Property.id, Property.discription, Property.discription_dk
-    ).where(Property.discription_dk == "")
+    statement = select(Property.id, Property.discription, Property.discription_dk).where(Property.discription_dk == "")
     out = session.execute(statement)
-    result_list_of_dict = [
-        {"id": col1, "discription": col2, "discription_dk": col3}
-        for (col1, col2, col3) in out.fetchall()
-    ]
+    result_list_of_dict = [{"id": col1, "discription": col2, "discription_dk": col3} for (col1, col2, col3) in out.fetchall()]
     for dic in result_list_of_dict:
         dic["discription"] = str(dic["discription"]).replace("\n", " ")
         dic["discription"] = str(dic["discription"]).replace("  ", " ")
@@ -218,33 +214,20 @@ def select_db_no_translation(session) -> dict:
         dic["discription_dk"] = translation_service.translate(totranslatestr)
 
     for dic in result_list_of_dict:
-        statement = (
-            update(Property)
-            .values(discription_dk=dic["discription_dk"])
-            .where(Property.id == dic["id"])
-        )
+        statement = update(Property).values(discription_dk=dic["discription_dk"]).where(Property.id == dic["id"])
         session.execute(statement)
     session.commit()
     return result_list_of_dict
 
 
 def update_observed(session):
-    statement = (
-        update(Property)
-        .values(observed=str(date.today()))
-        .where(Property.observed is None)
-    )
+    statement = update(Property).values(observed=str(date.today())).where(Property.observed is None)
     session.execute(statement)
     session.commit()
 
 
 def update_sold(session, region, id_list):
-    statement = (
-        update(Property)
-        .values(sold=1)
-        .where(Property.region == region)
-        .where(~Property.id.in_(id_list))
-    )
+    statement = update(Property).values(sold=1).where(Property.region == region).where(~Property.id.in_(id_list))
     session.execute(statement)
     session.commit()
 
@@ -300,17 +283,12 @@ def enrich_with_pois(item: Property) -> Property:
         Property with pub_count, shopping_count, baker_count, and food_count populated
     """
     try:
-        counts = poi_service.get_all_counts(
-            lat=float(item.latitude), lon=float(item.longitude), radius=2000
-        )
+        counts = poi_service.get_all_counts(lat=float(item.latitude), lon=float(item.longitude), radius=2000)
         item.pub_count = counts.bars
         item.shopping_count = counts.shops
         item.baker_count = counts.bakeries
         item.food_count = counts.restaurants
-        print(
-            f"POI counts: bars={counts.bars}, shops={counts.shops}, "
-            f"bakeries={counts.bakeries}, restaurants={counts.restaurants}"
-        )
+        print(f"POI counts: bars={counts.bars}, shops={counts.shops}, bakeries={counts.bakeries}, restaurants={counts.restaurants}")
     except Exception as e:
         print(f"Failed to get POI counts: {e}")
         item.pub_count = 0
@@ -350,7 +328,7 @@ if __name__ == "__main__":  #
         data = [
             # Center near Parma, 400km radius covers most of Northern Italy
             ("NORTHERN_ITALY", "44.8,10.3", 400000, 43.5, 47.1, 6.6, 14.0),
-        ]        # Load or initialize first_observed for test mode
+        ]  # Load or initialize first_observed for test mode
         try:
             with open("first_observed.json") as f:
                 first_observed = json.load(f)
@@ -403,9 +381,7 @@ if __name__ == "__main__":  #
                 total_count = total_count + count
                 break
 
-    new_today = [
-        key for key, value in first_observed.items() if value == str(date.today())
-    ]
+    new_today = [key for key, value in first_observed.items() if value == str(date.today())]
     print(len(new_today))
     logger.debug("Today we have added :" + str(new_today))
     with Session(db_engine) as session:

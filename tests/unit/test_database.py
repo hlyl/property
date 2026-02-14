@@ -48,14 +48,7 @@ def test_get_session_context_manager():
 
         # Add a property
         prop = Property(
-            id=999,
-            region="TEST",
-            province="TS",
-            category="Residenziale",
-            price=100000,
-            discription="Test",
-            discription_dk="Test",
-            photo_list="[]"
+            id=999, region="TEST", province="TS", category="Residenziale", price=100000, discription="Test", discription_dk="Test", photo_list="[]"
         )
         session.add(prop)
         # Session should auto-commit on successful exit
@@ -81,7 +74,7 @@ def test_get_session_rollback_on_exception():
                 price=150000,
                 discription="Should rollback",
                 discription_dk="Skal rulles tilbage",
-                photo_list="[]"
+                photo_list="[]",
             )
             session.add(prop)
 
@@ -187,7 +180,7 @@ def test_session_commit_on_success(test_db_path):
             price=200000,
             discription="Should commit",
             discription_dk="Skal committe",
-            photo_list="[]"
+            photo_list="[]",
         )
         session.add(prop)
         # Exit context - should auto-commit

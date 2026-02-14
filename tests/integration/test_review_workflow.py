@@ -25,7 +25,7 @@ def test_full_review_workflow(db_engine):
             sold=0,
             discription="Integration test property",
             discription_dk="Integration test ejendom",
-            photo_list="[]"
+            photo_list="[]",
         )
         session.add(prop)
         session.commit()
@@ -67,7 +67,7 @@ def test_bulk_review_operations(db_engine):
                 sold=0,
                 discription=f"Property {i}",
                 discription_dk=f"Ejendom {i}",
-                photo_list="[]"
+                photo_list="[]",
             )
             for i in range(1, 11)
         ]
@@ -82,9 +82,7 @@ def test_bulk_review_operations(db_engine):
 
     # Verify updates
     with get_session(use_test_db=True) as session:
-        interested = session.exec(
-            select(Property).where(Property.review_status == "Interested")
-        ).all()
+        interested = session.exec(select(Property).where(Property.review_status == "Interested")).all()
         assert len(interested) == 5
 
         # Verify specific IDs
@@ -97,9 +95,42 @@ def test_review_status_counts_workflow(db_engine):
     # Create properties with different statuses
     with get_session(use_test_db=True) as session:
         props = [
-            Property(id=100, region="A", province="A", category="R", price=100, review_status="To Review", sold=0, discription="A", discription_dk="A", photo_list="[]"),
-            Property(id=101, region="B", province="B", category="R", price=200, review_status="To Review", sold=0, discription="B", discription_dk="B", photo_list="[]"),
-            Property(id=102, region="C", province="C", category="R", price=300, review_status="Interested", sold=0, discription="C", discription_dk="C", photo_list="[]"),
+            Property(
+                id=100,
+                region="A",
+                province="A",
+                category="R",
+                price=100,
+                review_status="To Review",
+                sold=0,
+                discription="A",
+                discription_dk="A",
+                photo_list="[]",
+            ),
+            Property(
+                id=101,
+                region="B",
+                province="B",
+                category="R",
+                price=200,
+                review_status="To Review",
+                sold=0,
+                discription="B",
+                discription_dk="B",
+                photo_list="[]",
+            ),
+            Property(
+                id=102,
+                region="C",
+                province="C",
+                category="R",
+                price=300,
+                review_status="Interested",
+                sold=0,
+                discription="C",
+                discription_dk="C",
+                photo_list="[]",
+            ),
         ]
         session.add_all(props)
         session.commit()
@@ -131,10 +162,54 @@ def test_review_filtering_workflow(db_engine):
     # Create diverse property set
     with get_session(use_test_db=True) as session:
         props = [
-            Property(id=200, region="TUSCANY", province="LU", category="R", price=250000, review_status="To Review", sold=0, discription="T1", discription_dk="T1", photo_list="[]"),
-            Property(id=201, region="TUSCANY", province="FI", category="R", price=350000, review_status="Interested", sold=0, discription="T2", discription_dk="T2", photo_list="[]"),
-            Property(id=202, region="LOMBARDY", province="MI", category="R", price=450000, review_status="To Review", sold=0, discription="L1", discription_dk="L1", photo_list="[]"),
-            Property(id=203, region="LOMBARDY", province="BG", category="R", price=200000, review_status="Rejected", sold=0, discription="L2", discription_dk="L2", photo_list="[]"),
+            Property(
+                id=200,
+                region="TUSCANY",
+                province="LU",
+                category="R",
+                price=250000,
+                review_status="To Review",
+                sold=0,
+                discription="T1",
+                discription_dk="T1",
+                photo_list="[]",
+            ),
+            Property(
+                id=201,
+                region="TUSCANY",
+                province="FI",
+                category="R",
+                price=350000,
+                review_status="Interested",
+                sold=0,
+                discription="T2",
+                discription_dk="T2",
+                photo_list="[]",
+            ),
+            Property(
+                id=202,
+                region="LOMBARDY",
+                province="MI",
+                category="R",
+                price=450000,
+                review_status="To Review",
+                sold=0,
+                discription="L1",
+                discription_dk="L1",
+                photo_list="[]",
+            ),
+            Property(
+                id=203,
+                region="LOMBARDY",
+                province="BG",
+                category="R",
+                price=200000,
+                review_status="Rejected",
+                sold=0,
+                discription="L2",
+                discription_dk="L2",
+                photo_list="[]",
+            ),
         ]
         session.add_all(props)
         session.commit()
@@ -165,7 +240,17 @@ def test_recent_reviews_workflow(db_engine):
     # Create and review properties over time
     with get_session(use_test_db=True) as session:
         props = [
-            Property(id=300 + i, region=f"R{i}", province="TS", category="R", price=100000, sold=0, discription=f"P{i}", discription_dk=f"P{i}", photo_list="[]")
+            Property(
+                id=300 + i,
+                region=f"R{i}",
+                province="TS",
+                category="R",
+                price=100000,
+                sold=0,
+                discription=f"P{i}",
+                discription_dk=f"P{i}",
+                photo_list="[]",
+            )
             for i in range(5)
         ]
         session.add_all(props)
@@ -209,7 +294,7 @@ def test_pagination_workflow(db_engine):
                 sold=0,
                 discription=f"Prop {i}",
                 discription_dk=f"Ejendom {i}",
-                photo_list="[]"
+                photo_list="[]",
             )
             for i in range(50)
         ]
@@ -245,7 +330,7 @@ def test_property_lifecycle_integration(db_engine):
             viewed=0,
             discription="Lifecycle test",
             discription_dk="Livscyklus test",
-            photo_list="[]"
+            photo_list="[]",
         )
         session.add(prop)
 

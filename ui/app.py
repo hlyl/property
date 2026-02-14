@@ -22,13 +22,16 @@ PROPERTIES_PER_PAGE = 20
 # ================ PAGE SETUP ================
 st.set_page_config(page_title=PAGE_TITLE, page_icon=PAGE_ICON, layout="wide")
 
+
 # ================ DATABASE CONNECTION ================
 @st.cache_resource
 def get_engine():
     """Create and cache database engine."""
     return create_engine(get_database_url())
 
+
 engine = get_engine()
+
 
 # ================ DATA LOADING ================
 @st.cache_data(ttl=300)  # Cache for 5 minutes
@@ -52,28 +55,45 @@ def load_properties_df(status_filter=None, region_filter=None):
 
         if len(properties) == 0:
             # Return empty DataFrame with proper column structure
-            return pd.DataFrame(columns=['id', 'region', 'price', 'price_m', 'rooms',
-                                        'bathrooms', 'surface', 'latitude', 'longitude',
-                                        'dist_coast', 'dist_water', 'review_status',
-                                        'reviewed_date', 'photo_list', 'discription'])
+            return pd.DataFrame(
+                columns=[
+                    "id",
+                    "region",
+                    "price",
+                    "price_m",
+                    "rooms",
+                    "bathrooms",
+                    "surface",
+                    "latitude",
+                    "longitude",
+                    "dist_coast",
+                    "dist_water",
+                    "review_status",
+                    "reviewed_date",
+                    "photo_list",
+                    "discription",
+                ]
+            )
 
         df = pd.DataFrame([prop.model_dump() for prop in properties])
 
         # Convert numeric columns
-        df['longitude'] = pd.to_numeric(df['longitude'], errors='coerce')
-        df['latitude'] = pd.to_numeric(df['latitude'], errors='coerce')
-        df['dist_coast'] = pd.to_numeric(df['dist_coast'], errors='coerce')
-        df['dist_water'] = pd.to_numeric(df['dist_water'], errors='coerce')
-        df['price'] = pd.to_numeric(df['price'], errors='coerce')
-        df['price_m'] = pd.to_numeric(df['price_m'], errors='coerce')
+        df["longitude"] = pd.to_numeric(df["longitude"], errors="coerce")
+        df["latitude"] = pd.to_numeric(df["latitude"], errors="coerce")
+        df["dist_coast"] = pd.to_numeric(df["dist_coast"], errors="coerce")
+        df["dist_water"] = pd.to_numeric(df["dist_water"], errors="coerce")
+        df["price"] = pd.to_numeric(df["price"], errors="coerce")
+        df["price_m"] = pd.to_numeric(df["price_m"], errors="coerce")
 
         return df
+
 
 def get_review_counts():
     """Get review status counts."""
     with Session(engine) as session:
         service = ReviewService(session)
         return service.get_status_counts()
+
 
 # ================ MAIN APP ================
 def main():
@@ -111,21 +131,18 @@ def main():
 
     with col_chart1:
         # Bar chart
-        fig_bar = go.Figure(data=[
-            go.Bar(
-                x=["To Review", "Interested", "Rejected"],
-                y=[counts.get("To Review", 0), counts.get("Interested", 0), counts.get("Rejected", 0)],
-                marker_color=['#FFA500', '#4CAF50', '#F44336'],
-                text=[counts.get("To Review", 0), counts.get("Interested", 0), counts.get("Rejected", 0)],
-                textposition='auto',
-            )
-        ])
-        fig_bar.update_layout(
-            title="Review Status Counts",
-            xaxis_title="Status",
-            yaxis_title="Number of Properties",
-            height=350
+        fig_bar = go.Figure(
+            data=[
+                go.Bar(
+                    x=["To Review", "Interested", "Rejected"],
+                    y=[counts.get("To Review", 0), counts.get("Interested", 0), counts.get("Rejected", 0)],
+                    marker_color=["#FFA500", "#4CAF50", "#F44336"],
+                    text=[counts.get("To Review", 0), counts.get("Interested", 0), counts.get("Rejected", 0)],
+                    textposition="auto",
+                )
+            ]
         )
+        fig_bar.update_layout(title="Review Status Counts", xaxis_title="Status", yaxis_title="Number of Properties", height=350)
         st.plotly_chart(fig_bar, use_container_width=True)
 
     with col_chart2:
@@ -133,13 +150,10 @@ def main():
         fig_pie = px.pie(
             values=[counts.get("To Review", 0), counts.get("Interested", 0), counts.get("Rejected", 0)],
             names=["To Review", "Interested", "Rejected"],
-            color_discrete_sequence=['#FFA500', '#4CAF50', '#F44336'],
-            hole=0.4
+            color_discrete_sequence=["#FFA500", "#4CAF50", "#F44336"],
+            hole=0.4,
         )
-        fig_pie.update_layout(
-            title="Review Status Breakdown",
-            height=350
-        )
+        fig_pie.update_layout(title="Review Status Breakdown", height=350)
         st.plotly_chart(fig_pie, use_container_width=True)
 
     st.markdown("---")
@@ -153,13 +167,13 @@ def main():
         status_filter = st.selectbox(
             "Review Status",
             ["All", "To Review", "Interested", "Rejected"],
-            index=1  # Default to "To Review"
+            index=1,  # Default to "To Review"
         )
 
     with col_f2:
         # Load unique regions
         df_temp = load_properties_df()
-        regions = ["All"] + sorted(df_temp['region'].unique().tolist())
+        regions = ["All"] + sorted(df_temp["region"].unique().tolist())
         region_filter = st.selectbox("Region", regions)
 
     st.markdown("---")
@@ -185,11 +199,12 @@ def main():
     with tab2:
         render_detailed_view(df)
 
+
 # ================ QUICK ACTIONS TAB ================
 def render_quick_actions(df):
     """Render quick action buttons for property review."""
     # Show only To Review properties, limit to first 20
-    to_review_df = df[df['review_status'] == 'To Review'].head(PROPERTIES_PER_PAGE)
+    to_review_df = df[df["review_status"] == "To Review"].head(PROPERTIES_PER_PAGE)
 
     if len(to_review_df) == 0:
         st.info("No properties to review! All caught up 🎉")
@@ -204,19 +219,19 @@ def render_quick_actions(df):
             st.markdown(f"**{row['id']}**")
 
         with col2:
-            price_str = f"€{int(row['price']):,}" if pd.notna(row['price']) else "N/A"
-            rooms_str = f"{row['rooms']} rooms" if pd.notna(row['rooms']) else ""
+            price_str = f"€{int(row['price']):,}" if pd.notna(row["price"]) else "N/A"
+            rooms_str = f"{row['rooms']} rooms" if pd.notna(row["rooms"]) else ""
             st.markdown(f"📍 **{row['region']}** | {price_str} | {rooms_str}")
-            if pd.notna(row['dist_coast']):
+            if pd.notna(row["dist_coast"]):
                 st.caption(f"🏖️ Coast: {row['dist_coast']:.1f} km")
 
         with col3:
             if st.button("✅ Interested", key=f"int_{row['id']}", use_container_width=True):
-                update_property_status(int(row['id']), "Interested")
+                update_property_status(int(row["id"]), "Interested")
 
         with col4:
             if st.button("❌ Reject", key=f"rej_{row['id']}", use_container_width=True):
-                update_property_status(int(row['id']), "Rejected")
+                update_property_status(int(row["id"]), "Rejected")
 
         with col5:
             property_url = f"https://www.immobiliare.it/annunci/{row['id']}"
@@ -224,19 +239,15 @@ def render_quick_actions(df):
 
         st.divider()
 
+
 # ================ DETAILED VIEW TAB ================
 def render_detailed_view(df):
     """Render detailed dataframe view."""
     # Select and format columns for display
-    display_df = df[[
-        'id', 'region', 'price', 'price_m', 'rooms', 'bathrooms',
-        'surface', 'dist_coast', 'review_status', 'reviewed_date'
-    ]].copy()
+    display_df = df[["id", "region", "price", "price_m", "rooms", "bathrooms", "surface", "dist_coast", "review_status", "reviewed_date"]].copy()
 
     # Create property URL column
-    display_df['property_url'] = display_df['id'].apply(
-        lambda x: f'https://www.immobiliare.it/annunci/{x}'
-    )
+    display_df["property_url"] = display_df["id"].apply(lambda x: f"https://www.immobiliare.it/annunci/{x}")
 
     # Display with custom column configuration
     st.dataframe(
@@ -250,17 +261,15 @@ def render_detailed_view(df):
             "bathrooms": "Bathrooms",
             "surface": "Surface",
             "dist_coast": st.column_config.NumberColumn("Coast (km)", format="%.1f"),
-            "review_status": st.column_config.SelectboxColumn(
-                "Status",
-                options=["To Review", "Interested", "Rejected"]
-            ),
+            "review_status": st.column_config.SelectboxColumn("Status", options=["To Review", "Interested", "Rejected"]),
             "reviewed_date": "Reviewed",
-            "property_url": st.column_config.LinkColumn("View Property")
+            "property_url": st.column_config.LinkColumn("View Property"),
         },
         use_container_width=True,
         hide_index=True,
-        height=600
+        height=600,
     )
+
 
 # ================ HELPER FUNCTIONS ================
 def update_property_status(property_id: int, new_status: str):
@@ -280,6 +289,7 @@ def update_property_status(property_id: int, new_status: str):
                 st.error(f"Failed to update property {property_id}")
     except Exception as e:
         st.error(f"Error updating property: {e}")
+
 
 # ================ RUN APP ================
 if __name__ == "__main__":

@@ -71,7 +71,7 @@ IMMOBILIARE_BASE_URL = "https://www.immobiliare.it"
 # API Keys
 GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY", "")
 
-#==============================================================================
+# ==============================================================================
 # POI (Points of Interest) Configuration
 # ==============================================================================
 POI_SEARCH_RADIUS = int(os.getenv("POI_SEARCH_RADIUS", "2000"))  # meters

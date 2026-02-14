@@ -131,7 +131,7 @@ def sample_property():
         shopping_count=5,
         pub_count=3,
         baker_count=2,
-        food_count=4
+        food_count=4,
     )
 
 
@@ -153,7 +153,7 @@ def sample_properties_list():
             sold=0,
             discription="Property 1",
             discription_dk="Ejendom 1",
-            photo_list="[]"
+            photo_list="[]",
         ),
         Property(
             id=2,
@@ -165,7 +165,7 @@ def sample_properties_list():
             sold=0,
             discription="Property 2",
             discription_dk="Ejendom 2",
-            photo_list="[]"
+            photo_list="[]",
         ),
         Property(
             id=3,
@@ -177,7 +177,7 @@ def sample_properties_list():
             sold=0,
             discription="Property 3",
             discription_dk="Ejendom 3",
-            photo_list="[]"
+            photo_list="[]",
         ),
         Property(
             id=4,
@@ -189,7 +189,7 @@ def sample_properties_list():
             sold=0,
             discription="Property 4",
             discription_dk="Ejendom 4",
-            photo_list="[]"
+            photo_list="[]",
         ),
     ]
 
@@ -219,7 +219,7 @@ def mock_api_response():
                 "bathrooms": 2,
                 "surface": 100,
                 "latitude": 43.8438,
-                "longitude": 10.5077
+                "longitude": 10.5077,
             }
         ]
     }
@@ -256,5 +256,5 @@ def coordinates_italy():
         "viareggio": {"lat": 43.8667, "lon": 10.2500},  # Coastal Tuscany
         "florence": {"lat": 43.7696, "lon": 11.2558},  # Central Tuscany
         "rome": {"lat": 41.9028, "lon": 12.4964},  # Central Italy
-        "venice": {"lat": 45.4408, "lon": 12.3155}  # Northeast coast
+        "venice": {"lat": 45.4408, "lon": 12.3155},  # Northeast coast
     }

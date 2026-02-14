@@ -56,6 +56,7 @@ def update_property_status(property_id: int, new_status: str):
         else:
             st.error(f"Failed to update property {property_id}")
 
+
 # Load data from session state or database
 if "df" not in st.session_state:
     with Session(engine) as session:
@@ -74,6 +75,7 @@ wgs_proj = pyproj.CRS("EPSG:4326")
 utm_proj = pyproj.CRS("EPSG:32633")
 project = pyproj.Transformer.from_crs(wgs_proj, utm_proj, always_xy=True).transform
 
+
 # Load Italian coastline
 @st.cache_data
 def load_coastline():
@@ -88,6 +90,7 @@ def load_coastline():
 
     return your_json_file, shape
 
+
 try:
     coastline_geojson, coastline_shape = load_coastline()
 except Exception as e:
@@ -98,11 +101,7 @@ except Exception as e:
 st.sidebar.header("Map Controls")
 
 # Filter properties by review status
-review_filter = st.sidebar.multiselect(
-    "Review Status",
-    ["To Review", "Interested", "Rejected"],
-    default=["To Review", "Interested"]
-)
+review_filter = st.sidebar.multiselect("Review Status", ["To Review", "Interested", "Rejected"], default=["To Review", "Interested"])
 
 # Filter dataframe
 filtered_df = df[df["review_status"].isin(review_filter)] if "review_status" in df.columns and review_filter else df.copy()
@@ -110,9 +109,7 @@ filtered_df = df[df["review_status"].isin(review_filter)] if "review_status" in 
 # Select a property to highlight
 property_ids = filtered_df["id"].tolist()
 selected_property = st.sidebar.selectbox(
-    "Select Property to Highlight",
-    options=["None"] + property_ids,
-    format_func=lambda x: f"Property {x}" if x != "None" else "None"
+    "Select Property to Highlight", options=["None"] + property_ids, format_func=lambda x: f"Property {x}" if x != "None" else "None"
 )
 
 # Display stats
@@ -125,27 +122,27 @@ if selected_property != "None" and selected_property in filtered_df["id"].values
     st.sidebar.write(f"- Price: €{int(selected_row['price']):,}")
 
     # Add price per m² with null handling
-    price_m_display = f"€{int(selected_row['price_m']):,}/m²" if pd.notna(selected_row.get('price_m')) else 'N/A'
+    price_m_display = f"€{int(selected_row['price_m']):,}/m²" if pd.notna(selected_row.get("price_m")) else "N/A"
     st.sidebar.write(f"- Price/m²: {price_m_display}")
 
     # Add surface area - handle both numeric and string values
-    surface_val = selected_row.get('surface')
+    surface_val = selected_row.get("surface")
     # If it's already a string with units, use it directly; if numeric, format it with units
-    surface_display = (surface_val if isinstance(surface_val, str) else f"{int(surface_val)} m²") if pd.notna(surface_val) else 'N/A'
+    surface_display = (surface_val if isinstance(surface_val, str) else f"{int(surface_val)} m²") if pd.notna(surface_val) else "N/A"
     st.sidebar.write(f"- Surface: {surface_display}")
 
     # Add rooms
-    rooms_display = selected_row.get('rooms') if pd.notna(selected_row.get('rooms')) else 'N/A'
+    rooms_display = selected_row.get("rooms") if pd.notna(selected_row.get("rooms")) else "N/A"
     st.sidebar.write(f"- Rooms: {rooms_display}")
 
     # Add bathrooms
-    bathrooms_display = selected_row.get('bathrooms') if pd.notna(selected_row.get('bathrooms')) else 'N/A'
+    bathrooms_display = selected_row.get("bathrooms") if pd.notna(selected_row.get("bathrooms")) else "N/A"
     st.sidebar.write(f"- Bathrooms: {bathrooms_display}")
 
     st.sidebar.write(f"- Coast Distance: {selected_row['dist_coast']} km")
 
     # Display current status
-    current_status = selected_row.get('review_status', 'To Review')
+    current_status = selected_row.get("review_status", "To Review")
     st.sidebar.write(f"- **Status:** {current_status}")
 
     # Action buttons
@@ -155,21 +152,21 @@ if selected_property != "None" and selected_property in filtered_df["id"].values
     col1, col2 = st.sidebar.columns(2)
 
     with col1:
-        if st.button("✅ Interested", key=f"interested_{selected_property}", width='stretch'):
+        if st.button("✅ Interested", key=f"interested_{selected_property}", width="stretch"):
             update_property_status(selected_property, "Interested")
 
     with col2:
-        if st.button("❌ Reject", key=f"reject_{selected_property}", width='stretch'):
+        if st.button("❌ Reject", key=f"reject_{selected_property}", width="stretch"):
             update_property_status(selected_property, "Rejected")
 
     # Reset to "To Review" button
-    if current_status != "To Review" and st.sidebar.button("🔄 Reset to Review", key=f"reset_{selected_property}", width='stretch'):
+    if current_status != "To Review" and st.sidebar.button("🔄 Reset to Review", key=f"reset_{selected_property}", width="stretch"):
         update_property_status(selected_property, "To Review")
 
     # View listing button
     st.sidebar.markdown("---")
     property_url = f"https://www.immobiliare.it/annunci/{selected_property}/"
-    st.sidebar.link_button("🔗 View Listing", property_url, width='stretch')
+    st.sidebar.link_button("🔗 View Listing", property_url, width="stretch")
 
 # Create the map
 st.markdown("---")
@@ -196,22 +193,10 @@ else:
     zoom = 6
 
 # Initialize Folium map
-m = folium.Map(
-    location=[center_lat, center_lon],
-    zoom_start=zoom,
-    tiles="OpenStreetMap"
-)
+m = folium.Map(location=[center_lat, center_lon], zoom_start=zoom, tiles="OpenStreetMap")
 
 # Add Italian coastline
-geo_j = folium.GeoJson(
-    coastline_geojson,
-    style_function=lambda x: {
-        "fillColor": "lightblue",
-        "color": "blue",
-        "weight": 2,
-        "fillOpacity": 0.3
-    }
-)
+geo_j = folium.GeoJson(coastline_geojson, style_function=lambda x: {"fillColor": "lightblue", "color": "blue", "weight": 2, "fillOpacity": 0.3})
 geo_j.add_to(m)
 
 # Add property markers
@@ -249,19 +234,19 @@ for _idx, row in filtered_df.iterrows():
         fill_opacity = 0.7
 
     # Create popup content
-    price_m_display = f"€{int(row['price_m']):,}" if pd.notna(row['price_m']) else 'N/A'
-    rooms_display = row['rooms'] if pd.notna(row['rooms']) else 'N/A'
+    price_m_display = f"€{int(row['price_m']):,}" if pd.notna(row["price_m"]) else "N/A"
+    rooms_display = row["rooms"] if pd.notna(row["rooms"]) else "N/A"
 
     popup_html = f"""
     <div style="font-family: Arial; min-width: 200px;">
-        <h4>Property {row['id']}</h4>
-        <b>Region:</b> {row['region']}<br>
-        <b>Price:</b> €{int(row['price']):,}<br>
+        <h4>Property {row["id"]}</h4>
+        <b>Region:</b> {row["region"]}<br>
+        <b>Price:</b> €{int(row["price"]):,}<br>
         <b>Price/m²:</b> {price_m_display}<br>
         <b>Rooms:</b> {rooms_display}<br>
-        <b>Coast Distance:</b> {row['dist_coast']} km<br>
+        <b>Coast Distance:</b> {row["dist_coast"]} km<br>
         <b>Status:</b> {status}<br>
-        <a href="https://www.immobiliare.it/annunci/{row['id']}/" target="_blank">View Listing</a>
+        <a href="https://www.immobiliare.it/annunci/{row["id"]}/" target="_blank">View Listing</a>
     </div>
     """
 
@@ -274,7 +259,7 @@ for _idx, row in filtered_df.iterrows():
         fillColor=color,
         fillOpacity=fill_opacity,
         popup=folium.Popup(popup_html, max_width=300),
-        tooltip=f"Property {row['id']} - {row['region']}"
+        tooltip=f"Property {row['id']} - {row['region']}",
     ).add_to(m)
 
 # If property selected, draw line to nearest coast point
@@ -292,7 +277,7 @@ if selected_property != "None" and selected_property in filtered_df["id"].values
             color="red",
             weight=3,
             opacity=0.7,
-            dash_array="10, 5"
+            dash_array="10, 5",
         ).add_to(m)
 
         # Add marker at nearest coast point
@@ -304,7 +289,7 @@ if selected_property != "None" and selected_property in filtered_df["id"].values
             fillColor="darkblue",
             fillOpacity=1.0,
             popup="Nearest Coast Point",
-            tooltip="Nearest Coast Point"
+            tooltip="Nearest Coast Point",
         ).add_to(m)
 
 # Add legend
@@ -359,21 +344,21 @@ if map_data and map_data.get("last_object_clicked"):
                 col1, col2, col3, col4 = st.columns([2, 1, 1, 1])
 
                 with col1:
-                    price_str = f"€{int(review_row['price']):,}" if pd.notna(review_row['price']) else "N/A"
+                    price_str = f"€{int(review_row['price']):,}" if pd.notna(review_row["price"]) else "N/A"
                     st.markdown(f"**Property {review_row['id']}** - {review_row['region']} - {price_str}")
                     st.caption(f"🏖️ Coast: {review_row['dist_coast']} km | Status: {review_row.get('review_status', 'To Review')}")
 
                 with col2:
-                    if st.button("✅ Interested", key="map_interested", width='stretch'):
+                    if st.button("✅ Interested", key="map_interested", width="stretch"):
                         update_property_status(clicked_property_id, "Interested")
 
                 with col3:
-                    if st.button("❌ Reject", key="map_reject", width='stretch'):
+                    if st.button("❌ Reject", key="map_reject", width="stretch"):
                         update_property_status(clicked_property_id, "Rejected")
 
                 with col4:
                     property_url = f"https://www.immobiliare.it/annunci/{review_row['id']}/"
-                    st.link_button("🔗 View", property_url, width='stretch')
+                    st.link_button("🔗 View", property_url, width="stretch")
     except (ValueError, IndexError, KeyError) as e:
         # If we can't parse the property ID, show error
         st.error(f"Error parsing property: {e}")
@@ -389,8 +374,4 @@ st.subheader(f"Properties on Map ({len(filtered_df)} total)")
 # Show table with key information
 display_cols = ["id", "region", "price", "price_m", "rooms", "dist_coast", "review_status"]
 available_cols = [col for col in display_cols if col in filtered_df.columns]
-st.dataframe(
-    filtered_df[available_cols].sort_values(by="dist_coast"),
-    use_container_width=True,
-    hide_index=True
-)
+st.dataframe(filtered_df[available_cols].sort_values(by="dist_coast"), use_container_width=True, hide_index=True)

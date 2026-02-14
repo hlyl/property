@@ -54,10 +54,7 @@ def test_distance_calculator_both_distances(coordinates_italy):
     calc = DistanceCalculator()
     coords = coordinates_italy["lucca"]
 
-    coast_dist, water_dist = calc.calculate_both_distances(
-        coords["lat"],
-        coords["lon"]
-    )
+    coast_dist, water_dist = calc.calculate_both_distances(coords["lat"], coords["lon"])
 
     # Both should be loaded now
     assert calc._coastline is not None
@@ -75,17 +72,11 @@ def test_distance_calculator_coastal_vs_inland(coordinates_italy):
 
     # Viareggio is coastal
     coastal_coords = coordinates_italy["viareggio"]
-    coastal_dist = calc.calculate_coast_distance(
-        coastal_coords["lat"],
-        coastal_coords["lon"]
-    )
+    coastal_dist = calc.calculate_coast_distance(coastal_coords["lat"], coastal_coords["lon"])
 
     # Florence is inland
     inland_coords = coordinates_italy["florence"]
-    inland_dist = calc.calculate_coast_distance(
-        inland_coords["lat"],
-        inland_coords["lon"]
-    )
+    inland_dist = calc.calculate_coast_distance(inland_coords["lat"], inland_coords["lon"])
 
     # Coastal location should have shorter distance to coast
     assert coastal_dist < inland_dist

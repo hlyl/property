@@ -33,14 +33,7 @@ class ReviewService:
             True if update successful, False otherwise
         """
         try:
-            statement = (
-                update(Property)
-                .values(
-                    review_status=new_status,
-                    reviewed_date=datetime.now().isoformat()
-                )
-                .where(Property.id == property_id)
-            )
+            statement = update(Property).values(review_status=new_status, reviewed_date=datetime.now().isoformat()).where(Property.id == property_id)
             self.session.execute(statement)
             self.session.commit()
             return True
@@ -56,10 +49,7 @@ class ReviewService:
             Dictionary mapping status names to counts
             e.g., {"To Review": 1000, "Interested": 5, "Rejected": 2}
         """
-        statement = select(
-            Property.review_status,
-            func.count(Property.id).label('count')
-        ).where(Property.sold == 0).group_by(Property.review_status)
+        statement = select(Property.review_status, func.count(Property.id).label("count")).where(Property.sold == 0).group_by(Property.review_status)
 
         results = self.session.exec(statement).all()
         counts = {status: count for status, count in results}
@@ -71,12 +61,7 @@ class ReviewService:
 
         return counts
 
-    def get_properties_by_status(
-        self,
-        status: str | None = None,
-        region: str | None = None,
-        limit: int | None = None
-    ) -> list[Property]:
+    def get_properties_by_status(self, status: str | None = None, region: str | None = None, limit: int | None = None) -> list[Property]:
         """Get properties filtered by review status and region.
 
         Args:
@@ -112,12 +97,7 @@ class ReviewService:
         """
         try:
             statement = (
-                update(Property)
-                .values(
-                    review_status=new_status,
-                    reviewed_date=datetime.now().isoformat()
-                )
-                .where(Property.id.in_(property_ids))
+                update(Property).values(review_status=new_status, reviewed_date=datetime.now().isoformat()).where(Property.id.in_(property_ids))
             )
             result = self.session.execute(statement)
             self.session.commit()
@@ -137,10 +117,6 @@ class ReviewService:
             List of recently reviewed properties, newest first
         """
         statement = (
-            select(Property)
-            .where(Property.sold == 0)
-            .where(Property.reviewed_date.is_not(None))
-            .order_by(Property.reviewed_date.desc())
-            .limit(limit)
+            select(Property).where(Property.sold == 0).where(Property.reviewed_date.is_not(None)).order_by(Property.reviewed_date.desc()).limit(limit)
         )
         return self.session.exec(statement).all()

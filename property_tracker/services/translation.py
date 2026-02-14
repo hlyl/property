@@ -43,10 +43,7 @@ class DeepTranslatorService:
         try:
             from deep_translator import GoogleTranslator, MyMemoryTranslator
         except ImportError:
-            raise ImportError(
-                "deep-translator library not installed. "
-                "Install with: uv sync (should be in main dependencies)"
-            ) from None
+            raise ImportError("deep-translator library not installed. Install with: uv sync (should be in main dependencies)") from None
 
         self.service = service
         if service == "google":
@@ -80,9 +77,7 @@ class DeepTranslatorService:
                     translated = self.translator.translate(chunk)
                     translations.append(translated if translated else chunk)
                 result = " ".join(translations)
-                logger.debug(
-                    f"Translated {len(text)} chars in {len(chunks)} chunks using {self.service}"
-                )
+                logger.debug(f"Translated {len(text)} chars in {len(chunks)} chunks using {self.service}")
                 return result
             else:
                 result = self.translator.translate(text)
@@ -90,9 +85,7 @@ class DeepTranslatorService:
                     logger.debug(f"Translated {len(text)} chars using {self.service}")
                     return result
                 else:
-                    logger.warning(
-                        "Translation returned empty result, returning original text"
-                    )
+                    logger.warning("Translation returned empty result, returning original text")
                     return text
         except Exception as e:
             logger.error(f"Translation failed with {self.service}: {e}")
@@ -118,16 +111,10 @@ class GoogleTransService:
         try:
             from googletrans import Translator
         except ImportError:
-            raise ImportError(
-                "googletrans library not installed. "
-                "Install with: uv sync --extra google"
-            ) from None
+            raise ImportError("googletrans library not installed. Install with: uv sync --extra google") from None
 
         self.translator = Translator()
-        logger.warning(
-            "Using googletrans (deprecated, unreliable). "
-            "Consider using DeepTranslatorService instead."
-        )
+        logger.warning("Using googletrans (deprecated, unreliable). Consider using DeepTranslatorService instead.")
 
     def translate(self, text: str) -> str:
         """Translate Italian text to Danish.
@@ -165,9 +152,7 @@ def get_translation_service(use_google: bool = False) -> TranslationService:
         TranslationService implementation
     """
     if use_google:
-        logger.warning(
-            "Using deprecated googletrans library. Consider using deep-translator instead."
-        )
+        logger.warning("Using deprecated googletrans library. Consider using deep-translator instead.")
         return GoogleTransService()
     else:
         logger.info("Using deep-translator for translations (recommended, free)")

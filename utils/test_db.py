@@ -93,4 +93,3 @@ def test_translation_service_chunking():
 
 def test_main():
     test_1()
-

@@ -4,7 +4,6 @@ This module contains the Property model for Italian real estate listings
 with review tracking and geospatial enrichment.
 """
 
-
 from sqlmodel import Field, SQLModel
 
 
@@ -16,7 +15,7 @@ class Property(SQLModel, table=True):
     """
 
     __tablename__ = "property"
-    __table_args__ = {'extend_existing': True}
+    __table_args__ = {"extend_existing": True}
 
     # Core identification
     id: int | None = Field(default=None, primary_key=True)

@@ -29,19 +29,15 @@ def migrate_add_review_fields(db_path: str) -> bool:
             print(f"Found {len(columns)} existing columns")
 
             # Add review_status if not exists
-            if 'review_status' not in columns:
-                session.exec(text(
-                    "ALTER TABLE property ADD COLUMN review_status VARCHAR DEFAULT 'To Review'"
-                ))
+            if "review_status" not in columns:
+                session.exec(text("ALTER TABLE property ADD COLUMN review_status VARCHAR DEFAULT 'To Review'"))
                 print("✓ Added review_status column")
             else:
                 print("→ review_status column already exists")
 
             # Add reviewed_date if not exists
-            if 'reviewed_date' not in columns:
-                session.exec(text(
-                    "ALTER TABLE property ADD COLUMN reviewed_date VARCHAR"
-                ))
+            if "reviewed_date" not in columns:
+                session.exec(text("ALTER TABLE property ADD COLUMN reviewed_date VARCHAR"))
                 print("✓ Added reviewed_date column")
             else:
                 print("→ reviewed_date column already exists")

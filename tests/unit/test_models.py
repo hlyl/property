@@ -17,7 +17,7 @@ def test_property_defaults():
         price=100000,
         discription="Test property",
         discription_dk="Test ejendom",
-        photo_list="[]"
+        photo_list="[]",
     )
 
     # Test default values
@@ -59,7 +59,7 @@ def test_property_review_status_field():
         review_status="Interested",
         discription="Test",
         discription_dk="Test",
-        photo_list="[]"
+        photo_list="[]",
     )
 
     assert prop.review_status == "Interested"
@@ -79,7 +79,7 @@ def test_property_interaction_fields():
         notes="Great location!",
         discription="Test",
         discription_dk="Test",
-        photo_list="[]"
+        photo_list="[]",
     )
 
     assert prop.favorite == 1
@@ -104,7 +104,7 @@ def test_property_optional_fields():
         longitude=None,
         discription="Test",
         discription_dk="Test",
-        photo_list="[]"
+        photo_list="[]",
     )
 
     assert prop.city is None
@@ -179,7 +179,7 @@ def test_property_with_sold_flag():
         sold=1,  # Marked as sold
         discription="Sold property",
         discription_dk="Solgt ejendom",
-        photo_list="[]"
+        photo_list="[]",
     )
 
     assert prop.sold == 1

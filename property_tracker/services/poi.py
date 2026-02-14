@@ -143,10 +143,7 @@ class GooglePlacesPOIService:
         try:
             from googleplaces import GooglePlaces, types
         except ImportError:
-            raise ImportError(
-                "googleplaces library not installed. "
-                "Install with: uv sync --extra google"
-            ) from None
+            raise ImportError("googleplaces library not installed. Install with: uv sync --extra google") from None
 
         self.google_places = GooglePlaces(api_key)
         self.types = types
@@ -189,9 +186,7 @@ class GooglePlacesPOIService:
             POICounts with all POI type counts
         """
         return POICounts(
-            bars=self.count_pois(
-                lat, lon, radius, [self.types.TYPE_BAR, self.types.TYPE_CAFE]
-            ),
+            bars=self.count_pois(lat, lon, radius, [self.types.TYPE_BAR, self.types.TYPE_CAFE]),
             shops=self.count_pois(
                 lat,
                 lon,
@@ -199,9 +194,7 @@ class GooglePlacesPOIService:
                 [self.types.TYPE_GROCERY_OR_SUPERMARKET, self.types.TYPE_STORE],
             ),
             bakeries=self.count_pois(lat, lon, radius, [self.types.TYPE_BAKERY]),
-            restaurants=self.count_pois(
-                lat, lon, radius, [self.types.TYPE_RESTAURANT, self.types.TYPE_FOOD]
-            ),
+            restaurants=self.count_pois(lat, lon, radius, [self.types.TYPE_RESTAURANT, self.types.TYPE_FOOD]),
         )
 
 

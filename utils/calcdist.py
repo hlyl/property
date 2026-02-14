@@ -6,7 +6,6 @@ property_tracker.utils.distance module with lazy-loading.
 DEPRECATED: Use property_tracker.utils.distance.DistanceCalculator instead.
 """
 
-
 from property_tracker.utils.distance import get_calculator
 
 # Get the shared calculator instance

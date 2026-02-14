@@ -11,12 +11,7 @@ from property_tracker.config.settings import get_database_url
 from property_tracker.services.review import ReviewService
 
 
-def render_review_buttons(
-    property_id: int,
-    current_status: str,
-    key_prefix: str = "",
-    use_container_width: bool = True
-) -> None:
+def render_review_buttons(property_id: int, current_status: str, key_prefix: str = "", use_container_width: bool = True) -> None:
     """Render review action buttons for a property.
 
     Creates a three-column layout with Interested, Reject, and Reset buttons.
@@ -40,28 +35,16 @@ def render_review_buttons(
     col1, col2, col3 = st.columns(3)
 
     with col1:
-        if st.button(
-            "✅ Mark as Interested",
-            key=f"{key_prefix}_int_{property_id}",
-            use_container_width=use_container_width
-        ):
+        if st.button("✅ Mark as Interested", key=f"{key_prefix}_int_{property_id}", use_container_width=use_container_width):
             _update_status(property_id, "Interested")
 
     with col2:
-        if st.button(
-            "❌ Reject",
-            key=f"{key_prefix}_rej_{property_id}",
-            use_container_width=use_container_width
-        ):
+        if st.button("❌ Reject", key=f"{key_prefix}_rej_{property_id}", use_container_width=use_container_width):
             _update_status(property_id, "Rejected")
 
     with col3:
         if current_status != "To Review":
-            if st.button(
-                "🔄 Reset to Review",
-                key=f"{key_prefix}_reset_{property_id}",
-                use_container_width=use_container_width
-            ):
+            if st.button("🔄 Reset to Review", key=f"{key_prefix}_reset_{property_id}", use_container_width=use_container_width):
                 _update_status(property_id, "To Review")
         else:
             # Placeholder to maintain layout
@@ -111,11 +94,7 @@ def render_status_badge(status: str) -> None:
     Args:
         status: Review status to display
     """
-    status_colors = {
-        "To Review": "🟠",
-        "Interested": "🟢",
-        "Rejected": "🔴"
-    }
+    status_colors = {"To Review": "🟠", "Interested": "🟢", "Rejected": "🔴"}
 
     emoji = status_colors.get(status, "⚪")
     st.markdown(f"{emoji} **{status}**")

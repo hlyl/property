@@ -55,8 +55,8 @@ def clear_properties(db_path: str) -> bool:
 if __name__ == "__main__":
     import argparse
 
-    parser = argparse.ArgumentParser(description='Clear property database')
-    parser.add_argument('--prod', action='store_true', help='Also clear database.db (production)')
+    parser = argparse.ArgumentParser(description="Clear property database")
+    parser.add_argument("--prod", action="store_true", help="Also clear database.db (production)")
     args = parser.parse_args()
 
     print("=" * 60)

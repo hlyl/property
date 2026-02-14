@@ -9,7 +9,7 @@ from sqlmodel import create_engine
 
 from property_tracker.models.property import Property
 
-__all__ = ['Property', 'create_db']
+__all__ = ["Property", "create_db"]
 
 
 def create_db(db_name: str) -> Engine:
@@ -22,7 +22,7 @@ def create_db(db_name: str) -> Engine:
         SQLAlchemy Engine instance for the database
     """
     from sqlmodel import SQLModel
+
     engine = create_engine(f"sqlite:///{db_name}")
     SQLModel.metadata.create_all(engine)
     return engine
-

@@ -24,23 +24,27 @@ else:
 st.metric("Total Properties in Database", len(df))
 st.markdown("---")
 
-overview = df[
-    [
-        "id",
-        "region",
-        "price",
-        "price_m",
-        "shopping_count",
-        "pub_count",
-        "baker_count",
-        "food_count",
-        "dist_coast",
-        "dist_water",
-        "longitude",
-        "latitude",
-        "review_status",  # Add review_status column
+overview = (
+    df[
+        [
+            "id",
+            "region",
+            "price",
+            "price_m",
+            "shopping_count",
+            "pub_count",
+            "baker_count",
+            "food_count",
+            "dist_coast",
+            "dist_water",
+            "longitude",
+            "latitude",
+            "review_status",  # Add review_status column
+        ]
     ]
-].copy().sort_values(by="price_m")  # .copy() to avoid SettingWithCopyWarning
+    .copy()
+    .sort_values(by="price_m")
+)  # .copy() to avoid SettingWithCopyWarning
 
 # Convert count columns to numeric, replacing empty/null values with 0
 overview["shopping_count"] = pd.to_numeric(overview["shopping_count"], errors="coerce").fillna(0).astype(int)
@@ -84,7 +88,7 @@ st.markdown("---")
 review_statuses = st.multiselect(
     "Review Status",
     ["To Review", "Interested", "Rejected"],
-    default=["To Review", "Interested", "Rejected"]  # Show all by default
+    default=["To Review", "Interested", "Rejected"],  # Show all by default
 )
 
 

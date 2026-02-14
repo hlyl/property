@@ -78,9 +78,7 @@ def migrate_database(db_path: str) -> None:
 
 def main():
     """Run migration on production and/or test databases."""
-    parser = argparse.ArgumentParser(
-        description="Add province and city columns to property table"
-    )
+    parser = argparse.ArgumentParser(description="Add province and city columns to property table")
     parser.add_argument(
         "--prod",
         action="store_true",

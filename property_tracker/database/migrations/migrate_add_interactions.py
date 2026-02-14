@@ -2,6 +2,7 @@
 
 Adds: favorite, viewed, hidden, notes columns
 """
+
 import sys
 
 from sqlmodel import Session, create_engine, text
@@ -28,21 +29,21 @@ def add_interaction_fields(db_path: str) -> bool:
             added = []
 
             # Add missing columns
-            if 'favorite' not in columns:
+            if "favorite" not in columns:
                 session.exec(text("ALTER TABLE property ADD COLUMN favorite INTEGER DEFAULT 0"))
-                added.append('favorite')
+                added.append("favorite")
 
-            if 'viewed' not in columns:
+            if "viewed" not in columns:
                 session.exec(text("ALTER TABLE property ADD COLUMN viewed INTEGER DEFAULT 0"))
-                added.append('viewed')
+                added.append("viewed")
 
-            if 'hidden' not in columns:
+            if "hidden" not in columns:
                 session.exec(text("ALTER TABLE property ADD COLUMN hidden INTEGER DEFAULT 0"))
-                added.append('hidden')
+                added.append("hidden")
 
-            if 'notes' not in columns:
+            if "notes" not in columns:
                 session.exec(text("ALTER TABLE property ADD COLUMN notes TEXT"))
-                added.append('notes')
+                added.append("notes")
 
             session.commit()
 
@@ -61,8 +62,8 @@ def add_interaction_fields(db_path: str) -> bool:
 if __name__ == "__main__":
     import argparse
 
-    parser = argparse.ArgumentParser(description='Add interaction fields to property database')
-    parser.add_argument('--prod', action='store_true', help='Also add to database.db (production)')
+    parser = argparse.ArgumentParser(description="Add interaction fields to property database")
+    parser.add_argument("--prod", action="store_true", help="Also add to database.db (production)")
     args = parser.parse_args()
 
     print("=" * 60)

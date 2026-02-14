@@ -3,7 +3,6 @@
 Tests ReviewService, POIService, and TranslationService functionality.
 """
 
-
 import pytest
 
 from property_tracker.models.property import Property
@@ -12,6 +11,7 @@ from property_tracker.services.review import ReviewService
 # ============================================================================
 # ReviewService Tests
 # ============================================================================
+
 
 def test_review_service_initialization(db_session):
     """Test ReviewService can be initialized."""
@@ -52,7 +52,7 @@ def test_review_service_get_status_counts(populated_db_session):
 
     assert counts["To Review"] == 2  # Properties 1 and 4
     assert counts["Interested"] == 1  # Property 2
-    assert counts["Rejected"] == 1    # Property 3
+    assert counts["Rejected"] == 1  # Property 3
 
 
 def test_review_service_get_status_counts_empty_db(db_session):
@@ -157,6 +157,7 @@ def test_review_service_get_recent_reviews_none_reviewed(db_session):
 # TranslationService Tests
 # ============================================================================
 
+
 def test_translation_service_empty_string():
     """Test translation service with empty string."""
     from property_tracker.services.translation import DeepTranslatorService
@@ -187,6 +188,7 @@ def test_translation_service_short_text():
 # ============================================================================
 # POIService Tests
 # ============================================================================
+
 
 def test_poi_service_initialization():
     """Test POIService can be initialized."""

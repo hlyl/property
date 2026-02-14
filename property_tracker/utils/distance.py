@@ -37,16 +37,12 @@ class DistanceCalculator:
         # Lazy-loaded data (None until first use)
         self._coastline = None
         self._water_lines = None  # Store the actual geometries
-        self._water_tree = None   # Store the spatial index
+        self._water_tree = None  # Store the spatial index
 
         # Coordinate transformers
         self._wgs_proj = pyproj.CRS("EPSG:4326")  # WGS84 (lat/lon)
         self._utm_proj = pyproj.CRS("EPSG:32633")  # UTM Zone 33N (meters)
-        self._transformer = Transformer.from_crs(
-            self._wgs_proj,
-            self._utm_proj,
-            always_xy=True
-        )
+        self._transformer = Transformer.from_crs(self._wgs_proj, self._utm_proj, always_xy=True)
 
     def _load_coastline(self) -> None:
         """Lazy-load Italian coastline geometry from GeoJSON.

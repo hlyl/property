@@ -53,37 +53,43 @@ def create_folium_map(df):
     center_lon = df["longitude"].mean() if len(df) > 0 else 12.5
 
     # Create base map
-    m = folium.Map(
-        location=[center_lat, center_lon],
-        zoom_start=6,
-        tiles="OpenStreetMap"
-    )
+    m = folium.Map(location=[center_lat, center_lon], zoom_start=6, tiles="OpenStreetMap")
 
     # Add markers for each property
     for _idx, row in df.iterrows():
         # Determine marker color based on price
-        price = row.get('price', 0)
+        price = row.get("price", 0)
+        if pd.isna(price):
+            price = 0
         if price < 50000:
-            color = 'green'
+            color = "green"
         elif price < 75000:
-            color = 'blue'
+            color = "blue"
         elif price < 100000:
-            color = 'orange'
+            color = "orange"
         else:
-            color = 'red'
+            color = "red"
+
+        # Handle NaN values for display
+        price_display = f"€{int(price):,}" if not pd.isna(price) else "N/A"
+        price_m_val = row.get("price_m", 0)
+        price_m_display = f"€{int(price_m_val):,}" if not pd.isna(price_m_val) and price_m_val else "N/A"
+        rooms_display = row.get("rooms", "N/A") if not pd.isna(row.get("rooms")) else "N/A"
+        bathrooms_display = row.get("bathrooms", "N/A") if not pd.isna(row.get("bathrooms")) else "N/A"
+        surface_display = row.get("surface", "N/A") if not pd.isna(row.get("surface")) else "N/A"
 
         # Create popup HTML with clickable link
         property_url = f"https://www.immobiliare.it/en/annunci/{row['id']}/"
         popup_html = f"""
         <div style="font-family: Arial; min-width: 250px; max-width: 300px;">
-            <h4 style="margin-bottom: 10px;">{row.get('caption', 'Property')}</h4>
+            <h4 style="margin-bottom: 10px;">{row.get("caption", "Property")}</h4>
             <table style="width: 100%; font-size: 12px;">
-                <tr><td><b>💰 Price:</b></td><td>€{int(row['price']):,}</td></tr>
-                <tr><td><b>📏 Price/m²:</b></td><td>€{int(row.get('price_m', 0)):,}</td></tr>
-                <tr><td><b>🛏️ Rooms:</b></td><td>{row.get('rooms', 'N/A')}</td></tr>
-                <tr><td><b>🚿 Bathrooms:</b></td><td>{row.get('bathrooms', 'N/A')}</td></tr>
-                <tr><td><b>📐 Surface:</b></td><td>{row.get('surface', 'N/A')}</td></tr>
-                <tr><td><b>📍 Region:</b></td><td>{row.get('region', 'N/A')}</td></tr>
+                <tr><td><b>💰 Price:</b></td><td>{price_display}</td></tr>
+                <tr><td><b>📏 Price/m²:</b></td><td>{price_m_display}</td></tr>
+                <tr><td><b>🛏️ Rooms:</b></td><td>{rooms_display}</td></tr>
+                <tr><td><b>🚿 Bathrooms:</b></td><td>{bathrooms_display}</td></tr>
+                <tr><td><b>📐 Surface:</b></td><td>{surface_display}</td></tr>
+                <tr><td><b>📍 Region:</b></td><td>{row.get("region", "N/A")}</td></tr>
             </table>
             <div style="margin-top: 10px; text-align: center;">
                 <a href="{property_url}" target="_blank"
@@ -95,17 +101,20 @@ def create_folium_map(df):
         </div>
         """
 
+        # Create tooltip with safe price display
+        tooltip_text = f"{row.get('caption', 'Property')} - {price_display}"
+
         # Add marker to map
         folium.CircleMarker(
-            location=[row['latitude'], row['longitude']],
+            location=[row["latitude"], row["longitude"]],
             radius=8,
             popup=folium.Popup(popup_html, max_width=300),
-            tooltip=f"{row.get('caption', 'Property')} - €{int(row['price']):,}",
+            tooltip=tooltip_text,
             color=color,
             fill=True,
             fillColor=color,
             fillOpacity=0.7,
-            weight=2
+            weight=2,
         ).add_to(m)
 
     return m
