@@ -138,11 +138,61 @@ df["longitude"] = pd.to_numeric(df["longitude"], errors="coerce")
 df["latitude"] = pd.to_numeric(df["latitude"], errors="coerce")
 df["price"] = pd.to_numeric(df["price"], errors="coerce")
 df["price_m"] = pd.to_numeric(df["price_m"], errors="coerce")
+df["rooms"] = pd.to_numeric(df.get("rooms"), errors="coerce")
+df["pub_count"] = pd.to_numeric(df.get("pub_count"), errors="coerce")
+df["baker_count"] = pd.to_numeric(df.get("baker_count"), errors="coerce")
+df["food_count"] = pd.to_numeric(df.get("food_count"), errors="coerce")
+
+bedroom_source_col = "bedrooms" if "bedrooms" in df.columns else "rooms"
+df["bedrooms_filter"] = pd.to_numeric(df.get(bedroom_source_col), errors="coerce")
 
 # Filter properties with valid coordinates
 lat_lon = df.dropna(subset=["longitude", "latitude"]).copy()
 # Reset index to ensure point indices match dataframe indices
 lat_lon = lat_lon.reset_index(drop=True)
+
+
+def _slider_bounds(series: pd.Series) -> tuple[int, int]:
+    numeric = pd.to_numeric(series, errors="coerce").dropna()
+    if numeric.empty:
+        return 0, 0
+    return int(numeric.min()), int(numeric.max())
+
+
+# Sidebar filters
+st.sidebar.header("🔎 Filters")
+
+price_min, price_max = _slider_bounds(lat_lon["price"])
+price_range = st.sidebar.slider("Price (€)", min_value=price_min, max_value=price_max, value=(price_min, price_max), step=1000)
+
+rooms_min, rooms_max = _slider_bounds(lat_lon["rooms"])
+rooms_range = st.sidebar.slider("Rooms", min_value=rooms_min, max_value=rooms_max, value=(rooms_min, rooms_max), step=1)
+
+bed_min, bed_max = _slider_bounds(lat_lon["bedrooms_filter"])
+bedrooms_range = st.sidebar.slider("Bedrooms", min_value=bed_min, max_value=bed_max, value=(bed_min, bed_max), step=1)
+
+bars_min, bars_max = _slider_bounds(lat_lon["pub_count"])
+bars_range = st.sidebar.slider("Bars", min_value=bars_min, max_value=bars_max, value=(bars_min, bars_max), step=1)
+
+bakeries_min, bakeries_max = _slider_bounds(lat_lon["baker_count"])
+bakeries_range = st.sidebar.slider(
+    "Bakeries", min_value=bakeries_min, max_value=bakeries_max, value=(bakeries_min, bakeries_max), step=1
+)
+
+restaurants_min, restaurants_max = _slider_bounds(lat_lon["food_count"])
+restaurants_range = st.sidebar.slider(
+    "Restaurants", min_value=restaurants_min, max_value=restaurants_max, value=(restaurants_min, restaurants_max), step=1
+)
+
+lat_lon = lat_lon[
+    (lat_lon["price"].fillna(0).between(price_range[0], price_range[1]))
+    & (lat_lon["rooms"].fillna(0).between(rooms_range[0], rooms_range[1]))
+    & (lat_lon["bedrooms_filter"].fillna(0).between(bedrooms_range[0], bedrooms_range[1]))
+    & (lat_lon["pub_count"].fillna(0).between(bars_range[0], bars_range[1]))
+    & (lat_lon["baker_count"].fillna(0).between(bakeries_range[0], bakeries_range[1]))
+    & (lat_lon["food_count"].fillna(0).between(restaurants_range[0], restaurants_range[1]))
+].copy()
+
 num_rows = len(lat_lon)
 
 # Debug info

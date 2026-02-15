@@ -12,8 +12,8 @@ from pathlib import Path
 import folium
 import pandas as pd
 import pyproj
-import shapely
 import streamlit as st
+from shapely import wkt
 from shapely.geometry import Point
 from shapely.ops import nearest_points
 from sqlmodel import Session, create_engine
@@ -86,7 +86,7 @@ def load_coastline():
     # Parse the polygon coordinates
     coords = your_json_file["features"][0]["geometry"]["coordinates"][0]
     polygon_str = "POLYGON ((" + ", ".join([f"{c[0]} {c[1]}" for c in coords]) + "))"
-    shape = shapely.wkt.loads(polygon_str)
+    shape = wkt.loads(polygon_str)
 
     return your_json_file, shape
 
