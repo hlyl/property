@@ -4,6 +4,7 @@ This module contains the Property model for Italian real estate listings
 with review tracking and geospatial enrichment.
 """
 
+from pydantic import field_validator
 from sqlmodel import Field, SQLModel
 
 
@@ -68,3 +69,13 @@ class Property(SQLModel, table=True):
     viewed: int | None = Field(default=0)  # 0 = not viewed, 1 = viewed
     hidden: int | None = Field(default=0)  # 0 = visible, 1 = hidden
     notes: str | None = Field(default=None)  # User notes about property
+
+    @field_validator("price", "price_m", mode="before")
+    @classmethod
+    def _coerce_price_fields_to_int(cls, value):
+        if value is None or value == "":
+            return None
+        try:
+            return int(round(float(value)))
+        except (TypeError, ValueError):
+            return None
