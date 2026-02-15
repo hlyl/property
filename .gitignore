@@ -48,6 +48,7 @@ backup/
 # Logs
 *.log
 logging.txt
+api_response_sample.json
 
 # OS
 .DS_Store
