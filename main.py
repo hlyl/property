@@ -365,12 +365,18 @@ if __name__ == "__main__":  #
             pages = input_json["maxPages"]
             count = input_json["count"]
             web_result = propertyparser(input_json, name)
+            page_new_items = 0
+            page_poi_bars = 0
+            page_poi_shops = 0
+            page_poi_bakeries = 0
+            page_poi_restaurants = 0
 
             with Session(db_engine) as session:
                 # exist_id = get_list_id(session)
                 for item in web_result:
                     item_id = str(item.id)
                     if item_id not in first_observed:
+                        page_new_items += 1
                         first_observed[item_id] = str(date.today())
                         # if item.id not in exist_id:
                         if item.latitude is not None and item.longitude is not None:
@@ -378,11 +384,21 @@ if __name__ == "__main__":  #
                             calc_dist_water_main(item)
                             if ENABLE_POI_LOOKUP:
                                 enrich_with_pois(item)
+                                page_poi_bars += item.pub_count or 0
+                                page_poi_shops += item.shopping_count or 0
+                                page_poi_bakeries += item.baker_count or 0
+                                page_poi_restaurants += item.food_count or 0
                         item.observed = str(date.today())
                         session.merge(item)
                     id_list.append(str(item.id))
                 session.commit()
-                logger.debug("We have committed : " + name + " - page: " + str(page))
+                if ENABLE_POI_LOOKUP:
+                    logger.info(
+                        f"{name} page {page}/{pages} committed: scraped={len(web_result)}, new={page_new_items}, "
+                        f"POIs found bars={page_poi_bars}, shops={page_poi_shops}, bakeries={page_poi_bakeries}, restaurants={page_poi_restaurants}"
+                    )
+                else:
+                    logger.info(f"{name} page {page}/{pages} committed: scraped={len(web_result)}, new={page_new_items}")
                 to_translate = select_db_no_translation(session)
             if page == pages or count == 0 or response.status_code != 200:
                 total_count = total_count + count
