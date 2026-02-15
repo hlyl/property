@@ -198,6 +198,33 @@ def test_poi_service_initialization():
     assert service is not None
 
 
+def test_overpass_count_pois_counts_all_element_types():
+    """POI count should include nodes, ways, and relations from Overpass."""
+    from property_tracker.services.poi import OverpassPOIService
+
+    class DummyApi:
+        @staticmethod
+        def query(_query):
+            class Result:
+                nodes = [1, 2]
+                ways = [1]
+                relations = [1, 2, 3]
+
+            return Result()
+
+    class DummyTime:
+        @staticmethod
+        def sleep(_seconds):
+            return None
+
+    service = OverpassPOIService.__new__(OverpassPOIService)
+    service.api = DummyApi()
+    service.time = DummyTime()
+
+    count = service.count_pois(lat=43.8438, lon=10.5077, radius=2000, poi_type="shop")
+    assert count == 6
+
+
 @pytest.mark.skip(reason="Requires external Overpass API")
 def test_poi_service_fetch_pois():
     """Test fetching POIs from Overpass API."""

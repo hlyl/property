@@ -27,18 +27,23 @@ GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
 DATABASE_PATH = os.getenv("DATABASE_PATH", "database.db")
 PRODUCTION = os.getenv("PRODUCTION", "true").lower() == "true"
 LOG_FILE = os.getenv("LOG_FILE", "logging.txt")
+POI_SEARCH_RADIUS = int(os.getenv("POI_SEARCH_RADIUS", "2000"))
+POI_SEARCH_PROVIDER = os.getenv("POI_SEARCH_PROVIDER", "overpass").strip().lower()
+ENABLE_POI_LOOKUP = os.getenv("ENABLE_POI_LOOKUP", "false").lower() == "true"
+
+USE_GOOGLE_POI_PROVIDER = USE_GOOGLE_PLACES or POI_SEARCH_PROVIDER == "google"
 
 # Validate configuration
-if USE_GOOGLE_PLACES and not GOOGLE_API_KEY:
+if USE_GOOGLE_POI_PROVIDER and not GOOGLE_API_KEY:
     raise ValueError("GOOGLE_API_KEY is required when USE_GOOGLE_PLACES=true")
 
 # Initialize services
-poi_service = get_poi_service(USE_GOOGLE_PLACES, GOOGLE_API_KEY)
+poi_service = get_poi_service(USE_GOOGLE_POI_PROVIDER, GOOGLE_API_KEY)
 translation_service = get_translation_service(USE_GOOGLE_TRANSLATE)
 
 # Keep backward compatibility with existing code
 production = PRODUCTION
-google_api = USE_GOOGLE_PLACES
+google_api = USE_GOOGLE_POI_PROVIDER
 # Get the distance calculator instance
 distance_calculator = get_calculator()
 
@@ -283,7 +288,7 @@ def enrich_with_pois(item: Property) -> Property:
         Property with pub_count, shopping_count, baker_count, and food_count populated
     """
     try:
-        counts = poi_service.get_all_counts(lat=float(item.latitude), lon=float(item.longitude), radius=2000)
+        counts = poi_service.get_all_counts(lat=float(item.latitude), lon=float(item.longitude), radius=POI_SEARCH_RADIUS)
         item.pub_count = counts.bars
         item.shopping_count = counts.shops
         item.baker_count = counts.bakeries
@@ -310,8 +315,11 @@ if __name__ == "__main__":  #
 
     logger.add(LOG_FILE)
     logger.debug("That's it, beautiful and simple logging!")
-    logger.info(f"Using Google Places: {USE_GOOGLE_PLACES}")
+    logger.info(f"Using Google Places: {USE_GOOGLE_POI_PROVIDER}")
     logger.info(f"Using Google Translate: {USE_GOOGLE_TRANSLATE}")
+    logger.info(f"POI lookup enabled: {ENABLE_POI_LOOKUP}")
+    logger.info(f"POI provider: {'google' if USE_GOOGLE_POI_PROVIDER else 'overpass'}")
+    logger.info(f"POI radius (m): {POI_SEARCH_RADIUS}")
 
     if production:
         db_engine = dao.create_db(DATABASE_PATH)
@@ -368,9 +376,8 @@ if __name__ == "__main__":  #
                         if item.latitude is not None and item.longitude is not None:
                             calc_dist_cost(item)
                             calc_dist_water_main(item)
-                            # Enrich with POI counts using configured service
-                            # TODO: Re-enable when needed - commented out for faster testing
-                            # enrich_with_pois(item)
+                            if ENABLE_POI_LOOKUP:
+                                enrich_with_pois(item)
                         item.observed = str(date.today())
                         session.merge(item)
                     id_list.append(str(item.id))

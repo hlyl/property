@@ -56,10 +56,10 @@ class OverpassPOIService:
 
     # Mapping of our POI types to OpenStreetMap tag queries
     OSM_QUERIES = {
-        "bar": '[out:json];node["amenity"~"bar|pub|cafe"](around:{radius},{lat},{lon});out count;',
-        "shop": '[out:json];node["shop"~"supermarket|convenience|grocery"](around:{radius},{lat},{lon});out count;',
-        "bakery": '[out:json];node["shop"="bakery"](around:{radius},{lat},{lon});out count;',
-        "restaurant": '[out:json];node["amenity"="restaurant"](around:{radius},{lat},{lon});out count;',
+        "bar": '[out:json][timeout:25];nwr["amenity"~"bar|pub|cafe"](around:{radius},{lat},{lon});out ids;',
+        "shop": '[out:json][timeout:25];nwr["shop"~"supermarket|convenience|grocery"](around:{radius},{lat},{lon});out ids;',
+        "bakery": '[out:json][timeout:25];nwr["shop"="bakery"](around:{radius},{lat},{lon});out ids;',
+        "restaurant": '[out:json][timeout:25];nwr["amenity"="restaurant"](around:{radius},{lat},{lon});out ids;',
     }
 
     def count_pois(self, lat: float, lon: float, radius: int, poi_type: str) -> int:
@@ -88,7 +88,7 @@ class OverpassPOIService:
                 self.time.sleep(2)
                 query = query_template.format(lat=lat, lon=lon, radius=radius)
                 result = self.api.query(query)
-                count = len(result.nodes)
+                count = len(getattr(result, "nodes", [])) + len(getattr(result, "ways", [])) + len(getattr(result, "relations", []))
                 logger.debug(f"Overpass API found {count} {poi_type}s near ({lat}, {lon})")
                 return count
             except Exception as e:
