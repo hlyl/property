@@ -30,6 +30,7 @@ LOG_FILE = os.getenv("LOG_FILE", "logging.txt")
 POI_SEARCH_RADIUS = int(os.getenv("POI_SEARCH_RADIUS", "2000"))
 POI_SEARCH_PROVIDER = os.getenv("POI_SEARCH_PROVIDER", "overpass").strip().lower()
 ENABLE_POI_LOOKUP = os.getenv("ENABLE_POI_LOOKUP", "false").lower() == "true"
+UPDATE_EXISTING_RECORDS = os.getenv("UPDATE_EXISTING_RECORDS", "false").lower() == "true"
 
 USE_GOOGLE_POI_PROVIDER = USE_GOOGLE_PLACES or POI_SEARCH_PROVIDER == "google"
 
@@ -303,6 +304,30 @@ def enrich_with_pois(item: Property) -> Property:
     return item
 
 
+def update_existing_property(existing_item: Property, incoming_item: Property) -> Property:
+    """Update refreshable listing fields on an existing property record.
+
+    Keeps user-managed fields (review status, notes, interaction flags) untouched.
+    """
+    existing_item.region = incoming_item.region
+    existing_item.is_new = incoming_item.is_new
+    existing_item.price = incoming_item.price
+    existing_item.price_drop = incoming_item.price_drop
+    existing_item.bathrooms = incoming_item.bathrooms
+    existing_item.caption = incoming_item.caption
+    existing_item.category = incoming_item.category
+    existing_item.discription = incoming_item.discription
+    existing_item.floor = incoming_item.floor
+    existing_item.rooms = incoming_item.rooms
+    existing_item.surface = incoming_item.surface
+    existing_item.price_m = incoming_item.price_m
+    existing_item.longitude = incoming_item.longitude
+    existing_item.latitude = incoming_item.latitude
+    existing_item.marker = incoming_item.marker
+    existing_item.photo_list = incoming_item.photo_list
+    return existing_item
+
+
 def get_list_id(session) -> list:
     statement = select(Property.id)
     data = session.execute(statement)
@@ -318,6 +343,7 @@ if __name__ == "__main__":  #
     logger.info(f"Using Google Places: {USE_GOOGLE_POI_PROVIDER}")
     logger.info(f"Using Google Translate: {USE_GOOGLE_TRANSLATE}")
     logger.info(f"POI lookup enabled: {ENABLE_POI_LOOKUP}")
+    logger.info(f"Update existing records: {UPDATE_EXISTING_RECORDS}")
     logger.info(f"POI provider: {'google' if USE_GOOGLE_POI_PROVIDER else 'overpass'}")
     logger.info(f"POI radius (m): {POI_SEARCH_RADIUS}")
 
@@ -366,6 +392,8 @@ if __name__ == "__main__":  #
             count = input_json["count"]
             web_result = propertyparser(input_json, name)
             page_new_items = 0
+            page_updated_existing_items = 0
+            page_poi_queries = 0
             page_poi_bars = 0
             page_poi_shops = 0
             page_poi_bakeries = 0
@@ -375,30 +403,54 @@ if __name__ == "__main__":  #
                 # exist_id = get_list_id(session)
                 for item in web_result:
                     item_id = str(item.id)
-                    if item_id not in first_observed:
+                    existing_item = session.get(Property, item.id)
+                    is_new_item = existing_item is None
+
+                    if is_new_item:
                         page_new_items += 1
                         first_observed[item_id] = str(date.today())
-                        # if item.id not in exist_id:
-                        if item.latitude is not None and item.longitude is not None:
-                            calc_dist_cost(item)
-                            calc_dist_water_main(item)
-                            if ENABLE_POI_LOOKUP:
-                                enrich_with_pois(item)
-                                page_poi_bars += item.pub_count or 0
-                                page_poi_shops += item.shopping_count or 0
-                                page_poi_bakeries += item.baker_count or 0
-                                page_poi_restaurants += item.food_count or 0
-                        item.observed = str(date.today())
-                        session.merge(item)
+                        working_item = item
+                    else:
+                        if item_id not in first_observed:
+                            first_observed[item_id] = existing_item.observed or str(date.today())
+
+                        if not UPDATE_EXISTING_RECORDS:
+                            id_list.append(str(item.id))
+                            continue
+
+                        page_updated_existing_items += 1
+                        working_item = update_existing_property(existing_item, item)
+
+                    if working_item.latitude is not None and working_item.longitude is not None:
+                        calc_dist_cost(working_item)
+                        calc_dist_water_main(working_item)
+                        if ENABLE_POI_LOOKUP:
+                            enrich_with_pois(working_item)
+                            page_poi_queries += 1
+                            page_poi_bars += working_item.pub_count or 0
+                            page_poi_shops += working_item.shopping_count or 0
+                            page_poi_bakeries += working_item.baker_count or 0
+                            page_poi_restaurants += working_item.food_count or 0
+
+                    if is_new_item:
+                        working_item.observed = str(date.today())
+                        session.merge(working_item)
                     id_list.append(str(item.id))
                 session.commit()
                 if ENABLE_POI_LOOKUP:
+                    poi_note = ""
+                    if page_poi_queries == 0:
+                        poi_note = " (no properties with coordinates were enriched on this page)"
                     logger.info(
-                        f"{name} page {page}/{pages} committed: scraped={len(web_result)}, new={page_new_items}, "
-                        f"POIs found bars={page_poi_bars}, shops={page_poi_shops}, bakeries={page_poi_bakeries}, restaurants={page_poi_restaurants}"
+                        f"{name} page {page}/{pages} committed: scraped={len(web_result)}, new={page_new_items}, updated_existing={page_updated_existing_items}, "
+                        f"poi_queries={page_poi_queries}, POIs found bars={page_poi_bars}, shops={page_poi_shops}, "
+                        f"bakeries={page_poi_bakeries}, restaurants={page_poi_restaurants}{poi_note}"
                     )
                 else:
-                    logger.info(f"{name} page {page}/{pages} committed: scraped={len(web_result)}, new={page_new_items}")
+                    logger.info(
+                        f"{name} page {page}/{pages} committed: scraped={len(web_result)}, new={page_new_items}, "
+                        f"updated_existing={page_updated_existing_items}"
+                    )
                 to_translate = select_db_no_translation(session)
             if page == pages or count == 0 or response.status_code != 200:
                 total_count = total_count + count
