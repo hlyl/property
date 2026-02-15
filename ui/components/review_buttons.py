@@ -34,17 +34,19 @@ def render_review_buttons(property_id: int, current_status: str, key_prefix: str
     """
     col1, col2, col3 = st.columns(3)
 
+    button_width = "stretch" if use_container_width else "content"
+
     with col1:
-        if st.button("✅ Mark as Interested", key=f"{key_prefix}_int_{property_id}", use_container_width=use_container_width):
+        if st.button("✅ Mark as Interested", key=f"{key_prefix}_int_{property_id}", width=button_width):
             _update_status(property_id, "Interested")
 
     with col2:
-        if st.button("❌ Reject", key=f"{key_prefix}_rej_{property_id}", use_container_width=use_container_width):
+        if st.button("❌ Reject", key=f"{key_prefix}_rej_{property_id}", width=button_width):
             _update_status(property_id, "Rejected")
 
     with col3:
         if current_status != "To Review":
-            if st.button("🔄 Reset to Review", key=f"{key_prefix}_reset_{property_id}", use_container_width=use_container_width):
+            if st.button("🔄 Reset to Review", key=f"{key_prefix}_reset_{property_id}", width=button_width):
                 _update_status(property_id, "To Review")
         else:
             # Placeholder to maintain layout

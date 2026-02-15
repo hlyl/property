@@ -143,7 +143,7 @@ def main():
             ]
         )
         fig_bar.update_layout(title="Review Status Counts", xaxis_title="Status", yaxis_title="Number of Properties", height=350)
-        st.plotly_chart(fig_bar, use_container_width=True)
+        st.plotly_chart(fig_bar, width="stretch")
 
     with col_chart2:
         # Pie chart
@@ -154,7 +154,7 @@ def main():
             hole=0.4,
         )
         fig_pie.update_layout(title="Review Status Breakdown", height=350)
-        st.plotly_chart(fig_pie, use_container_width=True)
+        st.plotly_chart(fig_pie, width="stretch")
 
     st.markdown("---")
 
@@ -226,16 +226,16 @@ def render_quick_actions(df):
                 st.caption(f"🏖️ Coast: {row['dist_coast']:.1f} km")
 
         with col3:
-            if st.button("✅ Interested", key=f"int_{row['id']}", use_container_width=True):
+            if st.button("✅ Interested", key=f"int_{row['id']}", width="stretch"):
                 update_property_status(int(row["id"]), "Interested")
 
         with col4:
-            if st.button("❌ Reject", key=f"rej_{row['id']}", use_container_width=True):
+            if st.button("❌ Reject", key=f"rej_{row['id']}", width="stretch"):
                 update_property_status(int(row["id"]), "Rejected")
 
         with col5:
             property_url = f"https://www.immobiliare.it/annunci/{row['id']}"
-            st.link_button("🔗 View", property_url, use_container_width=True)
+            st.link_button("🔗 View", property_url, width="stretch")
 
         st.divider()
 
@@ -265,7 +265,7 @@ def render_detailed_view(df):
             "reviewed_date": "Reviewed",
             "property_url": st.column_config.LinkColumn("View Property"),
         },
-        use_container_width=True,
+        width="stretch",
         hide_index=True,
         height=600,
     )

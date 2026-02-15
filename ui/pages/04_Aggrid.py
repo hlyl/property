@@ -27,4 +27,4 @@ else:
     st.markdown(f"Showing {len(df)} properties")
 
     # Display interactive dataframe with full width
-    st.dataframe(df, use_container_width=True, hide_index=True, height=700)
+    st.dataframe(df, width="stretch", hide_index=True, height=700)

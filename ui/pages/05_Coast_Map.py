@@ -374,4 +374,4 @@ st.subheader(f"Properties on Map ({len(filtered_df)} total)")
 # Show table with key information
 display_cols = ["id", "region", "price", "price_m", "rooms", "dist_coast", "review_status"]
 available_cols = [col for col in display_cols if col in filtered_df.columns]
-st.dataframe(filtered_df[available_cols].sort_values(by="dist_coast"), use_container_width=True, hide_index=True)
+st.dataframe(filtered_df[available_cols].sort_values(by="dist_coast"), width="stretch", hide_index=True)

@@ -94,7 +94,11 @@ def deserialise_property(item, region) -> Property:
         # Extract basic property info
         stringid = safe_get(item, "realEstate", "id")
         is_new = safe_get(item, "realEstate", "isNew")
-        price = safe_get(item, "realEstate", "price", "value")
+        raw_price = safe_get(item, "realEstate", "price", "value")
+        try:
+            price = int(round(float(raw_price))) if raw_price is not None else None
+        except (TypeError, ValueError):
+            price = None
 
         # Handle price drop
         price_drop_data = safe_get(item, "realEstate", "price", "loweredPrice")

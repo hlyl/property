@@ -77,6 +77,10 @@ def create_folium_map(df):
         rooms_display = row.get("rooms", "N/A") if not pd.isna(row.get("rooms")) else "N/A"
         bathrooms_display = row.get("bathrooms", "N/A") if not pd.isna(row.get("bathrooms")) else "N/A"
         surface_display = row.get("surface", "N/A") if not pd.isna(row.get("surface")) else "N/A"
+        bars_display = int(row.get("pub_count")) if not pd.isna(row.get("pub_count")) else "N/A"
+        shops_display = int(row.get("shopping_count")) if not pd.isna(row.get("shopping_count")) else "N/A"
+        bakeries_display = int(row.get("baker_count")) if not pd.isna(row.get("baker_count")) else "N/A"
+        restaurants_display = int(row.get("food_count")) if not pd.isna(row.get("food_count")) else "N/A"
 
         # Create popup HTML with clickable link
         property_url = f"https://www.immobiliare.it/en/annunci/{row['id']}/"
@@ -90,6 +94,10 @@ def create_folium_map(df):
                 <tr><td><b>🚿 Bathrooms:</b></td><td>{bathrooms_display}</td></tr>
                 <tr><td><b>📐 Surface:</b></td><td>{surface_display}</td></tr>
                 <tr><td><b>📍 Region:</b></td><td>{row.get("region", "N/A")}</td></tr>
+                <tr><td><b>🍺 Bars:</b></td><td>{bars_display}</td></tr>
+                <tr><td><b>🛒 Shops:</b></td><td>{shops_display}</td></tr>
+                <tr><td><b>🥐 Bakeries:</b></td><td>{bakeries_display}</td></tr>
+                <tr><td><b>🍽️ Restaurants:</b></td><td>{restaurants_display}</td></tr>
             </table>
             <div style="margin-top: 10px; text-align: center;">
                 <a href="{property_url}" target="_blank"
@@ -244,7 +252,7 @@ folium_map = create_folium_map(lat_lon)
 st.subheader("🗺️ Interactive Property Map")
 
 # Display Folium map
-map_output = st_folium(folium_map, width=None, height=700, use_container_width=True, key="property_map")
+map_output = st_folium(folium_map, width="stretch", height=700, key="property_map")
 
 # Quick Review Actions
 st.markdown("---")
@@ -302,13 +310,13 @@ with col_buttons:
         btn_col1, btn_col2, btn_col3 = st.columns(3)
 
         with btn_col1:
-            if st.button("🤔 Perhaps", key=f"perhaps_{property_id}", use_container_width=True):
+            if st.button("🤔 Perhaps", key=f"perhaps_{property_id}", width="stretch"):
                 update_property_status(property_id, "To Review")
 
         with btn_col2:
-            if st.button("✅ Yes", key=f"yes_{property_id}", use_container_width=True, type="primary"):
+            if st.button("✅ Yes", key=f"yes_{property_id}", width="stretch", type="primary"):
                 update_property_status(property_id, "Interested")
 
         with btn_col3:
-            if st.button("❌ No", key=f"no_{property_id}", use_container_width=True):
+            if st.button("❌ No", key=f"no_{property_id}", width="stretch"):
                 update_property_status(property_id, "Rejected")
